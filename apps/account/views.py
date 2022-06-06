@@ -13,6 +13,8 @@ from .serializers import UserSerializers, UserRolesSerializers, PasswordResetReq
 from .hashing import get_salt, hash_string
 from ..login.decorators import my_login_required
 from apps.roles.models import Role
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -22,13 +24,22 @@ class user_page(APIView):
     """View to render user.html page"""
     @my_login_required
     def get(self, request):
+        user_has_privilege = False
         form = UserForm()
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
+
+                  
+        current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
+        if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
+            user_has_privilege = True
+            
+
         context = {
             'form': form,
             'title': "Dashboard - User",
-            'user': user
+            'user': user,
+            'user_has_privilege': user_has_privilege
         }
         return render(request, 'user/users.html', context)
 
@@ -92,7 +103,8 @@ class user_view_detail(APIView):
         """Get request to retrieve user of specific user id..."""
         global edit_user
         print("getting specific.....")
-        instance = self.get_object(id)
+
+        instance = self.get_object(id=id)
         print(model_to_dict(instance))
         edit_user = instance
         serializer = UserSerializers(instance)
@@ -100,7 +112,7 @@ class user_view_detail(APIView):
 
     def post(self, request, id):
         """Put request to update the user of specific id...."""
-        instance = self.get_object(id)
+        instance = self.get_object(id=id)
         data = request.data
         print("instance is: ")
         print(model_to_dict(instance))
@@ -115,11 +127,11 @@ class user_view_detail(APIView):
             print("Errors.....")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+     
     def delete(self, request, id):
         """Delete request to remove the user of specific id..."""
         print("deleting....")
-        instance = self.get_object(id)
+        instance = self.get_object(id=id)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -169,13 +181,18 @@ class deleteConfirmation(APIView):
 class user_role_page(APIView):
     @my_login_required
     def get(self, request):
+        user_has_privilege = False
         form = UserRolesForm()
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
+        current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
+        if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
+            user_has_privilege = True
         context = {
             "form": form,
             "title": "Dashboard - UserRoles",
-            "user": user
+            "user": user,
+            'user_has_privilege': user_has_privilege
         }
         return render(request, 'user_role/user_roles.html', context)
 

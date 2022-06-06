@@ -14,7 +14,7 @@ from apps.roles.models import Role
 # )
 
 class UserForm(forms.ModelForm):
-    Organization = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    organization = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     is_superuser = forms.BooleanField(initial=False,
                                       widget=forms.RadioSelect(choices=[(True, 'Yes'),
                                                             (False, 'No')],

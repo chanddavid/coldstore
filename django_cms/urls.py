@@ -23,6 +23,7 @@ from apps.account import views as account_view
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    path('admin/',admin.site.urls),
     path('', include('apps.login.urls')),
     path('dashboard/', login_view.login_validate.as_view(), name="dashboard"),
     path('register/', login_view.register_view, name="register_user_view"),

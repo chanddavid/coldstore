@@ -61,12 +61,7 @@
     <!-- BEGIN THEME CONFIG PANEL-->
 {#    {% include 'static_element/log_message.html' %}#}
     <!-- END THEME CONFIG PANEL-->
-    <!-- New question dialog-->
-    {% include 'static_element/session-dialog.html' %}
-    <!-- End New question dialog-->
-    <!-- QUICK SIDEBAR-->
-    {% include 'static_element/quicksidebar.html' %}
-    <!-- END QUICK SIDEBAR-->
+
 {% endblock %}
     <!-- PAGE LEVEL PLUGINS-->
 {% block externaljs %}
@@ -105,7 +100,7 @@
                             }
                         }
                     },
-                    team:{
+                    organization:{
                         required: true
                     }
                 },
@@ -123,8 +118,8 @@
                         email: "Enter a valid email",
                         remote: "Email is already taken."
                     },
-                    team:{
-                        required: "Select a team"
+                    organization:{
+                        required: "Select a organization"
                     }
                 },
                  highlight: function(e) {
