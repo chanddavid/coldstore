@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from .models import Device
 from .serializers import DeviceSerializer
 from ..account.models import User
+from apps.account.models import User_role
 
 # Create your views here.
 from ..login.decorators import my_login_required
@@ -19,10 +20,15 @@ class device_page(APIView):
 
     @my_login_required
     def get(self, request):
+        user_has_privilege = False
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
         serializer = DeviceSerializer()
-        return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Device', 'user':user})
+        current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
+        if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
+            user_has_privilege = True
+            print(user_has_privilege)
+        return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Device', 'user':user,'user_has_privilege': user_has_privilege})
 
 
 

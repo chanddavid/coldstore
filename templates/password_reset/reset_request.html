@@ -90,12 +90,7 @@
     <!-- BEGIN THEME CONFIG PANEL-->
 {#    {% include 'static_element/log_message.html' %}#}
     <!-- END THEME CONFIG PANEL-->
-    <!-- New question dialog-->
-    {% include 'static_element/session-dialog.html' %}
-    <!-- End New question dialog-->
-    <!-- QUICK SIDEBAR-->
-    {% include 'static_element/quicksidebar.html' %}
-    <!-- END QUICK SIDEBAR-->
+
 {% endblock %}
     <!-- PAGE LEVEL PLUGINS-->
 {% block externaljs %}
@@ -192,117 +187,6 @@
                 },
             })
         })
-        {#$(function(){#}
-        {#    $('#reset_request_datatable')#}
-        //{#})#}
-        {#$(function (){#}
-        {#    $("#post_user").validate({#}
-        {#        rules:{#}
-        {#            user_name: {#}
-        {#                required: true,#}
-        {#                remote: {#}
-        {#                    url: "{% url 'check_username' %}",#}
-        {#                    type: "POST",#}
-        {#                    data: {#}
-        {#                        user_name: $('.user_name').val(),#}
-        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
-        {#                    },#}
-        {#                }#}
-        {#            },#}
-        {#            hashed_password: {#}
-        {#                required: true,#}
-        {#                minlength: 6#}
-        {#            },#}
-        {#            email: {#}
-        {#                required: true,#}
-        {#                email: true,#}
-        {#                 remote: {#}
-        {#                    url: "{% url 'check_email' %}",#}
-        {#                    type: "POST",#}
-        {#                    data: {#}
-        {#                        email: $('.email').val(),#}
-        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
-        {#                    }#}
-        {#                }#}
-        {#            },#}
-        {#        },#}
-        {#        messages: {#}
-        {#            user_name: {#}
-        {#                required: "Please enter username",#}
-        {#                remote: "Username already exist"#}
-        {#            },#}
-        {#            hashed_password: {#}
-        {#                required: "Please provide a password",#}
-        {#                minlength: "Password must be 6 character long!.."#}
-        {#            },#}
-        {#            email: {#}
-        {#                required: "Please provide your email",#}
-        {#                email: "Enter a valid email",#}
-        {#                remote: "Email is already taken."#}
-        {#            }#}
-        {#        },#}
-        {#         highlight: function(e) {#}
-        {#             $(e).closest(".form-group").addClass("has-error")#}
-        {#         },#}
-        {#         unhighlight: function(e) {#}
-        {#             $(e).closest(".form-group").removeClass("has-error")#}
-        {#        },#}
-        {#    });#}
-        //{#})#}
-
-        {#$(function (){#}
-        {#    $("#edit_user").validate({#}
-        {#        rules:{#}
-        {#            user_name: {#}
-        {#                required: true,#}
-        {#                remote: {#}
-        {#                    url: "{% url 'check_user_username_update' %}",#}
-        {#                    type: "POST",#}
-        {#                    data: {#}
-        {#                        user_name: $('.user_name').val(),#}
-        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
-        {#                    },#}
-        {#                }#}
-        {#            },#}
-        {#            hashed_password: {#}
-        {#                required: true,#}
-        {#                minlength: 6#}
-        {#            },#}
-        {#            email: {#}
-        {#                required: true,#}
-        {#                email: true,#}
-        {#                 remote: {#}
-        {#                    url: "{% url 'check_user_email_update' %}",#}
-        {#                    type: "POST",#}
-        {#                    data: {#}
-        {#                        email: $('.email').val(),#}
-        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
-        {#                    }#}
-        {#                }#}
-        {#            },#}
-        {#        },#}
-        {#        messages: {#}
-        {#            user_name: {#}
-        {#                required: "Please enter username",#}
-        {#                remote: "Username already exist"#}
-        {#            },#}
-        {#            hashed_password: {#}
-        {#                required: "Please provide a password",#}
-        {#                minlength: "Password must be 6 character long!.."#}
-        {#            },#}
-        {#            email: {#}
-        {#                required: "Please provide your email",#}
-        {#                email: "Enter a valid email",#}
-        {#                remote: "Email is already taken."#}
-        {#            }#}
-        {#        },#}
-        {#         highlight: function(e) {#}
-        {#             $(e).closest(".form-group").addClass("has-error")#}
-        {#         },#}
-        {#         unhighlight: function(e) {#}
-        {#             $(e).closest(".form-group").removeClass("has-error")#}
-        {#        },#}
-        {#    });#}
         //{#})#}
     </script>
 {% endblock %}

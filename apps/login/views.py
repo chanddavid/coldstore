@@ -16,8 +16,10 @@ from ..account.models import User,Password_reset_request
 from ..account.serializers import UserSerializers, PasswordResetRequestSerializer
 from django.core.paginator import Paginator
 import datetime
+from ..account.models import User_role
 
 def login_view(request):
+
     if not request.session.has_key('username'):
         context = {
             'title': 'Login'
@@ -85,6 +87,7 @@ class Check_Password(APIView):
 
 class login_validate(APIView):
     def post(self, request):
+        user_has_privilege = False
         global user
         data = request.data
         print("Data is: ")
@@ -97,9 +100,15 @@ class login_validate(APIView):
                 user_serializer.save(last_login=datetime.datetime.today().date())
             request.session['username']=user.user_name
             current_logged_in_user = request.session.get("username")
+            current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
+            if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
+                user_has_privilege = True
+                
             user = User.objects.get(user_name=current_logged_in_user)
+
             context = {
-                'user': user
+                'user': user,
+                'user_has_privilege': user_has_privilege
             }
             return render(request, 'index.html', context)
         elif serializer.errors:
@@ -109,11 +118,18 @@ class login_validate(APIView):
 
     @my_login_required
     def get(self, request):
+        user_has_privilege = False
         if request.GET.get('page') == None:
-            current_logged_in_user = request.session.get("username")
+            current_logged_in_user = request.session.get("username")           
             user = User.objects.get(user_name=current_logged_in_user)
+            current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
+            if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
+                user_has_privilege = True
+                print(user_has_privilege)
+           
             context = {
-                'user': user
+                'user': user,
+                'user_has_privilege': user_has_privilege
             }
             return render(request, 'index.html', context)
         else:
