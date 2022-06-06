@@ -35,7 +35,6 @@ SESSION_COOKIE_NAME=os.getenv("SESSION_COOKIE_NAME")
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',   
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
