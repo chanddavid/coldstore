@@ -1,0 +1,49 @@
+{% load widget_tweaks %}
+{% load rest_framework %}
+<div class="edit_device_modal">
+    <div class="edit_modal_container">
+        <span class="edit_modal_container_close">&times;</span>
+
+        <div class="edit_modal_body">
+            <div class="edit_model_body_header">
+                <h2 class="ibox-title mb-5 modal_title">Edit Device</h2>
+                <div class="border-bottom"></div>
+            </div>
+
+            <form class="form-info" action="" id="edit_device">
+                {% csrf_token %}
+                <div class="ibox-bodyupdate">
+                    <div class="row">
+                        <div>
+                            <input type="hidden" id="deviceId" name="deviceId" style="display: none">
+                        </div>
+
+                        <div class="col-sm-6 form-group mb-4 device_name">
+                            {% render_field serializer.device_Name style=style %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4 store">
+                            {% render_field serializer.store style=style %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4 data">
+                            {% render_field serializer.data style=style %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4 status" style="visibility: hidden;">
+                            {% render_field serializer.status style=style %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4 status">
+                            <div>Status</div> 
+                            <label class="switch">
+                                <input type="checkbox" id="editcheckbox" class="editcheckbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="ibox-footer">
+                    <button class="btn btn-info mr-2" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

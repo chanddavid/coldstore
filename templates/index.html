@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link href="{% static 'vendors/jvectormap/jquery-jvectormap-2.0.3.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" />
+    <style>
+        .user_img{
+            height: 45px;
+            width: 45px;
+        }
+        .user_card{
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .user_card.col-lg-4{
+            max-width: 30.9%;
+        }
+
+        .user_row{
+            justify-content: space-between;
+        }
+
+        .card{
+            flex-direction: column!important;
+        }
+        .pagination_user{
+            display: block;
+            width: 100%;
+            text-align: right;
+        }
+        .user_404{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .img_404{
+            width: 240px;
+
+        }
+        ul.media-list-divider{
+            height: 650px;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body flexbox-b">
+                                <div class="easypie mr-4" data-percent="73" data-bar-color="#18C5A9" data-size="80" data-line-width="8">
+                                    <span class="easypie-data text-success" style="font-size:32px;"><i class="la la-users"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="font-strong text-success">{{ total_user }}</h3>
+                                    <div class="text-muted">TOTAL USER'S</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body flexbox-b">
+                                <div class="easypie mr-4" data-percent="42" data-bar-color="#5c6bc0" data-size="80" data-line-width="8">
+                                    <span class="easypie-data font-26 text-primary"><i class="ti-files"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="font-strong text-primary">{{ total_document }}</h3>
+                                    <div class="text-muted">TOTAL DOCUMENTS</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="ibox ibox-fullheight">
+                            <div class="ibox-head">
+                                <div class="ibox-title">USERS</div>
+                                <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+                                    <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+                                    <input class="form-control search-input-user" type="text" placeholder="Search..." id="searchbar">
+                                </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            {% include 'static_element/footer.html' %}
+        </div>
+    </div>
+    <!-- New question dialog-->
+    {% include 'static_element/session-dialog.html' %}
+    <!-- End New question dialog-->
+    <!-- QUICK SIDEBAR-->
+    {% include 'static_element/quicksidebar.html' %}
+    <!-- END QUICK SIDEBAR-->
+{% endblock %}
+    <!-- PAGE LEVEL PLUGINS-->
+
+{% block externaljs %}
+    <script src="{% static 'vendors/chart.js/dist/Chart.min.js' %}"></script>
+    <script src="{% static 'vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js' %}"></script>
+    <script src="{% static 'vendors/jvectormap/jquery-jvectormap-2.0.3.min.js' %}"></script>
+    <script src="{% static 'vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="{% static 'js/scripts/dashboard_visitors.js' %}"></script>
+{% endblock %}
+

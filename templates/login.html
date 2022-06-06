@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <style>
+        .close_btn .close{
+            color: black;
+            position: absolute;
+            top: 0;
+            right: 0;
+            /* border: 2px solid black; */
+            background: white;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="cover"></div>
+    <div class="ibox login-content">
+        <div class="text-center">
+            <span class="auth-head-icon"><i class="la la-user"></i></span>
+        </div>
+        <form class="ibox-body" id="login-form" action="{% url 'dashboard' %}" method="POST">{% csrf_token %}
+            {% if messages %}
+                {% for msg in messages %}
+                    {% if msg.tags == "error" %}
+                        <div class="alert alert-danger" role="alert">
+                        <span class="close_btn">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                        </span>
+                            {{ msg }}
+                        </div>
+                    {% elif msg.tags == "success" %}
+                        <div class="alert alert-success" role="alert">
+                        <span class="close_btn">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                        </span>
+                            {{ msg }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <h4 class="font-strong text-center mb-5">LOG IN</h4>
+            <div class="form-group mb-4">
+                <input class="form-control form-control-line" type="text" name="email_username" placeholder="Email / Username">
+            </div>
+            <div class="form-group mb-4">
+                <input class="form-control form-control-line" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="flexbox mb-5">
+                <span>
+                    <label class="ui-switch switch-icon mr-2 mb-0">
+                        <input type="checkbox" checked="">
+                        <span></span>
+                    </label>Remember</span>
+                <a class="text-primary" href="{% url 'password_reset' %}">Forgot password?</a>
+            </div>
+            <div class="text-center mb-4">
+                <button type="submit" class="btn btn-primary btn-rounded btn-block">LOGIN</button>
+            </div>
+            <div class="text-muted" style="text-align: center">
+                Don't have an account yet?
+                <p class="mt-2">
+                   <a href="{% url 'register_user_view' %}" class="text-primary">Create an account</a>
+                </p>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block externaljs %}
+    <script>
+        $(function() {
+            $('#login-form').validate({
+                errorClass: "help-block",
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true
+                    }
+                },
+                highlight: function(e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function(e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+            });
+        });
+    </script>
+{% endblock %}

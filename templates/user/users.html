@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="{% static 'vendors/dataTables/datatables.min.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+
+                <h1 class="page-title mb-3">Organization List</h1>
+                <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+                    <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+                    <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
+                </div>
+                <div class="ibox ibox-fullheight">
+                    <div class="flexbox mb-4">
+                        <div id="add_user" class="btn btn-success btn-rounded ml-3 mt-3">
+                            <a href=""><i class="fas fa-user-plus"></i> Add Organization</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive row">
+                            <table class="table table-bordered table-hover" id="user_datatable">
+                                <thead class="thead-default thead-lg">
+                                    <tr>
+                                        <th>S.N</th>
+                                        <th>Username</th>
+                                        <th>First_Name</th>
+                                        <th>Last_Name</th>
+                                        <th>Email</th>
+                                        <th>Organization</th>
+                                        <th>is_superuser</th>
+                                        <th>is_active</th>
+                                        <th class="no-sort">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            {% include 'static_element/footer.html' %}
+
+            {% include 'user/modals/create_user_modal.html' %}
+            {% include 'user/modals/update_user_modal.html' %}
+        </div>
+    </div>
+    <!-- BEGIN THEME CONFIG PANEL-->
+{#    {% include 'static_element/log_message.html' %}#}
+    <!-- END THEME CONFIG PANEL-->
+    <!-- New question dialog-->
+    {% include 'static_element/session-dialog.html' %}
+    <!-- End New question dialog-->
+    <!-- QUICK SIDEBAR-->
+    {% include 'static_element/quicksidebar.html' %}
+    <!-- END QUICK SIDEBAR-->
+{% endblock %}
+    <!-- PAGE LEVEL PLUGINS-->
+{% block externaljs %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/user/modals/user_modal.js' %}"></script>
+    <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
+    <script src="{% static 'js/user/user_script.js' %}"></script>
+    <script>
+        $(function (){
+            $("#post_user").validate({
+                rules:{
+                    user_name: {
+                        required: true,
+                        remote: {
+                            url: "{% url 'check_username' %}",
+                            type: "POST",
+                            data: {
+                                user_name: $('.user_name').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            },
+                        }
+                    },
+                    hashed_password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                         remote: {
+                            url: "{% url 'check_email' %}",
+                            type: "POST",
+                            data: {
+                                email: $('.email').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            }
+                        }
+                    },
+                    team:{
+                        required: true
+                    }
+                },
+                messages: {
+                    user_name: {
+                        required: "Please enter username",
+                        remote: "Username already exist"
+                    },
+                    hashed_password: {
+                        required: "Please provide a password",
+                        minlength: "Password must be 6 character long!.."
+                    },
+                    email: {
+                        required: "Please provide your email",
+                        email: "Enter a valid email",
+                        remote: "Email is already taken."
+                    },
+                    team:{
+                        required: "Select a team"
+                    }
+                },
+                 highlight: function(e) {
+                     $(e).closest(".form-group").addClass("has-error")
+                 },
+                 unhighlight: function(e) {
+                     $(e).closest(".form-group").removeClass("has-error")
+                },
+            });
+        })
+
+        $(function (){
+            $("#edit_user").validate({
+                rules:{
+                    user_name: {
+                        required: true,
+                        remote: {
+                            url: "{% url 'check_user_username_update' %}",
+                            type: "POST",
+                            data: {
+                                user_name: $('.user_name').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            },
+                        }
+                    },
+                    hashed_password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                         remote: {
+                            url: "{% url 'check_user_email_update' %}",
+                            type: "POST",
+                            data: {
+                                email: $('.email').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            }
+                        }
+                    },
+                },
+                messages: {
+                    user_name: {
+                        required: "Please enter username",
+                        remote: "Username already exist"
+                    },
+                    hashed_password: {
+                        required: "Please provide a password",
+                        minlength: "Password must be 6 character long!.."
+                    },
+                    email: {
+                        required: "Please provide your email",
+                        email: "Enter a valid email",
+                        remote: "Email is already taken."
+                    }
+                },
+                 highlight: function(e) {
+                     $(e).closest(".form-group").addClass("has-error")
+                 },
+                 unhighlight: function(e) {
+                     $(e).closest(".form-group").removeClass("has-error")
+                },
+            });
+        })
+    </script>
+{% endblock %}
+

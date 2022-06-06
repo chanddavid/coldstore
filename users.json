@@ -1,0 +1,464 @@
+[
+  {
+    "model": "account.user",
+    "pk": 1,
+    "fields": {
+      "user_name": "vaghawan",
+      "salt": "bd8b8019d49e47f684daddd5efc313d2",
+      "hashed_password": "d38dd3dfe88c7fc5331b161b0931ddc6",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_superuser": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 2,
+    "fields": {
+      "user_name": "Prapti",
+      "salt": "926df85d109e4f018e70835f25d8fa35",
+      "hashed_password": "6b8b75162431faa0e6618e47dd30967f",
+      "first_name": "",
+      "last_name": "",
+      "email": "prapti.pandey@ekbana.info",
+      "is_superuser": false,
+      "is_active": false
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 3,
+    "fields": {
+      "user_name": "bibek",
+      "salt": "414ac9c5e41547069a7ea8e7d178bf5b",
+      "hashed_password": "a0954eff62579331c03f4a52e93853ed",
+      "first_name": "",
+      "last_name": "",
+      "email": "bibek.chaudhary@ekbana.info",
+      "is_superuser": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 13,
+    "fields": {
+      "user_name": "saurab",
+      "salt": "62cee746bb85483f9bc0ebf69943ce00",
+      "hashed_password": "0319be2e349f8cf2cc03ee78b5a9947c",
+      "first_name": "",
+      "last_name": "",
+      "email": "saurab.dahal@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 15,
+    "fields": {
+      "user_name": "ramesh",
+      "salt": "9ccce4a92b7940298859382f417270a8",
+      "hashed_password": "3d0f45f24668450f278c9c6a577c4932",
+      "first_name": "",
+      "last_name": "",
+      "email": "ramesh.rawal@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 16,
+    "fields": {
+      "user_name": "salistha",
+      "salt": "6a756d37dbcb4aa79e2ca02734da8a5d",
+      "hashed_password": "c85fa4304c5237000ffe658a5486633e",
+      "first_name": "",
+      "last_name": "",
+      "email": "salisthashakya@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 18,
+    "fields": {
+      "user_name": "Santosh_Adhikari",
+      "salt": "d0f92b4d0a8247f69c4eac400b522879",
+      "hashed_password": "f85c9fba7bd1721c6b3f9d4da85686a9",
+      "first_name": "",
+      "last_name": "",
+      "email": "santosh.adhikari@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 19,
+    "fields": {
+      "user_name": "madhav",
+      "salt": "74ce59a9a27941508f52131834a7da4f",
+      "hashed_password": "4b2ade5272be1c8a3b2120ab3b3c270c",
+      "first_name": "",
+      "last_name": "",
+      "email": "madhav.humagain@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 20,
+    "fields": {
+      "user_name": "ashuta",
+      "salt": "dd27e8c942834a3385c1894cd7416245",
+      "hashed_password": "431c986401c25b5794f2f0cfd6f1bcc4",
+      "first_name": "",
+      "last_name": "",
+      "email": "ashuta.bhattarai@ekbana.info",
+      "is_superuser": false,
+      "is_active": false
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 21,
+    "fields": {
+      "user_name": "dipesh",
+      "salt": "6f0cddf5621547349cf07d24ba68bb82",
+      "hashed_password": "d58f952ec2359c3a5f0e678a39d0ba48",
+      "first_name": "",
+      "last_name": "",
+      "email": "dipesh.shrestha@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 22,
+    "fields": {
+      "user_name": "pema",
+      "salt": "bd53eb82c4134cfd872a4c46cc49cec0",
+      "hashed_password": "c73ebc369dd055286cbcf1e449ab9331",
+      "first_name": "",
+      "last_name": "",
+      "email": "pema.gurung@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 23,
+    "fields": {
+      "user_name": "tchiring",
+      "salt": "4d10f80bfb9b4e63ac550186b50f39f7",
+      "hashed_password": "7da763aab7915227301e5bc378afd62e",
+      "first_name": "",
+      "last_name": "",
+      "email": "tchiring.lama@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 24,
+    "fields": {
+      "user_name": "Sharmila",
+      "salt": "306638d9d4c343cc8db6377775b31fde",
+      "hashed_password": "17978d75485a5ed0d12150d0038f3609",
+      "first_name": "",
+      "last_name": "",
+      "email": "sarmilaupadhyaya43@gmail.com",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 25,
+    "fields": {
+      "user_name": "sushant bajagain",
+      "salt": "92274ab74ff943cfab0334e71d106511",
+      "hashed_password": "ffb8c1b4e1ea5e68779db959603b016e",
+      "first_name": "",
+      "last_name": "",
+      "email": "sushant_bajagain@hotmail.com",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 26,
+    "fields": {
+      "user_name": "bijay",
+      "salt": "682e12583eb341a9a9c28fd6b302c301",
+      "hashed_password": "1f25b13c6795430e6d7f7cbaf0b3bb18",
+      "first_name": "",
+      "last_name": "",
+      "email": "bijay.khanal@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 27,
+    "fields": {
+      "user_name": "Faraz",
+      "salt": "752a0dc8fe2c4537b71b2897dac83a9c",
+      "hashed_password": "3dfd23370669c92d77945d9a6d643a80",
+      "first_name": "",
+      "last_name": "",
+      "email": "faraz.khan@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 28,
+    "fields": {
+      "user_name": "Sajita",
+      "salt": "1b3f85d6afa64cdfa0333a847942db89",
+      "hashed_password": "fe0c4697da77cd03ebda93f38b555f3d",
+      "first_name": "",
+      "last_name": "",
+      "email": "sajita.pathak@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 29,
+    "fields": {
+      "user_name": "shitaladhikari",
+      "salt": "9b0193487b65451caa679452b30d31c7",
+      "hashed_password": "79663532152cb77e3ab401d0bf8782dc",
+      "first_name": "",
+      "last_name": "",
+      "email": "shitaladhikari123@gmail.com",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 30,
+    "fields": {
+      "user_name": "aashutosh.pyakurel",
+      "salt": "1036f3fd471b445d838dbc615594f02a",
+      "hashed_password": "62cb84e7c6ec3944a1c4496a2d41e89b",
+      "first_name": "",
+      "last_name": "",
+      "email": "aashutosh.pyakurel@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 31,
+    "fields": {
+      "user_name": "Surajzepp",
+      "salt": "d7eb9795f8b4434184c2aadf49506ea8",
+      "hashed_password": "3443b95e80138b6f3e66eab1bd0403d9",
+      "first_name": "",
+      "last_name": "",
+      "email": "suraj.joshi@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 32,
+    "fields": {
+      "user_name": "niraulap",
+      "salt": "7c1fd2dca341495e9add24abcca5fd99",
+      "hashed_password": "4eb8c78cc55b98573072090fad48b91e",
+      "first_name": "",
+      "last_name": "",
+      "email": "prajita.niraula@ekbana.info",
+      "is_superuser": false,
+      "is_active": false
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 33,
+    "fields": {
+      "user_name": "Sabin",
+      "salt": "a6f883256c1046fa894c7a75ad9f4c83",
+      "hashed_password": "54215155cfc54450ef887903ac22e303",
+      "first_name": "",
+      "last_name": "",
+      "email": "sabin.katwal@ekbana.info",
+      "is_superuser": false,
+      "is_active": false
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 34,
+    "fields": {
+      "user_name": "aashir",
+      "salt": "b3f18cd83eaa41c8877b6906ef336926",
+      "hashed_password": "602e1be8211443f983238ca29888737a",
+      "first_name": "",
+      "last_name": "",
+      "email": "aashirshk20@gmail.com",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 35,
+    "fields": {
+      "user_name": "erin.shakya",
+      "salt": "45c4509435b94084a26b16539e4d2a20",
+      "hashed_password": "8cb712b5e3ec5e588ed641b56106dc0d",
+      "first_name": "",
+      "last_name": "",
+      "email": "erin.shakya@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 36,
+    "fields": {
+      "user_name": "sudip2560",
+      "salt": "4196d868294c43d394f1eea8e8a6ad73",
+      "hashed_password": "92db3ce6e04605f463580dbf94086bf0",
+      "first_name": "",
+      "last_name": "",
+      "email": "sudip.manandhar@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 37,
+    "fields": {
+      "user_name": "rajan",
+      "salt": "86ae25a826134463a403e959814a1610",
+      "hashed_password": "2ce7d3d4fec8c88fd4ba392f118dc79d",
+      "first_name": "",
+      "last_name": "",
+      "email": "rajan.karki@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 38,
+    "fields": {
+      "user_name": "bichar4",
+      "salt": "c7291dbc05494eaba8ec1bf6873c8368",
+      "hashed_password": "43fdfacb389cf990f50894200fef35dd",
+      "first_name": "",
+      "last_name": "",
+      "email": "bichar4@gmail.com",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 39,
+    "fields": {
+      "user_name": "Parikshit",
+      "salt": "426520d9383a4b988c8cd70427bbf98a",
+      "hashed_password": "c75acf850d3a099bad43bb6022ef8a11",
+      "first_name": "",
+      "last_name": "",
+      "email": "parikshit.khanal@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 40,
+    "fields": {
+      "user_name": "aashish.shrestha",
+      "salt": "dcbe933b32094fc68b738d808fd61f76",
+      "hashed_password": "3fe4ae5ed488d1b1b075cad08d34a002",
+      "first_name": "",
+      "last_name": "",
+      "email": "aashish.shrestha@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 41,
+    "fields": {
+      "user_name": "rizzu.rohit",
+      "salt": "bb46599c432a4368acd79944e544a4c4",
+      "hashed_password": "0540dad12552b15f46da994ec4fce895",
+      "first_name": "",
+      "last_name": "",
+      "email": "rizzurohit.bhandari@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 42,
+    "fields": {
+      "user_name": "anil",
+      "salt": "95efc98fa9264fa28b01dfe5823bedfe",
+      "hashed_password": "f75f8bf16c4bfa954753151c593282f3",
+      "first_name": "",
+      "last_name": "",
+      "email": "anilkumar.shrestha@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 43,
+    "fields": {
+      "user_name": "Anzali",
+      "salt": "c5103ba06733487e8a632d3b8cacb294",
+      "hashed_password": "ac079831a6138f87b03088c32597a1b5",
+      "first_name": "",
+      "last_name": "",
+      "email": "anjali.acharya@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "account.user",
+    "pk": 44,
+    "fields": {
+      "user_name": "Prashant",
+      "salt": "f52bab6e60bf45ffb2d50d25982cff09",
+      "hashed_password": "cf793a62cf17b2eb5f0b959620f48cde",
+      "first_name": "",
+      "last_name": "",
+      "email": "prashant.ghimire@ekbana.info",
+      "is_superuser": false,
+      "is_active": true
+    }
+  }
+]

@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block externalcss %}
+    <link href="{% static 'css/cropper.min.css' %}" rel="stylesheet">
+    <style>
+        .page-header{
+            margin: 0;
+        }
+        .close_btn .close{
+            color: black;
+            position: absolute;
+            top: 0;
+            right: 0;
+            /* border: 2px solid black; */
+            background: white;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-header">
+            <form class="form-info" action="" id="update_user" method="post" enctype="multipart/form-data">
+                <div class="ibox flex-1">
+                    <div class="ibox-body">
+                        <div class="flexbox">
+                            <div class="flexbox-b">
+                                <div class="ml-5 mr-5">
+                                    <img class="img-circle" src="{{ user.profile.image.url }}" alt="image" height="120" width="110" />
+                                </div>
+                                <div>
+                                    <h4>{{ user.user_name }}</h4>
+                                    <div class="text-muted font-13 mb-3">
+                                        <span class="mr-3"><i class="ti-email mr-2"></i>{{ user.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flexbox-b">
+                                {% if messages %}
+                                    {% for msg in messages %}
+                                        {% if msg.tags == "success" %}
+                                            <div class="alert alert-success" role="alert">
+                                                <span class="close_btn">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                </span>
+                                                {{ msg }}
+                                            </div>
+                                        {% elif msg.tags == "error" %}
+                                            <div class="alert alert-danger" role="alert">
+                                                <span class="close_btn">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                </span>
+                                                {{ msg }}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-body">
+                                <h5 class="font-strong mb-4">GENERAL INFORMATION</h5>
+
+                                        {% csrf_token %}
+                                        <div class="ibox-body">
+                                            <div class="row">
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>First Name</label>
+                                                    {% render_field user_update_form.first_name class="form-control" type="text" placeholder="First Name" id="first_name" name="first_name" %}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Last Name</label>
+                                                    {% render_field user_update_form.last_name class="form-control" type="text" placeholder="Last Name" id="last_name" name="last_name" %}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Username</label>
+                                                    {% render_field user_update_form.user_name class="form-control" type="text" placeholder="Username" id="user_name" name="user_name" %}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Email</label>
+                                                    {% render_field user_update_form.email class="form-control" type="email" placeholder="Email" id="email" name="email"%}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Current Password</label>
+                                                    {% render_field user_update_form.current_password class="form-control" placeholder="Current Password" id="current_password" name="current_password" %}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>New Password</label>
+                                                    {% render_field user_update_form.new_password class="form-control" placeholder="New Password" id="new_password" name="new_password"%}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Confirm New Password</label>
+                                                    {% render_field user_update_form.confirm_newpassword class="form-control" placeholder="Confirm New Password" id="confirm_newpassword" name="confirm_newpassword" %}
+                                                </div>
+                                                <div class="col-sm-6 form-group mb-4">
+                                                    <label>Upload New Image</label>
+                                                    {% render_field profile_update_form.image class="form-control" %}
+                                                </div>
+                                                {% render_field profile_update_form.x class="form-control" %}
+                                                {% render_field profile_update_form.y class="form-control" %}
+                                                {% render_field profile_update_form.width class="form-control" %}
+                                                {% render_field profile_update_form.height class="form-control" %}
+
+
+
+                                            </div>
+                                        <div class="ibox-footer">
+                                            <button class="btn btn-info mr-2" type="submit">Submit</button>
+                                        </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            </div>
+            <div class="page-content fade-in-up">
+
+
+            <div class="modal fade" id="modalCrop">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title">Crop the photo</h4>
+                        </div>
+                        <div class="modal-body">
+                          <img src="" id="image" style="max-width: 100%;">
+                        </div>
+                        <div class="modal-footer">
+                          <div class="btn-group pull-left" role="group">
+                            <button type="button" class="btn btn-default js-zoom-in">
+                              <span class="ti ti-zoom-in"></span>
+                            </button>
+                            <button type="button" class="btn btn-default js-zoom-out">
+                              <span class="ti ti-zoom-out"></span>
+                            </button>
+                          </div>
+                          <button type="button" class="btn btn-primary js-crop" data-dismiss="modal">Crop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END PAGE CONTENT-->
+           {% include 'static_element/footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block externaljs %}
+    <script src="{% static 'js/cropper.min.js' %}"></script>
+    <script>
+        $(function(){
+            $('#update_user').validate({
+                errorClass: "help-block",
+                rules: {
+                    user_name: {
+                        required: true,
+                        remote: {
+                            url: "{% url 'check_username_update' %}",
+                            type: "POST",
+                            data: {
+                                user_name: $('.user_name').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            },
+                        }
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "{% url 'check_email_update' %}",
+                            type: "POST",
+                            data: {
+                                email: $('.email').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            }
+                        }
+                    },
+                    current_password:{
+                        required: true,
+                        remote:{
+                            url: "{% url 'check_password' %}",
+                            type: "POST",
+                            data: {
+                                current_password: $('.current_password').val(),
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                            }
+                        },
+                    },
+                    new_password:{
+                        minlength: 6
+                    },
+                    confirm_newpassword:{
+                        equalTo: "#new_password"
+                    }
+                },
+                 messages:{
+                    user_name: {
+                        remote: "Username already exists."
+                    },
+                    email: {
+                        remote: "This email is already taken."
+                    },
+                     current_password: {
+                        remote: "Password does not match"
+                     }
+                },
+                highlight: function(e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function(e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+            })
+        })
+    </script>
+    <script>
+        $('#current_password').on("keyup", function(){
+            $.ajax({
+                url: "{% url 'check_password' %}",
+                type: "POST",
+                data: {
+                    current_password: $('#current_password').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data){
+                    console.log("Data is: ")
+                    console.log(data)
+                    if (data===true){
+                        $('#new_password').prop("disabled", false)
+                        $('#confirm_newpassword').prop("disabled", false)
+                    }
+                    else if(data===false || data===""){
+                        $('#new_password').prop("disabled", true)
+                        $('#confirm_newpassword').prop("disabled", true)
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        $(function () {
+          /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+          $("#id_image").change(function () {
+            if (this.files && this.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                $("#image").attr("src", e.target.result);
+                $("#modalCrop").modal("show");
+              }
+              reader.readAsDataURL(this.files[0]);
+            }
+          });
+
+           /* SCRIPTS TO HANDLE THE CROPPER BOX */
+          var $image = $("#image");
+          var cropBoxData;
+          var canvasData;
+          $("#modalCrop").on("shown.bs.modal", function () {
+            $image.cropper({
+              viewMode: 1,
+              aspectRatio: 1/1,
+              minCropBoxWidth: 200,
+              minCropBoxHeight: 200,
+              ready: function () {
+                $image.cropper("setCanvasData", canvasData);
+                $image.cropper("setCropBoxData", cropBoxData);
+              }
+            });
+          }).on("hidden.bs.modal", function () {
+            cropBoxData = $image.cropper("getCropBoxData");
+            canvasData = $image.cropper("getCanvasData");
+            $image.cropper("destroy");
+          });
+
+
+          $(".js-zoom-in").click(function () {
+            $image.cropper("zoom", 0.1);
+          });
+
+          $(".js-zoom-out").click(function () {
+            $image.cropper("zoom", -0.1);
+          });
+
+          $(".js-crop").click(function () {
+            var cropData = $image.cropper("getData");
+            $("#id_x").val(cropData["x"]);
+            $("#id_y").val(cropData["y"]);
+            $("#id_height").val(cropData["height"]);
+            $("#id_width").val(cropData["width"]);
+        });
+
+    });
+  </script>
+
+{% endblock %}

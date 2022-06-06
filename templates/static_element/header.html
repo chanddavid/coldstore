@@ -1,0 +1,62 @@
+{% load static %}
+{% block externalcss %}
+    <style>
+        .nav.navbar-toolbar.right{
+            width: 20%;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+
+{% endblock %}
+<header class="header">
+    <!-- START TOP-LEFT TOOLBAR-->
+    <ul class="nav navbar-toolbar">
+        <li>
+            <a class="nav-link sidebar-toggler js-sidebar-toggler" href="javascript:;">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </li>
+        <li class="dropdown mega-menu">
+            <div class="company_logo nav-link dropdown-toggle" data-toggle="dropdown">
+                    <img src="{% static 'img/company_icon/logo.png' %}" alt="image" height="20px"/>
+            </div>
+        </li>
+    </ul>
+    <!-- END TOP-LEFT TOOLBAR-->
+    <!-- START TOP-RIGHT TOOLBAR-->
+    <ul class="nav navbar-toolbar right">
+        <div>
+            <img class="img-circle" src="{{ user.profile.image.url }}" alt="user_icon" width="40" height="40">
+        </div>
+        <li class="dropdown dropdown-user">
+            <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                <span>{{ request.session.username }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-arrow dropdown-menu-right admin-dropdown-menu">
+                <div class="dropdown-arrow"></div>
+                <div class="dropdown-header">
+                    <div class="admin-avatar">
+                        <img src="{{ user.profile.image.url }}" alt="image">
+                    </div>
+                    <div>
+                        <h5 class="font-strong text-white">{{ request.session.username }}</h5>
+                    </div>
+                </div>
+                <div class="admin-menu-features">
+                    <a class="admin-features-item" href="" style="width: 100%"><i class="ti-user"></i>
+                        <span>PROFILE</span>
+                    </a>
+                </div>
+                <div class="admin-menu-content">
+                    <div class="d-flex justify-content-between mt-2">
+                        <a class="d-flex align-items-center" href="{% url 'logout' %}">Logout<i class="ti-shift-right ml-2 font-20"></i></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- END TOP-RIGHT TOOLBAR-->
+</header>

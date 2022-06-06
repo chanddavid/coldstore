@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+<div class="user_modal">
+    <div class="modal_container">
+        <span class="modal_container_close">&times;</span>
+
+        <div class="modal_body">
+            <div class="model_body_header">
+                <h2 class="ibox-title mb-5 modal_title">User Form</h2>
+                <div class="border-bottom"></div>
+            </div>
+
+            <form class="form-info" action="" id="post_user" method="post">
+                {% csrf_token %}
+                <div class="ibox-body">
+                    <div class="row">
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>First Name</label>
+                            {% render_field form.first_name class="form-control" type="text" placeholder="First Name" id="first_name" name="first_name" %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>Last Name</label>
+                            {% render_field form.last_name class="form-control" type="text" placeholder="Last Name" id="last_name" name="last_name" %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>Username</label>
+                            {% render_field form.user_name class="form-control" type="text" placeholder="Username" id="user_name" name="user_name" %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>Password</label>
+                            {% render_field form.hashed_password class="form-control" type="password" placeholder="Password" id="password" %}
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Email</label>
+                        {% render_field form.email class="form-control" type="email" placeholder="Email" id="email" name="email"%}
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Organization</label>
+                        {% render_field form.organization class="form-control" id="organization"%}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Super-User</label>
+
+                        <div class="ml-2" style="display:inline">
+                            {% for is_superuser_choice in form.is_superuser %}
+                                 {{ is_superuser_choice.tag  }}
+                                 {{ is_superuser_choice.choice_label }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Active</label>
+                        <div class="ml-2" style="display:inline">
+                            {% for is_active_choice in form.is_active %}
+                                 {{ is_active_choice.tag  }}
+                                 {{ is_active_choice.choice_label }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ibox-footer">
+                    <button class="btn btn-info mr-2" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="reset">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

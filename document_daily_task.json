@@ -1,0 +1,479 @@
+[
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 4,
+    "fields": {
+      "created_by": 25,
+      "content": "<p>worked on aws</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 6,
+    "fields": {
+      "created_by": 19,
+      "content": "<ul>\r\n\t<li>\r\n\t<p><strong>Reinstall raspbian, to add SWAP on new SD card (Reception - camera-attendance) and also did all the installations necessary to host camera-attendance</strong></p>\r\n\t</li>\r\n</ul>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 9,
+    "fields": {
+      "created_by": 15,
+      "content": "<ul>\r\n\t<li>\r\n\t<p><strong>Customer Growth Analysis</strong></p>\r\n\t</li>\r\n\t<li>\r\n\t<p><strong>Overall Analysis data generation</strong></p>\r\n\t</li>\r\n</ul>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 10,
+    "fields": {
+      "created_by": 15,
+      "content": "<ul>\r\n\t<li>\r\n\t<p><strong>New Customer Promo Interest</strong></p>\r\n\t</li>\r\n\t<li>\r\n\t<p><strong>New Customer Hold</strong></p>\r\n\t</li>\r\n\t<li>\r\n\t<p><strong>Returned Customer Growth Analysis</strong></p>\r\n\t</li>\r\n</ul>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 11,
+    "fields": {
+      "created_by": 15,
+      "content": "<ul>\r\n\t<li>\r\n\t<p><strong>Returned Customer Growth Analysis</strong></p>\r\n\t</li>\r\n\t<li>\r\n\t<p><strong>Returned Customer Promo Intrest</strong></p>\r\n\t</li>\r\n\t<li>\r\n\t<p><strong>Returned Customer Hold Analysis</strong></p>\r\n\t</li>\r\n</ul>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 12,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Encapsulate parent module in child dependencies which packaging in jar.<br />\r\n2. Studying Video streaming using kafka</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 13,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Basket Penetration</p>\r\n\r\n<p>July Anniversary Analysis Documentation</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 14,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>1. Create configuration file using JDOM.</p>\r\n\r\n<p>2. Integrate client to master configuration setting.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 15,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Zero Promotion Analysis</p>\r\n\r\n<p>Customer Repeat Analysis</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 16,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>1. [DFS] Set complete meta data configuration with both client and follower nodes.</p>\r\n\r\n<p>2. [Kafka] Implement simple video streaming using kafka-python.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 17,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Basket transferred customer visit analysis.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 18,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Use Kafka client in python and java to code in kafka.</p>\r\n\r\n<p>&nbsp;</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 19,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Report Preparation</p>\r\n\r\n<p>Customer Growth validation</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 20,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Overall data generation and update</p>\r\n\r\n<p>Presenation Report preparation</p>\r\n\r\n<p>Presentation</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 21,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Diabetes Data Analysis and Classification</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 23,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Churn Prediction Data Analysis</p>\r\n\r\n<p>&nbsp;</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 24,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Research in two phoenix sink connector and try to implement dhananjay patkar phoenix sin connector.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 25,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Phoenix connector code modification</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 27,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Try to implement own phoenix sink connector with reference from dhanajay patkar connector.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 29,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Understanding sink connector work flow and trying to implement it.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 30,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1.&nbsp;Fetched video_id instead of hashed_id for all categories in dashboard and userprofile</p>\r\n\r\n<p>2.&nbsp;Installed Oracle 11g using docker</p>\r\n\r\n<p>3.&nbsp;Implenmenting source connector for oracle using oracle-11g</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 31,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1.&nbsp;Implenmenting source connector for oracle using oracle-12c</p>\r\n\r\n<p>2.&nbsp;Web socket for sending message to all subscribed clients</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 32,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Understand lifecycle of creating connector with reference to phoenix connector (dhanajay&#39;s).</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 33,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>1) Thorough understanding of creating sink connector.</p>\r\n\r\n<p>2) Use confluent community features for streaming data distributedly.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 34,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1.&nbsp;Using JDBC for phoenix sink connector.</p>\r\n\r\n<p>2.&nbsp;Added Schema registry in kafka cluster</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 35,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>2 years data extraction,</p>\r\n\r\n<p>weather data analysis</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 37,
+    "fields": {
+      "created_by": 2,
+      "content": "<p>sdfsdfsd</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 38,
+    "fields": {
+      "created_by": 2,
+      "content": "vdvdsvds",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 39,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>6-month promo products sales analysis.</p>\r\n\r\n<p>Report and Presentation Slide Prepn.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 40,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Used schema registry to add schema for a topic<br />\r\n2. Implement schema registry for streams in kafka</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 41,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Discussion of HGI reporting<br />\r\n2. Use of schema registry for phoenix sink connector and streams done.<br />\r\n3. Studying KSQL in more detail.</p>",
+      "date": "2019-07-25"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 42,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Schema registry implementation in kafka with avro format.</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 43,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Ksql aggreagation in stream.</p>\r\n\r\n<p>Read blog related to fraud detection using kafka.</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 44,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Add key to single message transformation.</p>\r\n\r\n<p>Extracting data from API through source connector.</p>\r\n\r\n<p>Read data wrangling using apache kafka and ksql.</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 45,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Understand different ways to handle modeling of data from relational database to elasticsearch.</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 46,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Kafka Streams</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 47,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. HGI reporting discussion<br />\r\n2. Elasticsearch json parsing</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 48,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>1. Java Consumer for kafka topic, with avro format deserializer</p>",
+      "date": "2019-08-13"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 49,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>SVD revisit and research</p>\r\n\r\n<p>Google Twitter dataset analysis</p>",
+      "date": "2019-08-19"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 50,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Look into insert to and joins between streams with use of within.</p>",
+      "date": "2019-08-19"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 51,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Stream table ClassDetails and PolicyIssuance&nbsp;from postgres to kafka.</p>\r\n\r\n<p>Filter stream record from ClassDetails.</p>",
+      "date": "2019-08-19"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 52,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Fix issue related to numeric data type in kafka connect.</p>\r\n\r\n<p>Join two ClassDetails stream and PolicyIssuance stream using KSQL.</p>",
+      "date": "2019-08-19"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 53,
+    "fields": {
+      "created_by": 15,
+      "content": "<p>Customer churn Prediction</p>\r\n\r\n<p>Data Analysis</p>",
+      "date": "2019-08-19"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 54,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>create consumer as java application.</p>\r\n\r\n<p>Modify query used in connector to adapt to change in values using case.</p>",
+      "date": "2019-08-23"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 55,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Learn scala.</p>\r\n\r\n<p>Use spark with scala.</p>",
+      "date": "2019-08-23"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 56,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>class detail json schema generation</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 57,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>CalculationDetailJSON schema generation</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 58,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>policy issuance schema generation</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 59,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Index hgi insurance data to elasticsearch</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 60,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Solve issues related data insertion in elasticsearch.</p>\r\n\r\n<p>Insert hgi joined class detail and policy issuance data in elasticsearch</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 61,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Trim string fields in hgi data.</p>\r\n\r\n<p>Convert timestamp to unix.</p>\r\n\r\n<p>Remove duplicates columns in data.</p>\r\n\r\n<p>Insert data into elastic search.</p>",
+      "date": "2019-09-04"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 62,
+    "fields": {
+      "created_by": 16,
+      "content": "<p>Filteration and aggregation in elasticsearch.</p>\r\n\r\n<p>Fix indexing data in elasticsearch.</p>",
+      "date": "2019-09-05"
+    }
+  },
+  {
+    "model": "documents.createdailytaskdocuments",
+    "pk": 63,
+    "fields": {
+      "created_by": 3,
+      "content": "<p>Video Streaming using Python and JAVA (Testing)</p>",
+      "date": "2019-09-09"
+    }
+  }
+]

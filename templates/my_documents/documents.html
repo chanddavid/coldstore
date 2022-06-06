@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="{% static 'vendors/dataTables/datatables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+
+                <div class="page-heading">
+                <h1 class="page-title">Documents</h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'dashboard' %}"><i class="la la-home font-20"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'my_document_view' %}">Documents</a>
+                    </li>
+                </ol>
+            </div>
+                <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+                    <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+                    <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
+                </div>
+
+                <div class="ibox ibox-fullheight">
+                    <div class="flexbox mb-4">
+                        <div id="add_documents" class="btn btn-success btn-rounded ml-5 mt-3">
+                            <a href="{% url 'create_new_document' %}"><i class="fas fa-file-alt"></i> New Document</a>
+                        </div>
+                        <div id="upload_documents" class="btn btn-success btn-rounded mr-5 mt-3">
+                            <a href="javascript:;" data-toggle="modal" data-target="#uploadDocumentModal"><i class="fas fa-upload"></i> Upload Documents </a>
+                        </div>
+                    </div>
+
+                    <hr class="mt-5">
+                    <h3 class="ml-3">Uploaded Documents</h3>
+                    <hr>
+                    <div class="table-responsive row">
+                            <table class="table table-bordered table-hover" id="upload_document_datatable">
+                                <thead class="thead-default thead-lg">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th class="no-sort">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for document in documents %}
+                                        <tr>
+                                            <td>{{ document.title }}</td>
+                                            <td>{{ document.date|date:"Y-m-d"}}</td>
+                                            <td>
+                                                <a href="{{ document.file.url }}" class="btn btn-blue" download><i class="fas fa-download"></i> Download</a>
+                                                <a class="btn btn-dark" href="{% url 'open_document' document.id %}" target="_blank"><i class="fas fa-file-pdf-o"></i> View</a>
+                                                <a onclick="deleteUploadedDocument({{ document.id }})" class="btn btn-danger" style="color: white"><i class="fas fa-trash"></i> Delete</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    <hr class="mt-5">
+                    <h3 class="ml-3">Created Documents</h3>
+                    <hr>
+                    <div class="table-responsive row">
+                        <table class="table table-bordered table-hover" id="created_document_datatable">
+                                <thead class="thead-default thead-lg">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th class="no-sort">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for document in created_documents %}
+                                        <tr>
+                                            <td>{{ document.title }}</td>
+                                            <td>{{ document.date|date:"Y-m-d"}}</td>
+                                            <td>
+                                                <a href="{% url 'download_created_document_as_pdfview' document.id %}" class="btn btn-blue" download><i class="fas fa-download"></i> Download</a>
+                                                <a class="btn btn-dark" href="{% url 'create_new_document_detail_view' document.id %}" target="_blank"><i class="fas fa-file-pdf-o"></i> View</a>
+                                                <a href="{% url 'update_document' document.id %}" class="btn btn-primary" style="color: white"><i class="fas fa-edit"></i> Edit</a>
+                                                <a onclick="deleteCreatedDocument({{ document.id }})" class="btn btn-danger" style="color: white"><i class="fas fa-trash"></i> Delete</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="uploadDocumentModal" tabindex="-1" role="dialog" aria-labelledby="uploadDocumentModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="background:#f2f3fa; color: black">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">Upload Documents</h2>
+                            <button type="button" id="modal-close-btn" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="ibox ibox-fullheight">
+                                <form class="form-info" action="{% url 'my_document_view' %}" method="post" id="upload_document" enctype="multipart/form-data">{% csrf_token %}
+
+                                <div class="ibox-body">
+                                    <div class="mb-3">
+                                        <small class="text-muted">**File must be in docx or pdf format.**</small>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label>Title: </label>
+                                        <input class="form-control" type="text" placeholder="Title" name="title" id="title">
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label>Choose File: </label>
+                                        <input class="form-control" type="file" name="file" id="file">
+                                    </div>
+                                </div>
+                                <div class="ibox-footer">
+                                    <button class="btn btn-info mr-2" type="submit">Submit</button>
+                                    <button class="btn btn-secondary" type="reset">Reset</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END PAGE CONTENT-->
+            {% include 'static_element/footer.html' %}
+        </div>
+    </div>
+    <!-- BEGIN THEME CONFIG PANEL-->
+{#    {% include 'static_element/log_message.html' %}#}
+    <!-- END THEME CONFIG PANEL-->
+    <!-- New question dialog-->
+    {% include 'static_element/session-dialog.html' %}
+    <!-- End New question dialog-->
+    <!-- QUICK SIDEBAR-->
+    {% include 'static_element/quicksidebar.html' %}
+    <!-- END QUICK SIDEBAR-->
+{% endblock %}
+    <!-- PAGE LEVEL PLUGINS-->
+
+{% block externaljs %}
+    <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
+    <script>
+        let uploadDocumentDatatables = $('#upload_document_datatable').DataTable({
+             pageLength: 10,
+             fixedHeader: true,
+             responsive: true,
+            "sDom": 'rtip',
+             order: [[1, 'desc']],
+             columnDefs: [
+                 {
+                    targets: 'no-sort',
+                    orderable: false
+                },
+             ],
+            aoColumnDefs: [
+                {
+                    aTargets: 0,
+                    fnCreatedCell: function (td) {
+                        $(td).css('width', '33%');
+                    }
+
+                }
+            ]
+        })
+
+        $('#searchbar').on('keyup', function () {
+            uploadDocumentDatatables.search(this.value).draw();
+        })
+    </script>
+    <script>
+        let createDocumentDatatables = $('#created_document_datatable').DataTable({
+             pageLength: 10,
+             fixedHeader: true,
+             responsive: true,
+            "sDom": 'rtip',
+             order: [[1, 'desc']],
+             columnDefs: [
+                 {
+                    targets: 'no-sort',
+                    orderable: false
+                },
+             ],
+            aoColumnDefs: [
+                {
+                    aTargets: 0,
+                    fnCreatedCell: function(td){
+                        $(td).css("width", "33%")
+                    }
+                }
+            ]
+        })
+
+        $('#searchbar').on('keyup', function () {
+            createDocumentDatatables.search(this.value).draw();
+        })
+    </script>
+    <script>
+        function deleteUploadedDocument(id){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result)=>{
+                if(result.value){
+                    Swal.fire({
+                        title: 'Deleted',
+                        icon: 'success',
+                        confirmButtonText: 'Ok',
+                    }).then((result)=>{
+                        if(result.value){
+                            window.location.href = "upload_document_delete/"+id;
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+
+    <script>
+        function deleteCreatedDocument(id){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result)=>{
+                if(result.value){
+                    Swal.fire({
+                        title: 'Deleted',
+                        icon: 'success',
+                        confirmButtonText: 'Ok',
+                    }).then((result)=>{
+                        if(result.value){
+                            window.location.href = "create_document_delete/"+id;
+                        }
+                    })
+                }
+            })
+        }
+
+        $(function(){
+            $('#upload_document').validate({
+                rules:{
+                    title:{
+                        required: true
+                    },
+                    file: {
+                        required: true,
+                        remote:{
+                            url: "{% url 'file_format' %}",
+                            type: "POST",
+                            data: {
+                                file: $('.file').files,
+                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                            }
+                        }
+                    }
+                },
+                messages:{
+                  file:{
+                      remote: "File format must be either in pdf or docx"
+                  }
+                },
+                 highlight: function(e) {
+                     $(e).closest(".form-group").addClass("has-error")
+                 },
+                 unhighlight: function(e) {
+                     $(e).closest(".form-group").removeClass("has-error")
+                },
+            })
+        })
+    </script>
+{% endblock %}
+

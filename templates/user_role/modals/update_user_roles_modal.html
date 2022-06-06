@@ -1,0 +1,39 @@
+{% load widget_tweaks %}
+<div class="edit_user_roles_modal">
+    <div class="edit_modal_container">
+        <span class="edit_modal_container_close">&times;</span>
+
+        <div class="edit_modal_body">
+            <div class="edit_model_body_header">
+                <h2 class="ibox-title mb-5 modal_title">Edit User Role</h2>
+                <div class="border-bottom"></div>
+            </div>
+
+             <form class="form-info" action="" id="edit_user_roles">
+                {% csrf_token %}
+                <div class="ibox-body">
+                    <div class="row">
+                        <div>
+                            <input type="hidden" id="userRoleId" name="userRoleId" style="display: none">
+                        </div>
+                        <div class="col-sm-12 form-group mb-4">
+                            <label>Users: </label>
+                            {% render_field form.user class="form-control" id="edit_user"%}
+                        </div>
+                        <div class="col-sm-12 form-group mb-4">
+                            <label>Roles: </label>
+                             <div class="form-check">
+                                {% render_field form.roles class="edit-chosen-select" data-placeholder="Choose roles..." name="roles[]"%}
+                             </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-footer">
+                    <button class="btn btn-info mr-2" type="submit">Update</button>
+{#                    <button class="btn btn-secondary" type="reset">Cancel</button>#}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

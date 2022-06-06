@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="{% static 'vendors/dataTables/datatables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+
+                <h1 class="page-title mb-3">Role List</h1>
+
+                <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+                    <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+                    <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
+                </div>
+
+                <div class="ibox ibox-fullheight">
+                    <div class="flexbox mb-4">
+                        <div id="add_roles" class="btn btn-success btn-rounded ml-3 mt-3">
+                            <a href=""><i class="fas fa-user-plus"></i> Add Roles</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive row">
+                            <table class="table table-bordered table-hover" id="role_datatable">
+                                <thead class="thead-default thead-lg">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th class="no-sort">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+           {% include 'static_element/footer.html' %}
+
+            {% include 'roles/modals/create_role_modal.html' %}
+            {% include 'roles/modals/update_role_modal.html' %} 
+        </div>
+    </div>
+{% endblock %}
+
+{% block externaljs %}
+    <script src="{% static 'js/roles/modals/roles_modal.js' %}"></script>
+    <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
+    <script src="{% static 'js/roles/roles_script.js' %}"></script>
+    <script>
+        $("#post_role").validate({
+            rules:{
+                name: "required"
+            },
+            messages: {
+                name: "Please enter role name"
+            },
+             highlight: function(e) {
+                    $(e).closest(".form-group").addClass("has-error")
+             },
+             unhighlight: function(e) {
+                $(e).closest(".form-group").removeClass("has-error")
+             },
+        })
+    </script>
+{% endblock %}

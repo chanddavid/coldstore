@@ -1,0 +1,43 @@
+{% load static %}
+
+<nav class="page-sidebar opened">
+    <ul class="side-menu metismenu scroller">
+        {% if user.is_superuser %}
+            <li class="sidebar_items active">
+                <a href="{% url 'dashboard' %}"><i class="sidebar-item-icon ti-home"></i>
+                    <span class="nav-label">Dashboards</span>
+                </a>
+            </li>
+            <li class="sidebar_items">
+                <a href="{% url 'request_reset_page' %}"><img src="{% static 'img/request.svg' %}" alt="request" style="width: 25px; height: 25px; margin-right: 10px;">
+                    <span class="nav-label">Requests</span>
+                </a>
+            </li>
+            <li class="heading">SETTINGS</li>
+                <ul class="nav-2-level collapse in">
+                    <li class="sidebar_items">
+                        <a href="{% url 'users_page' %}">Organization</a>
+                    </li>
+                    <li class="sidebar_items">
+                        <a href="{% url 'roles_page' %}">Roles</a>
+                    </li>
+                    <li class="sidebar_items">
+                        <a href="{% url 'user_role_page' %}">User Roles</a>
+                    </li>
+                    <li class="sidebar_items">
+                        <a href="{% url 'device_view' %}">Device</a>
+                    </li>
+                    <li class="sidebar_items">
+                        <a href="/">List Device</a>
+                    </li>
+                </ul>
+            <hr>
+        {% else %}
+            <li class="sidebar_items active">
+                <a href="{% url 'dashboard' %}"><i class="sidebar-item-icon ti-home"></i>
+                    <span class="nav-label">Dashboards</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

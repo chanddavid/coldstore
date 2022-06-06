@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block externalcss %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="{% static 'vendors/dataTables/datatables.min.css' %}" rel="stylesheet" />
+    <style>
+        .close{
+            padding: 10px!important;
+            background: red!important;
+            border-radius: 0 1.5rem 0 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        {% include 'static_element/header.html' %}
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        {% include 'static_element/sidebar.html' %}
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-content fade-in-up">
+
+                <h1 class="page-title mb-3">Password Reset Request List</h1>
+                <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+                    <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+                    <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
+                </div>
+                <div class="ibox ibox-fullheight">
+                    <div class="table-responsive row">
+                            <table class="table table-bordered table-hover" id="reset_request_datatable">
+                                <thead class="thead-default thead-lg">
+                                    <tr>
+                                        <th>S.N</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Created At</th>
+                                        <th class="no-sort">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+                <div class="modal fade" id="password_change" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reset Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-info" action="" id="reset_user_password" method="post">
+                            {% csrf_token %}
+                            <div class="ibox-body">
+                                <div class="row">
+                                    <div class="col-sm-12 form-group mb-4">
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" hidden>
+                                    </div>
+                                    <div class="col-sm-12 form-group mb-4">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Reset</button>
+                            </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            {% include 'static_element/footer.html' %}
+{##}
+{#            {% include 'user/modals/create_user_modal.html' %}#}
+{#            {% include 'user/modals/update_user_modal.html' %}#}
+        </div>
+    </div>
+    <!-- BEGIN THEME CONFIG PANEL-->
+{#    {% include 'static_element/log_message.html' %}#}
+    <!-- END THEME CONFIG PANEL-->
+    <!-- New question dialog-->
+    {% include 'static_element/session-dialog.html' %}
+    <!-- End New question dialog-->
+    <!-- QUICK SIDEBAR-->
+    {% include 'static_element/quicksidebar.html' %}
+    <!-- END QUICK SIDEBAR-->
+{% endblock %}
+    <!-- PAGE LEVEL PLUGINS-->
+{% block externaljs %}
+{#    <script src="{% static 'js/user/modals/user_modal.js' %}"></script>#}
+    <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
+    <script>
+        let reset_request_datatables =
+         $('#reset_request_datatable').DataTable({
+             pageLength: 10,
+             fixedHeader: true,
+             responsive: true,
+             ajax: {
+               url: "{% url 'request_reset_list_view' %}",
+               type: "GET",
+             },
+             columns: [
+                 {"data": "id"},
+                 {"data": "user_name"},
+                 {"data": "email"},
+                 {"data": "created_at"},
+                 {
+                     data: null,
+                     className: "center",
+                     defaultContent: '<a href="javascript:void(0)" data-toggle="modal" data-target="#password_change" class="text-muted font-16" id="edit_btn"><i class="far fa-edit"></i></a>'
+
+                 }
+             ],
+            "sDom": 'rtip',
+        });
+
+        $('#searchbar').on('keyup', function (){
+            reset_request_datatables.search(this.value).draw();
+        })
+
+
+
+    </script>
+
+    <script>
+        $('#password_change').on('show.bs.modal', function(e){
+            console.log("Edit Buttion is clicked")
+            let _this = e.relatedTarget;
+            let email = $(_this).parent().siblings()[2].textContent;
+            let email_field = $('#email').val(email)
+
+        })
+
+        $(document).on('submit', '#reset_user_password', function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "{% url 'request_reset_reset_view' %}",
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success: function(data){
+                    $('#password_change').modal('hide');
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `Password has been reset`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    document.querySelector('#reset_user_password').reset();
+                    reset_request_datatables.ajax.reload();
+                }
+            })
+        })
+
+
+        $(function(){
+            $('#reset_user_password').validate({
+                errorClass: "help-block",
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    }
+                },
+                highlight: function(e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function(e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+            })
+        })
+        {#$(function(){#}
+        {#    $('#reset_request_datatable')#}
+        //{#})#}
+        {#$(function (){#}
+        {#    $("#post_user").validate({#}
+        {#        rules:{#}
+        {#            user_name: {#}
+        {#                required: true,#}
+        {#                remote: {#}
+        {#                    url: "{% url 'check_username' %}",#}
+        {#                    type: "POST",#}
+        {#                    data: {#}
+        {#                        user_name: $('.user_name').val(),#}
+        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
+        {#                    },#}
+        {#                }#}
+        {#            },#}
+        {#            hashed_password: {#}
+        {#                required: true,#}
+        {#                minlength: 6#}
+        {#            },#}
+        {#            email: {#}
+        {#                required: true,#}
+        {#                email: true,#}
+        {#                 remote: {#}
+        {#                    url: "{% url 'check_email' %}",#}
+        {#                    type: "POST",#}
+        {#                    data: {#}
+        {#                        email: $('.email').val(),#}
+        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
+        {#                    }#}
+        {#                }#}
+        {#            },#}
+        {#        },#}
+        {#        messages: {#}
+        {#            user_name: {#}
+        {#                required: "Please enter username",#}
+        {#                remote: "Username already exist"#}
+        {#            },#}
+        {#            hashed_password: {#}
+        {#                required: "Please provide a password",#}
+        {#                minlength: "Password must be 6 character long!.."#}
+        {#            },#}
+        {#            email: {#}
+        {#                required: "Please provide your email",#}
+        {#                email: "Enter a valid email",#}
+        {#                remote: "Email is already taken."#}
+        {#            }#}
+        {#        },#}
+        {#         highlight: function(e) {#}
+        {#             $(e).closest(".form-group").addClass("has-error")#}
+        {#         },#}
+        {#         unhighlight: function(e) {#}
+        {#             $(e).closest(".form-group").removeClass("has-error")#}
+        {#        },#}
+        {#    });#}
+        //{#})#}
+
+        {#$(function (){#}
+        {#    $("#edit_user").validate({#}
+        {#        rules:{#}
+        {#            user_name: {#}
+        {#                required: true,#}
+        {#                remote: {#}
+        {#                    url: "{% url 'check_user_username_update' %}",#}
+        {#                    type: "POST",#}
+        {#                    data: {#}
+        {#                        user_name: $('.user_name').val(),#}
+        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
+        {#                    },#}
+        {#                }#}
+        {#            },#}
+        {#            hashed_password: {#}
+        {#                required: true,#}
+        {#                minlength: 6#}
+        {#            },#}
+        {#            email: {#}
+        {#                required: true,#}
+        {#                email: true,#}
+        {#                 remote: {#}
+        {#                    url: "{% url 'check_user_email_update' %}",#}
+        {#                    type: "POST",#}
+        {#                    data: {#}
+        {#                        email: $('.email').val(),#}
+        {#                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
+        {#                    }#}
+        {#                }#}
+        {#            },#}
+        {#        },#}
+        {#        messages: {#}
+        {#            user_name: {#}
+        {#                required: "Please enter username",#}
+        {#                remote: "Username already exist"#}
+        {#            },#}
+        {#            hashed_password: {#}
+        {#                required: "Please provide a password",#}
+        {#                minlength: "Password must be 6 character long!.."#}
+        {#            },#}
+        {#            email: {#}
+        {#                required: "Please provide your email",#}
+        {#                email: "Enter a valid email",#}
+        {#                remote: "Email is already taken."#}
+        {#            }#}
+        {#        },#}
+        {#         highlight: function(e) {#}
+        {#             $(e).closest(".form-group").addClass("has-error")#}
+        {#         },#}
+        {#         unhighlight: function(e) {#}
+        {#             $(e).closest(".form-group").removeClass("has-error")#}
+        {#        },#}
+        {#    });#}
+        //{#})#}
+    </script>
+{% endblock %}
+

@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+{% load rest_framework %}
+<div class="edit_role_modal">
+    <div class="edit_modal_container">
+        <span class="edit_modal_container_close">&times;</span>
+
+        <div class="edit_modal_body">
+            <div class="edit_model_body_header">
+                <h2 class="ibox-title mb-5 modal_title">Edit Role</h2>
+                <div class="border-bottom"></div>
+            </div>
+
+            <form class="form-info" action="" id="edit_role">
+                {% csrf_token %}
+                <div class="ibox-body">
+                    <div class="row">
+                        <div>
+                            <input type="hidden" id="roleId" name="roleId" style="display: none">
+                        </div>
+                        <div class="col-sm-12 form-group mb-4 role_name">
+{#                            {% render_form serializer %}#}
+                            {% render_field serializer.name style=style %}
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-footer">
+                    <button class="btn btn-info mr-2" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

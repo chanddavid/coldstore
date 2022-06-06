@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+<div class="edit_user_modal">
+    <div class="edit_modal_container">
+        <span class="edit_modal_container_close">&times;</span>
+
+        <div class="edit_modal_body">
+            <div class="edit_model_body_header">
+                <h2 class="ibox-title mb-5 modal_title">Edit User</h2>
+                <div class="border-bottom"></div>
+            </div>
+
+            <form class="form-info" action="" id="edit_user">
+                {% csrf_token %}
+                <div class="ibox-body">
+                    <div class="row">
+                        <div>
+                            <input type="hidden" id="userId" name="userId" style="display: none">
+                        </div>
+
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>First Name</label>
+                            {% render_field form.first_name class="form-control" type="text" placeholder="First Name" id="edit_first_name" name="first_name" %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4">
+                            <label>Last Name</label>
+                            {% render_field form.last_name class="form-control" type="text" placeholder="Last Name" id="edit_last_name" name="last_name" %}
+                        </div>
+                        <div class="col-sm-12 form-group mb-4">
+                            <label>Username</label>
+                            {% render_field form.user_name class="form-control" type="text" placeholder="Username" id="edit_user_name" name="user_name" %}
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Email</label>
+                        {% render_field form.email class="form-control" type="email" placeholder="Email" id="edit_email" name="email"%}
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Organization</label>
+                        {% render_field form.team class="form-control" id="edit_team"%}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Super-User</label>
+
+                        <div class="ml-2 edit_is_superuser" style="display:inline">
+                            {% for is_superuser_choice in form.is_superuser %}
+                                 {{ is_superuser_choice.tag  }}
+                                 {{ is_superuser_choice.choice_label }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3 ">
+                        <label>Active</label>
+                        <div class="ml-2 edit_is_active" style="display:inline">
+                            {% for is_active_choice in form.is_active %}
+                                 {{ is_active_choice.tag  }}
+                                 {{ is_active_choice.choice_label }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ibox-footer">
+                    <button class="btn btn-info mr-2" type="submit">Update</button>
+{#                    <button class="btn btn-secondary" type="reset">Cancel</button>#}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
