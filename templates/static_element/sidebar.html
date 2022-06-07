@@ -21,12 +21,14 @@
             <li class="sidebar_items">
                 <a href="{% url 'users_page' %}">Organization</a>
             </li>
+            
             <li class="sidebar_items">
                 <a href="{% url 'roles_page' %}">Roles</a>
             </li>
             <li class="sidebar_items">
                 <a href="{% url 'user_role_page' %}">User Roles</a>
             </li>
+            {% endif %}
             <li class="sidebar_items">
                 <a href="{% url 'device_view' %}">Device</a>
             </li>
@@ -35,7 +37,7 @@
             </li>
         </ul>
         <hr>
-        {% endif %}
+        
 
         {% else %}
         <li class="sidebar_items active">

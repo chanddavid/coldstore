@@ -5,11 +5,11 @@ class DeviceSerializer(serializers.ModelSerializer):
     device_Name = serializers.CharField(
         style={'placeholder': 'Device Name'}
     )
-    store=serializers.CharField(
-        style={'placeholder': 'Store'}
+    organization=serializers.CharField(
+        style={'placeholder': 'Organization'}
     )
-    data=serializers.FloatField(
-        style={'placeholder': 'Data'}
+    freeze_id=serializers.CharField(
+        style={'placeholder': 'Freeze ID'}
     )  
     
     class Meta:

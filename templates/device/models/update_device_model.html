@@ -17,16 +17,16 @@
                         <div>
                             <input type="hidden" id="deviceId" name="deviceId" style="display: none">
                         </div>
-
+                        <div class="col-sm-6 form-group mb-4 freeze_id">
+                            {% render_field serializer.freeze_id style=style %}
+                        </div>
                         <div class="col-sm-6 form-group mb-4 device_name">
                             {% render_field serializer.device_Name style=style %}
                         </div>
-                        <div class="col-sm-6 form-group mb-4 store">
-                            {% render_field serializer.store style=style %}
+                        <div class="col-sm-6 form-group mb-4 organization">
+                            {% render_field serializer.organization style=style %}
                         </div>
-                        <div class="col-sm-6 form-group mb-4 data">
-                            {% render_field serializer.data style=style %}
-                        </div>
+                       
                         <div class="col-sm-6 form-group mb-4 status" style="visibility: hidden;">
                             {% render_field serializer.status style=style %}
                         </div>

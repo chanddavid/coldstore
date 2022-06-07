@@ -8,14 +8,15 @@ let datatables = $('#device_datatable').DataTable({
     },
     columns: [  
         {"data": "id"},
+        {"data": "freeze_id"},
         {"data": "device_Name"},
-        {"data": "store"},
-        {"data": "data"},
+        {"data": "organization"},
         {"data": "status"},
         {
             data: null,
             className: "center",
-            defaultContent: '<a href="javascript:void(0)" onclick="delete_device(this)" class="text-muted font-16" style="margin-right: 10px" id="delete_btn"><i class="fas fa-trash-alt"></i></a>' +
+            defaultContent: '<a href="javascript:void(0)" onclick="refresh_device(this)" class="text-muted font-16" style="margin-right: 10px" id="refresh_btn"><i class="fa-solid fa-arrow-rotate-right"></i></a>' +
+                            '<a href="javascript:void(0)" onclick="delete_device(this)" class="text-muted font-16" style="margin-right: 10px" id="delete_btn"><i class="fas fa-trash-alt"></i></a>' +
                             '<a href="javascript:void(0)" onclick="get_device_edit_modal(this)" class="text-muted font-16" id="edit_btn"><i class="far fa-edit"></i></a>'
         }
     ],
@@ -54,9 +55,9 @@ $(document).on("submit", "#post_device", function (e){
         type: 'post',
         dataType: 'json',
         data: {
+            freeze_id: $("input[name='freeze_id']").val(),
             device_Name: $("input[name='device_Name']").val(),
-            store: $("input[name='store']").val(),
-            data: $("input[name='data']").val(),
+            organization: $("input[name='organization']").val(),
             // status: $("input[name='status']").val() 
             status: status,
             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
@@ -141,9 +142,9 @@ $(document).on('submit', '#edit_device', function(e){
         type: "put",
         dataType: "json",
         data: {
+            freeze_id: $(".freeze_id input[name='freeze_id']").val(),
             device_Name: $(".device_name input[name='device_Name']").val(),
-            store: $(".store input[name='store']").val(),
-            data: $(".data input[name='data']").val(),
+            organization: $(".organization input[name='organization']").val(),
             status: status,
             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
             action: "put"
@@ -154,3 +155,8 @@ $(document).on('submit', '#edit_device', function(e){
         }
     })
 })
+
+
+function refresh_device(){
+    console.log("i am clicked")
+}
