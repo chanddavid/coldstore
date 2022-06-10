@@ -35,3 +35,4 @@ tqdm==4.64.0
 urllib3==1.26.9
 WeasyPrint==51
 webencodings==0.5.1
+pydantic==1.9.1

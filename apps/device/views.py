@@ -11,7 +11,7 @@ from apps.account.models import User_role
 from ..login.decorators import my_login_required
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
-from mqtt.restart import restart
+# from mqtt.restart import restart
 
 
 class device_page(APIView):
@@ -87,10 +87,10 @@ class device_view_detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class mqtt_device_details(APIView):
-    def post(self,request):
-        json=dict(request.data)
-        restart(json)
-        print("Loop after run")
-        return Response({"message":"success"}, status=status.HTTP_200_OK)
+# class mqtt_device_restart(APIView):
+#     def post(self,request):
+#         json=dict(request.data)
+#         restart(json)
+#         print("Loop after run")
+#         return Response({"message":"success"}, status=status.HTTP_200_OK)
 

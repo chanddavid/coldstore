@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from dotenv import load_dotenv, find_dotenv
+from mqtt.env_vars import env
 load_dotenv(find_dotenv(), override=True)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -22,15 +23,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("secret_key")
+SECRET_KEY = env.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("debug")
+DEBUG = env.debug
 # DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("allowed_hosts").split(',')
+ALLOWED_HOSTS = env.allowed_hosts
 print(ALLOWED_HOSTS)
 
-SESSION_COOKIE_NAME=os.getenv("SESSION_COOKIE_NAME")
+SESSION_COOKIE_NAME=env.session_cookie_name
 
 # Application definition
 
@@ -99,8 +100,8 @@ WSGI_APPLICATION = 'django_cms.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'djongo',
-            'NAME': os.getenv("NAME"),
-            'ENFORCE_SCHEMA': os.getenv("ENFORCE_SCHEMA") 
+            'NAME': env.name,
+            'ENFORCE_SCHEMA': env.enforce_schema
         }
 }
 

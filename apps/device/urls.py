@@ -7,7 +7,7 @@ urlpatterns = [
     path('create_device/', views.device_view.as_view(), name="create_device"),
     path('update_device/<int:id>', views.device_view_detail.as_view(), name="edit_device"),
     path('delete_device/<int:id>', views.device_view_detail.as_view(), name="delete_device"),
-    path('mqtt_device_details/', views.mqtt_device_details.as_view(), name="mqtt_device_details"),
+    # path('mqtt_device_restart/', views.mqtt_device_restart.as_view(), name="mqtt_device_restart"),
 
 
 ]
