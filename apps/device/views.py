@@ -11,6 +11,7 @@ from apps.account.models import User_role
 from ..login.decorators import my_login_required
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
+from mqtt.restart import restart
 
 
 class device_page(APIView):
@@ -24,10 +25,7 @@ class device_page(APIView):
         user_has_privilege = False
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
-        
         serializer = DeviceSerializer()
-        user_acc_org=user_acc_to_org(user)
-        print("device detail",user_acc_org)
         user_has_privilege=user_privilege(user)
         return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Device', 'user':user,'user_has_privilege': user_has_privilege})
 
@@ -35,16 +33,18 @@ class device_page(APIView):
 
 class device_view(APIView):
     def get(self, request):
-        # device = Device.objects.all()
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
-        device=user_acc_to_org(user)
+        if user_privilege(user):
+            device = Device.objects.all()
+        else:           
+            device=user_acc_to_org(user)
         print("device data",device)
         device_serializer = DeviceSerializer(device, many=True)
         return Response({"data":device_serializer.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = request.data
+        data = request.data 
         print(data)
         device_serializer = DeviceSerializer(data=data)
         
@@ -85,3 +85,12 @@ class device_view_detail(APIView):
         instance = self.get_object(id=id)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class mqtt_device_details(APIView):
+    def post(self,request):
+        json=dict(request.data)
+        restart(json)
+        print("Loop after run")
+        return Response({"message":"success"}, status=status.HTTP_200_OK)
+

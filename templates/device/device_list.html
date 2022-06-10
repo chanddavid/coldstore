@@ -56,19 +56,13 @@
     </div>
 </div>
 
-
-<!-- BEGIN THEME CONFIG PANEL-->
-{# {% include 'static_element/log_message.html' %}#}
-<!-- END THEME CONFIG PANEL-->
-
 {% endblock %}
 <!-- PAGE LEVEL PLUGINS-->
 {% block externaljs %}
 <script src="{% static 'js/device/modals/device_modals.js' %}"></script>
 <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
 <script src="{% static 'js/device/device_script.js' %}"></script>
-<<script>
-<<script>
+<script>
     $("#post_device").validate({
     rules:{
     device_Name:{

@@ -157,6 +157,26 @@ $(document).on('submit', '#edit_device', function(e){
 })
 
 
-function refresh_device(){
+function refresh_device(data){
+    let deviceId = $(data).parent().siblings()[0].textContent;
+    $.ajax({
+        url: "update_device/"+deviceId,
+        type: "get",
+        dataType: "json",
+        success: function(data){
+            console.log(data)
+            $.ajax({
+                url: "mqtt_device_details/",
+                type: "post",
+                data:data,
+                dataType: "json",
+                success: function(data){
+                    console.log(data)
+                }
+            })
+        
+        }
+    })
+
     console.log("i am clicked")
 }
