@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.roles',
     'widget_tweaks',
-    'ckeditor',
-    'ckeditor_uploader',
     'apps.device',
 ]
 
@@ -157,3 +155,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#this is feature/real-time-data
