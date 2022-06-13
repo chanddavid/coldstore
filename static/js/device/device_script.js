@@ -8,7 +8,12 @@ let datatables = $('#device_datatable').DataTable({
     },
     columns: [  
         {"data": "id"},
-        {"data": "device_Name"},
+        {
+            "data": "device_Name",
+            "render": function(data, type, row, meta){
+                return `<a onclick="get_realtime_data_from_mqttbroker('${data}')">${data}</a>`;
+            }
+        },
         {"data": "store"},
         {"data": "data"},
         {"data": "status"},
@@ -154,3 +159,57 @@ $(document).on('submit', '#edit_device', function(e){
         }
     })
 })
+
+
+function get_realtime_data_from_mqttbroker(data){
+    const clientId = 'mqttjs_' + Math.random().toString(16).substring(2, 10)
+    const options = {
+        // keepalive: 60,
+        clientId: clientId,
+        // Clean session
+        clean: true,
+        connectTimeout: 4000,
+        // Auth
+        // clientId: 'emqx_test',
+        // username: 'emqx_test',
+        // password: 'emqx_test',
+      }
+    
+    const client = mqtt.connect('10.10.5.82', options);
+
+    client.on('connect', function (connack) {
+        console.log('Connected');
+        // Publish
+
+        // setInterval(()=>{
+        //     client.publish('test', 'ws connection demo...!', { qos: 0, retain: false }, function(error){
+        //         if(error){
+        //             console.log("Error while publishing.")
+        //         }
+        //         else{
+        //             console.log("Message sent")
+        //             client.subscribe('test')
+        //         }
+        //     })
+            
+        // },5000);
+
+        client.subscribe('esp32/temperature');
+        
+        client.on('message', function (topic, message) {
+            // message is Buffer
+            console.log(message.toString())
+            // client.end()
+        })
+
+        // client.subscribe('test', function (err) {
+        //     if (!err) {
+        //       client.publish('test', 'Hello mqtt')
+        //     }
+        //   })
+
+    })
+}
+
+
+

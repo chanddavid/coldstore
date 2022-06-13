@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.roles',
     'widget_tweaks',
-    'ckeditor',
-    'ckeditor_uploader',
     'apps.device',
 ]
 

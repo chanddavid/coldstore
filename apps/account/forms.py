@@ -1,4 +1,3 @@
-from PIL import Image
 from django import forms
 from .models import User, User_role
 from apps.roles.models import Role
