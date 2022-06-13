@@ -17,6 +17,9 @@ from ..account.serializers import UserSerializers, PasswordResetRequestSerialize
 from django.core.paginator import Paginator
 import datetime
 from ..account.models import User_role
+from helper.user_has_privilege import user_privilege
+from helper.user_has_privilege import user_acc_to_org
+from mqtt.subscriber import run
 
 def login_view(request):
 
@@ -100,11 +103,11 @@ class login_validate(APIView):
                 user_serializer.save(last_login=datetime.datetime.today().date())
             request.session['username']=user.user_name
             current_logged_in_user = request.session.get("username")
-            current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
-            if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
-                user_has_privilege = True
-                
             user = User.objects.get(user_name=current_logged_in_user)
+            user_has_privilege=user_privilege(user)
+            print("Organization value  is: ")
+            user_acc_to_org(user)
+                
 
             context = {
                 'user': user,
@@ -122,11 +125,7 @@ class login_validate(APIView):
         if request.GET.get('page') == None:
             current_logged_in_user = request.session.get("username")           
             user = User.objects.get(user_name=current_logged_in_user)
-            current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
-            if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
-                user_has_privilege = True
-                print(user_has_privilege)
-           
+            user_has_privilege=user_privilege(user)
             context = {
                 'user': user,
                 'user_has_privilege': user_has_privilege

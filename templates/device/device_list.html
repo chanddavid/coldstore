@@ -35,9 +35,9 @@
                         <thead class="thead-default thead-lg">
                             <tr>
                                 <th>Device ID</th>
+                                <th>Freeze ID</th>
                                 <th>Device Name</th>
-                                <th>Store Name</th>
-                                <th>Data</th>
+                                <th>Organization</th>
                                 <th>Status</th>
                                 <th class="no-sort">Action</th>
                             </tr>
@@ -45,7 +45,7 @@
                         <tbody>
                         </tbody>
                     </table>
-                 
+
                 </div>
             </div>
         </div>
@@ -56,48 +56,44 @@
     </div>
 </div>
 
-
-<!-- BEGIN THEME CONFIG PANEL-->
-{# {% include 'static_element/log_message.html' %}#}
-<!-- END THEME CONFIG PANEL-->
-
 {% endblock %}
 <!-- PAGE LEVEL PLUGINS-->
 {% block externaljs %}
 <script src="{% static 'js/device/modals/device_modals.js' %}"></script>
 <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
 <script src="{% static 'js/device/device_script.js' %}"></script>
-<<script>
+<script>
     $("#post_device").validate({
     rules:{
-        device_Name:{
-            required: true,
-            },
-        store:{
-            required: true,
-            },   
-        data:{
-            required: true,
-        },  
-        status:{
-            required: true,
-        },          
-    },  
+    device_Name:{
+    required: true,
+    },
+    Organization:{
+    required: true,
+    },
+    freeze_id:{
+    required: true,
+    },
+    status:{
+    required: true,
+    },
+    },
     messages: {
-        device_Name: {
-            required: "Please enter Device name",
-        },
-        store: {
-            required: "Please provide a store ",
-            minlength: "store must be 6 character long!.."
-        },
-        data: {
-            required: "Please provide your data",
-            
-        },
-        status:{
-            required: "Select a status"
-        }
+    device_Name: {
+    required: "Please enter Device name",
+    },
+
+    Organization: {
+    required: "Please provide a Organization ",
+    minlength: "store must be 6 character long!.."
+    },
+    freeze_id: {
+    required: "Please provide your freeze ID",
+
+    },
+    status:{
+    required: "Select a status"
+    }
     },
     highlight: function(e) {
     $(e).closest(".form-group").addClass("has-error")

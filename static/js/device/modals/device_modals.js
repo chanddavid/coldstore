@@ -45,9 +45,9 @@ function toggleEditDeviceModal(data){
     }
     else{
         edit_device_modal.querySelector("#deviceId").value = data.id;
+        edit_device_modal.querySelector("input[name='freeze_id']").value = data.freeze_id;
         edit_device_modal.querySelector("input[name='device_Name']").value = data.device_Name;
-        edit_device_modal.querySelector("input[name='store']").value = data.store;
-        edit_device_modal.querySelector("input[name='data']").value = data.data;
+        edit_device_modal.querySelector("input[name='organization']").value = data.organization;
         edit_device_modal.querySelector("input[name='status']").value = data.status;
         
         let a=document.getElementsByClassName("ibox-bodyupdate")[0]

@@ -16,16 +16,17 @@
                     <div class="row">
                         <div class="col-sm-6 form-group mb-4">
 
+                            {% render_field serializer.freeze_id style=style %}
+                        </div>
+                        <div class="col-sm-6 form-group mb-4">
+
                             {% render_field serializer.device_Name style=style %}
                         </div>
                         <div class="col-sm-6 form-group mb-4">
 
-                            {% render_field serializer.store style=style %}
+                            {% render_field serializer.organization style=style %}
                         </div>
-                        <div class="col-sm-6 form-group mb-4">
-
-                            {% render_field serializer.data style=style %}
-                        </div>
+                       
 
                         
                         <div class="col-sm-6 form-group mb-4">

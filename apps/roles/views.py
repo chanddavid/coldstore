@@ -7,6 +7,7 @@ from .models import Role
 from .serializers import RoleSerializer
 from ..account.models import User
 from apps.account.models import User_role
+from helper.user_has_privilege import user_privilege
 
 # Create your views here.
 from ..login.decorators import my_login_required
@@ -22,10 +23,7 @@ class roles_page(APIView):
         user_has_privilege = True
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
-
-        current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
-        if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
-            user_has_privilege = True
+        user_privilege(user)
         serializer = RoleSerializer()
         
         return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Role', 'user':user,'user_has_privilege': user_has_privilege})

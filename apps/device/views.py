@@ -7,9 +7,11 @@ from .models import Device
 from .serializers import DeviceSerializer
 from ..account.models import User
 from apps.account.models import User_role
-
 # Create your views here.
 from ..login.decorators import my_login_required
+from helper.user_has_privilege import user_privilege
+from helper.user_has_privilege import user_acc_to_org
+# from mqtt.restart import restart
 
 
 class device_page(APIView):
@@ -24,25 +26,28 @@ class device_page(APIView):
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
         serializer = DeviceSerializer()
-        current_logged_in_user_role = User_role.objects.select_related('roles').filter(user=user).values_list('roles__name', flat=True)
-        if current_logged_in_user_role.exists and current_logged_in_user_role[0].lower() == "organization":
-            user_has_privilege = True
-            print(user_has_privilege)
+        user_has_privilege=user_privilege(user)
         return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Device', 'user':user,'user_has_privilege': user_has_privilege})
 
 
 
 class device_view(APIView):
     def get(self, request):
-        device = Device.objects.all()
+        current_logged_in_user = request.session.get("username")
+        user = User.objects.get(user_name=current_logged_in_user)
+        if user_privilege(user):
+            device = Device.objects.all()
+        else:           
+            device=user_acc_to_org(user)
+        print("device data",device)
         device_serializer = DeviceSerializer(device, many=True)
         return Response({"data":device_serializer.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = request.data
-        print("Device data is: ")
+        data = request.data 
         print(data)
         device_serializer = DeviceSerializer(data=data)
+        
         if device_serializer.is_valid():
             device_serializer.save()
             return Response(device_serializer.data, status=status.HTTP_201_CREATED)
@@ -80,3 +85,12 @@ class device_view_detail(APIView):
         instance = self.get_object(id=id)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# class mqtt_device_restart(APIView):
+#     def post(self,request):
+#         json=dict(request.data)
+#         restart(json)
+#         print("Loop after run")
+#         return Response({"message":"success"}, status=status.HTTP_200_OK)
+
