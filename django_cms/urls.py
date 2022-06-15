@@ -15,12 +15,8 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url, include
+from django.urls import path, include
 from apps.login import views as login_view
-from apps.account import views as account_view
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', include('apps.login.urls')),

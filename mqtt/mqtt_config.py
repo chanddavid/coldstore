@@ -1,8 +1,8 @@
 from mqtt.env_vars import env
 from paho.mqtt import client as mqtt_client
+from gmqtt.client import Client as MQTTClient
 import time
 from random import randrange
-
 
 class MQTTProtocolConfig:
     _instance = None
@@ -27,7 +27,7 @@ class MQTTProtocolConfig:
             # self.client_id = env.mqtt_client_id
 
             MQTTProtocolConfig._instance = self
-
+    
     def connect_mqtt(self, client_id):
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
@@ -47,9 +47,33 @@ class MQTTProtocolConfig:
             print(f"just published {randNumber} to the {self.topic} topic")
             time.sleep(2)
 
-    def subscribe(self, client):
-        def on_message(client, userdata, message):
-            print(f"Received message: {message.payload.decode()} from {self.topic}  topic")
+    def subscribe(self, client, on_msg):
+        # def on_message(client, userdata, msg):
+        #     self.send({
+        #         "type": "websocket.send",
+        #         "text": f"Received `{msg.payload.decode()}` from `{msg.topic}` topic"
+        #     })
         client.subscribe(self.topic)
-        client.on_message = on_message
+        client.on_message = on_msg
 
+    
+    # async def async_connect_mqtt(self, client_id):
+    #     def on_connect(client, userdata, flags, rc):
+    #         if rc == 0:
+    #             print("Connected to MQTT Broker!")
+    #         else:
+    #             print("Failed to connect, return code %d\n", rc)
+
+    #     client = MQTTClient(client_id)
+    #     client.on_connect = on_connect
+    #     await client.connect(self.broker, self.port)
+    #     return client
+    
+    # async def subscribe(self, client, on_msg):
+    #     # def on_message(client, userdata, msg):
+    #     #     self.send({
+    #     #         "type": "websocket.send",
+    #     #         "text": f"Received `{msg.payload.decode()}` from `{msg.topic}` topic"
+    #     #     })
+    #     client.subscribe(self.topic)
+    #     client.on_message = on_msg
