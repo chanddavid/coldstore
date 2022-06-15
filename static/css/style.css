@@ -23,6 +23,12 @@
     justify-content: flex-start;
 }
 
+
+#temp-graph{
+  width: 1050px;
+  margin: auto;
+}
+
 .modal-content{
     border-radius: 1.5rem!important;
 }

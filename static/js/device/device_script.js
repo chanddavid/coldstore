@@ -12,7 +12,7 @@ let datatables = $('#device_datatable').DataTable({
         {
             "data": "device_Name",
             "render": function(data, type, row, meta){
-                return `<a onclick="get_realtime_data_from_mqttbroker('${data}')">${data}</a>`;
+                return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}')">${data}</a>`;
             }
         },
         {"data": "organization"},
@@ -161,79 +161,128 @@ $(document).on('submit', '#edit_device', function(e){
     })
 })
 
+let ws;
 
 function get_realtime_data_from_mqttbroker(data){
-    const clientId = 'mqttjs_' + Math.random().toString(16).substring(2, 10)
-    const options = {
-        // keepalive: 60,
-        clientId: clientId,
-        // Clean session
-        clean: true,
-        connectTimeout: 4000,
-        // Auth
-        // clientId: 'emqx_test',
-        // username: 'emqx_test',
-        // password: 'emqx_test',
-      }
+  let url = "ws://127.0.0.1:8001/ws/async-get-real-time-data/"  
+  ws = new WebSocket(url); 
+
+  ws.onopen = function(e){
+      console.log("Connection is opened !!!!")
+      console.log(e)
+  }
+
+  ws.onmessage = function(e){
+      console.log(JSON.parse(e.data))
+
+      let data = JSON.parse(e.data)["temp"]
+
+      console.log("Data: ", data)
+
+       
+      var options = {
+        series: [{
+        data: data.slice()
+      }],
+        chart: {
+        id: 'realtime',
+        height: 350,
+        type: 'line',
+        animations: {
+          enabled: true,
+          easing: 'linear',
+          dynamicAnimation: {
+            speed: 1000
+          }
+        },
+        toolbar: {
+          show: false
+        },
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      title: {
+        text: 'Dynamic Updating Chart',
+        align: 'left'
+      },
+      markers: {
+        size: 0
+      },
+    //   xaxis: {
+    //     type: 'datetime',
+    //     range: XAXISRANGE,
+    //   },
+      yaxis: {
+        max: 100
+      },
+      legend: {
+        show: false
+      },
+      };
+
+      var chart = new ApexCharts(document.querySelector("#chart"), options);
+      chart.render();
     
-    const client = mqtt.connect('10.10.5.82', options);
+    
+      window.setInterval(function () {
+    //   getNewSeries(lastDate, {
+    //     min: 10,
+    //     max: 90
+    //   })
+    
+      chart.updateSeries([{
+        data: data
+      }])
+    }, 1000)
+  }
 
-    client.on('connect', function (connack) {
-        console.log('Connected');
-        // Publish
+  ws.onclose = function(e){
+      console.log("Closed data from server")
+  }
 
-        // setInterval(()=>{
-        //     client.publish('test', 'ws connection demo...!', { qos: 0, retain: false }, function(error){
-        //         if(error){
-        //             console.log("Error while publishing.")
-        //         }
-        //         else{
-        //             console.log("Message sent")
-        //             client.subscribe('test')
-        //         }
-        //     })
-            
-        // },5000);
-
-        client.subscribe('esp32/temperature');
-        
-        client.on('message', function (topic, message) {
-            // message is Buffer
-            console.log(message.toString())
-            // client.end()
-        })
-
-        // client.subscribe('test', function (err) {
-        //     if (!err) {
-        //       client.publish('test', 'Hello mqtt')
-        //     }
-        //   })
-
-    })
+ 
 }
 
 
 
 function refresh_device(data){
-    let deviceId = $(data).parent().siblings()[0].textContent;
-    $.ajax({
-        url: "update_device/"+deviceId,
-        type: "get",
-        dataType: "json",
-        success: function(data){
-            console.log(data)
-            $.ajax({
-                url: "mqtt_device_details/",
-                type: "post",
-                data:data,
-                dataType: "json",
-                success: function(data){
-                    console.log(data)
-                }
-            })
+    // let deviceId = $(data).parent().siblings()[0].textContent;
+    // $.ajax({
+    //     url: "update_device/"+deviceId,
+    //     type: "get",
+    //     dataType: "json",
+    //     success: function(data){
+    //         console.log(data)
+    //         $.ajax({
+    //             url: "mqtt_device_details/",
+    //             type: "post",
+    //             data:data,
+    //             dataType: "json",
+    //             success: function(data){
+    //                 console.log(data)
+    //             }
+    //         })
         
-        }
-    })
+    //     }
+    // })
 
-    console.log("i am clicked")
+    // console.log("i am clicked")
+    ws.close();
 }
+
+
+document.getElementById("close-socket").addEventListener("click", (e)=>{
+    e.preventDefault();
+    ws.close();
+})
+
+// function close_connection(){
+//     ws.close();
+// }

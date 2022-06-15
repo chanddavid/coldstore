@@ -53,6 +53,28 @@
         {% include 'static_element/footer.html' %}
         {% include 'device/models/create_device_model.html' %}
         {% include 'device/models/update_device_model.html' %}
+
+          
+          <!-- Modal -->
+          <div class="modal fade" id="temp-graph" tabindex="-1" role="dialog" aria-labelledby="temp-graph" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 100%" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="graph-title">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="chart">
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" id="close-socket" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 </div>
 
