@@ -5,6 +5,7 @@ from mqtt.mqtt_config import MQTTProtocolConfig
 import random
 from asyncio_mqtt.client import Client
 import json
+from time import sleep
 
 class SyncDeviceConsumer(SyncConsumer):
 
@@ -33,6 +34,7 @@ class SyncDeviceConsumer(SyncConsumer):
                 "type": "websocket.send",
                 "text": f"Received `{msg.payload.decode()}` from `{msg.topic}` topic"
             })
+        
         self.mqtt.subscribe(self.client, on_message)
         self.client.loop_start()
 

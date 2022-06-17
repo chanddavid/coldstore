@@ -4,79 +4,83 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link href="{% static 'vendors/dataTables/datatables.min.css' %}" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
+=
 {% endblock %}
 
 {% block content %}
 <div class="page-wrapper">
-    <!-- START HEADER-->
-    {% include 'static_element/header.html' %}
-    <!-- END HEADER-->
-    <!-- START SIDEBAR-->
-    {% include 'static_element/sidebar.html' %}
-    <!-- END SIDEBAR-->
-    <div class="content-wrapper">
-        <!-- START PAGE CONTENT-->
-        <div class="page-content fade-in-up">
+  <!-- START HEADER-->
+  {% include 'static_element/header.html' %}
+  <!-- END HEADER-->
+  <!-- START SIDEBAR-->
+  {% include 'static_element/sidebar.html' %}
+  <!-- END SIDEBAR-->
+  <div class="content-wrapper">
+    <!-- START PAGE CONTENT-->
+    <div class="page-content fade-in-up">
 
-            <h1 class="page-title mb-3">Device List</h1>
-            <div class="input-group-icon input-group-icon-left pt-4 mb-4">
-                <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
-                <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
-            </div>
-            <div class="ibox ibox-fullheight">
-                <div class="flexbox mb-4">
-                    <div id="add_device" class="btn btn-success btn-rounded ml-3 mt-3">
-                        <a href=""><i class="fas fa-user-plus"></i> Add Device</a>
-                    </div>
-                </div>
-                <div class="table-responsive row">
-                    <table class="table table-bordered table-hover" id="device_datatable">
-                        <thead class="thead-default thead-lg">
-                            <tr>
-                                <th>Device ID</th>
-                                <th>Freeze ID</th>
-                                <th>Device Name</th>
-                                <th>Organization</th>
-                                <th>Status</th>
-                                <th class="no-sort">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-        <!-- END PAGE CONTENT-->
-        {% include 'static_element/footer.html' %}
-        {% include 'device/models/create_device_model.html' %}
-        {% include 'device/models/update_device_model.html' %}
-
-          
-          <!-- Modal -->
-          <div class="modal fade" id="temp-graph" tabindex="-1" role="dialog" aria-labelledby="temp-graph" aria-hidden="true">
-            <div class="modal-dialog" style="max-width: 100%" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="graph-title">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body" id="chart">
-                  
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" id="close-socket" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
+      <h1 class="page-title mb-3">Device List</h1>
+      <div class="input-group-icon input-group-icon-left pt-4 mb-4">
+        <span class="input-icon input-icon-right font-16 pt-4"><i class="ti-search"></i></span>
+        <input class="form-control search-input-datatable" type="text" placeholder="Search..." id="searchbar">
+      </div>
+      <div class="ibox ibox-fullheight">
+        <div class="flexbox mb-4">
+          <div id="add_device" class="btn btn-success btn-rounded ml-3 mt-3">
+            <a href=""><i class="fas fa-user-plus"></i> Add Device</a>
           </div>
+        </div>
+        <div class="table-responsive row">
+          <table class="table table-bordered table-hover" id="device_datatable">
+            <thead class="thead-default thead-lg">
+              <tr>
+                <th>Device ID</th>
+                <th>Freeze ID</th>
+                <th>Device Name</th>
+                <th>Organization</th>
+                <th>Status</th>
+                <th class="no-sort">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
     </div>
+    <!-- END PAGE CONTENT-->
+    {% include 'static_element/footer.html' %}
+    {% include 'device/models/create_device_model.html' %}
+    {% include 'device/models/update_device_model.html' %}
+
+
+    <div class="modal fade" tabindex="-1" id="temp-graph" role="dialog" aria-labelledby="temp-graph" aria-hidden="true">
+      <div class="modal-dialog" role="document" style="max-width: 100%">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="graph-title">Line Graph</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="chart">
+            <canvas id="myChart">
+
+            </canvas>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="close-socket" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+
+  </div>
 </div>
+
 
 {% endblock %}
 <!-- PAGE LEVEL PLUGINS-->
@@ -85,44 +89,44 @@
 <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
 <script src="{% static 'js/device/device_script.js' %}"></script>
 <script>
-    $("#post_device").validate({
-    rules:{
-    device_Name:{
-    required: true,
-    },
-    Organization:{
-    required: true,
-    },
-    freeze_id:{
-    required: true,
-    },
-    status:{
-    required: true,
-    },
+  $("#post_device").validate({
+    rules: {
+      device_Name: {
+        required: true,
+      },
+      Organization: {
+        required: true,
+      },
+      freeze_id: {
+        required: true,
+      },
+      status: {
+        required: true,
+      },
     },
     messages: {
-    device_Name: {
-    required: "Please enter Device name",
-    },
+      device_Name: {
+        required: "Please enter Device name",
+      },
 
-    Organization: {
-    required: "Please provide a Organization ",
-    minlength: "store must be 6 character long!.."
-    },
-    freeze_id: {
-    required: "Please provide your freeze ID",
+      Organization: {
+        required: "Please provide a Organization ",
+        minlength: "store must be 6 character long!.."
+      },
+      freeze_id: {
+        required: "Please provide your freeze ID",
 
+      },
+      status: {
+        required: "Select a status"
+      }
     },
-    status:{
-    required: "Select a status"
-    }
+    highlight: function (e) {
+      $(e).closest(".form-group").addClass("has-error")
     },
-    highlight: function(e) {
-    $(e).closest(".form-group").addClass("has-error")
+    unhighlight: function (e) {
+      $(e).closest(".form-group").removeClass("has-error")
     },
-    unhighlight: function(e) {
-    $(e).closest(".form-group").removeClass("has-error")
-    },
-    })
-    </script>
-    {% endblock %}
+  })
+</script>
+{% endblock %}

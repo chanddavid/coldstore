@@ -25,7 +25,7 @@
 
 
 #temp-graph{
-  width: 1050px;
+  width: 700px;
   margin: auto;
 }
 
@@ -332,3 +332,14 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* canvas {
+  border: 1px dotted red;
+}
+
+#chart{
+  position: relative;
+  margin: auto;
+  height: 40vh;
+  width: 40vw;
+} */

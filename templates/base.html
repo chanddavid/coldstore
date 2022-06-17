@@ -1,16 +1,17 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width initial-scale=1.0">
-     {% if title %}
-         <title>{{ title }}</title>
-     {% else %}
-         <title>Title</title>
-     {% endif %}
-   
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Title</title>
+    {% endif %}
+
 
     <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" />
@@ -21,8 +22,14 @@
     <link href="{% static 'vendors/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/main.min.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+
+
+
+
     <style>
-        .content-wrapper{
+        .content-wrapper {
             margin-left: 17%;
         }
     </style>
@@ -30,11 +37,14 @@
 
     {% endblock %}
 </head>
+
 <body>
     {% block content %}
 
     {% endblock %}
 </body>
+
+
 <!-- CORE PLUGINS-->
 <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'vendors/popper.js/dist/umd/popper.min.js' %}"></script>
@@ -50,7 +60,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="https://kit.fontawesome.com/d1acacb120.js" crossorigin="anonymous"></script>
 <script src="  https://kit.fontawesome.com/cab915e289.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
 
 <!-- PAGE LEVEL PLUGINS-->
 <!-- CORE SCRIPTS-->
@@ -58,4 +72,5 @@
 <!-- PAGE LEVEL SCRIPTS-->
 {% block externaljs %}
 {% endblock %}
+
 </html>
