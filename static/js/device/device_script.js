@@ -211,6 +211,7 @@ function get_realtime_data_from_mqttbroker(data) {
         fill: true,
         backgroundColor: "rgba(255,99,132,0.2)",
         data: [65, 59, 80, 81, 30, 23, 54, 12, 23, 34],
+        
 
       }]
     },
@@ -224,6 +225,7 @@ function get_realtime_data_from_mqttbroker(data) {
         }
       },
       animation: true,
+      
     }
   }
   var ctx = document.getElementById('myChart').getContext('2d');

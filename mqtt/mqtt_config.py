@@ -38,6 +38,7 @@ class MQTTProtocolConfig:
         client.on_connect = on_connect
         client.connect(self.broker, self.port)
         return client
+        
 
     def publish(self, client):
         while True:
