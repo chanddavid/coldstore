@@ -22,6 +22,10 @@ class EnvVars(BaseSettings):
     mqtt_topic:str
     # mqtt_client_id:str
 
+    # twilio configurations
+    account_sid: str
+    auth_token: str
+    twilio_phn_number: str
     class Config:
         env_file=".env"
 try:
