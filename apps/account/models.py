@@ -16,6 +16,7 @@ class User(models.Model):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     last_login = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=50, blank=False, null=True)
 
 
     def __str__(self):

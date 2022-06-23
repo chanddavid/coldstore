@@ -16,9 +16,15 @@ from apps.roles.models import Role
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from helper.user_has_privilege import user_privilege
+from apps.device.twilio_sms import TwilioSMS
+from mqtt.env_vars import env
 # Create your views here.
 
 edit_user = None
+
+def create_twilio_outgoing_call(user_name, phone_number):
+    twilio_client = TwilioSMS.getInstance(env.account_sid, env.auth_token)
+    twilio_client.create_outgoing_caller_id(user_name, phone_number)
 
 class user_page(APIView):
     """View to render user.html page"""
@@ -61,6 +67,7 @@ class user_view(APIView):
         if serializer.is_valid():
             serializer.save(salt=salt, hashed_password=hashed_password)
             print(serializer.data)
+            create_twilio_outgoing_call(serializer.validated_data["user_name"], serializer.validated_data["phone_number"])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         elif serializer.errors:
             print(serializer.errors)
@@ -74,11 +81,19 @@ class register_user(APIView):
         print(data)
         salt = get_salt()
         hashed_password = hash_string(salt, data["password"])
-        data = {'user_name': request.data['user_name'], 'email':request.data['email'], 'password': request.data['password'], 'confirm_password':request.data['confirm_password'], 'organization':'abc'}
+        data = {
+                'user_name': request.data['user_name'], 
+                'email':request.data['email'], 
+                'password': request.data['password'], 
+                'confirm_password':request.data['confirm_password'], 
+                'organization':'abc', 
+                'phone_number':request.data['phone_number']
+               }
         serializer = UserSerializers(data=data)
         if serializer.is_valid():
             serializer.save(salt=salt, hashed_password=hashed_password, is_active=False)
             username = serializer.validated_data['user_name']
+            create_twilio_outgoing_call(serializer.validated_data["user_name"], serializer.validated_data["phone_number"])
             messages.success(request, f'{username} created')
             return redirect('login_view')
         elif serializer.errors:

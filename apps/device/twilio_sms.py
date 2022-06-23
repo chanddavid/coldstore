@@ -19,3 +19,9 @@ class TwilioSMS:
         else:
             self.twilio_client = TwilioClient(account_sid, auth_token)
             TwilioSMS.__instance = self
+    
+    def create_outgoing_caller_id(self, username, phone_number):
+        self.twilio_client.validation_requests.create(
+            friendly_name=username,
+            phone_number=phone_number
+        )
