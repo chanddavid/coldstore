@@ -15,7 +15,7 @@ def user_acc_to_org(user):
     try:
         print("inside call function")
         current_logged_in_user = User.objects.filter(user_name=user).values_list('organization', flat=True) 
-        data=current_logged_in_user[0].lower()
+        data=current_logged_in_user[0]
         current_user_device_data=Device.objects.filter(organization=data)
         return current_user_device_data  
     except Exception as e:

@@ -29,7 +29,8 @@
     <!-- START TOP-RIGHT TOOLBAR-->
     <ul class="nav navbar-toolbar right">
         <div>
-            <img class="img-circle" src="{{ user.profile.image.url }}" alt="user_icon" width="40" height="40">
+            <img class="img-circle" src="{% static 'img/profiles.jpg' %}" alt="user_icon" width="40" height="40">
+            <!-- <img class="img-circle" src="{{ user.profile.image.url }}" alt="user_icon" width="40" height="40"> -->
         </div>
         <li class="dropdown dropdown-user">
             <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
@@ -39,7 +40,7 @@
                 <div class="dropdown-arrow"></div>
                 <div class="dropdown-header">
                     <div class="admin-avatar">
-                        <img src="{{ user.profile.image.url }}" alt="image">
+                        <img src="{% static 'img/Profile-Male.png' %}" alt="image">
                     </div>
                     <div>
                         <h5 class="font-strong text-white">{{ request.session.username }}</h5>

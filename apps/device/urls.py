@@ -11,3 +11,18 @@ urlpatterns = [
 
 
 ]
+
+
+
+
+# current_logged_in_user = request.session.get("username")
+# cureent_user_orgvalue = User.objects.filter(user_name=current_logged_in_user).values_list('organization', flat=True) 
+# print("current user org value",cureent_user_orgvalue[0])
+
+
+#    organization = serializers.SerializerMethodField('_is_my_find')
+
+#     def _is_my_find(self, obj):
+#         print("device",obj)
+#         organization = self.context.get("organization")
+#         return organization
