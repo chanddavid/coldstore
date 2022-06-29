@@ -54,6 +54,7 @@ function toggleUserEditModal(data){
         edit_user_modal.querySelector("#edit_last_name").value = data.last_name;
         edit_user_modal.querySelector("#edit_user_name").value = data.user_name;
         edit_user_modal.querySelector("#edit_email").value = data.email;
+        edit_user_modal.querySelector("#edit_phone").value = data.phone_number;
         edit_user_modal.querySelector("#edit_organization").value = data.organization;
         console.log($("input[name=is_superuser]:checked").value);
         const is_superuser = data.is_superuser.toString()[0].toUpperCase() + data.is_superuser.toString().slice(1)

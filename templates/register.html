@@ -27,6 +27,9 @@
                 <input class="form-control form-control-line" type="text" name="email" placeholder="Email">
             </div>
             <div class="form-group mb-4">
+                <input class="form-control form-control-line" type="text" name="phone_number" placeholder="Phone">
+            </div>
+            <div class="form-group mb-4">
                 <input class="form-control form-control-line" type="password" id="password" name="password" placeholder="Password">
             </div>
             <div class="form-group mb-4">
@@ -72,6 +75,9 @@
                             }
                         }
                     },
+                    phone_number:{
+                        required:true
+                    },
                     password: {
                         required: true,
                         minlength: 6
@@ -87,7 +93,11 @@
                     },
                     email: {
                         remote: "This email is already taken."
-                    }
+                    },
+                    phone_number:{
+                        required: "Please provide your phone number",
+                        remote: "Number is already taken."
+                    },
                 },
                 highlight: function(e) {
                     $(e).closest(".form-group").addClass("has-error")

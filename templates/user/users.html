@@ -39,6 +39,7 @@
                                         <th>First_Name</th>
                                         <th>Last_Name</th>
                                         <th>Email</th>
+                                        <th>Phone</th>
                                         <th>Organization</th>
                                         <th>is_superuser</th>
                                         <th>is_active</th>
@@ -100,6 +101,9 @@
                             }
                         }
                     },
+                    phone_number:{
+                        required:true
+                    },
                     organization:{
                         required: true
                     }
@@ -117,6 +121,10 @@
                         required: "Please provide your email",
                         email: "Enter a valid email",
                         remote: "Email is already taken."
+                    },
+                    phone_number:{
+                        required: "Please provide your phone number",
+                        remote: "Number is already taken."
                     },
                     organization:{
                         required: "Select a organization"
@@ -161,6 +169,9 @@
                             }
                         }
                     },
+                    phone_number:{
+                        required:true
+                    },
                 },
                 messages: {
                     user_name: {
@@ -175,7 +186,11 @@
                         required: "Please provide your email",
                         email: "Enter a valid email",
                         remote: "Email is already taken."
-                    }
+                    },
+                    phone_number:{
+                        required: "Please provide your phone number",
+                        remote: "Number is already taken."
+                    },
                 },
                  highlight: function(e) {
                      $(e).closest(".form-group").addClass("has-error")
