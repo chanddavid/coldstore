@@ -53,6 +53,14 @@ class Check_Email(APIView):
         else:
             return Response(False)
 
+class Check_Organization(APIView):
+    def post(self, request):
+        organization = request.POST.get("organization")
+        if not User.objects.filter(organization=organization).exists():
+            return Response(True)
+        else:
+            return Response(False)
+
 class Check_Username_For_Update(APIView):
     def post(self, request):
         username = request.POST.get("user_name")

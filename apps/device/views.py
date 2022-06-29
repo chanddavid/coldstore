@@ -35,18 +35,30 @@ class device_view(APIView):
     def get(self, request):
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
+
         if user_privilege(user):
             device = Device.objects.all()
         else:           
             device=user_acc_to_org(user)
-        print("device data",device)
         device_serializer = DeviceSerializer(device, many=True)
+        print(device_serializer.data)
         return Response({"data":device_serializer.data}, status=status.HTTP_200_OK)
 
+
     def post(self, request):
+        current_logged_in_user = request.session.get("username")
+        user = User.objects.get(user_name=current_logged_in_user)
         data = request.data 
-        print(data)
-        device_serializer = DeviceSerializer(data=data)
+        print('data',data)
+        if not user_privilege(user):
+            current_logged_in_user = request.session.get("username")
+            cureent_user_orgvalue = User.objects.filter(user_name=current_logged_in_user).values_list('organization', flat=True) 
+            print("current user org value",cureent_user_orgvalue[0])
+            data = {'freeze_id': request.data['freeze_id'], 'device_Name':request.data['device_Name'],'organization':cureent_user_orgvalue[0],'status':request.data['status']}
+            device_serializer = DeviceSerializer(data=data)
+        else:
+            device_serializer = DeviceSerializer(data=data)
+            
         
         if device_serializer.is_valid():
             device_serializer.save()

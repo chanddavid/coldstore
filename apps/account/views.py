@@ -81,14 +81,7 @@ class register_user(APIView):
         print(data)
         salt = get_salt()
         hashed_password = hash_string(salt, data["password"])
-        data = {
-                'user_name': request.data['user_name'], 
-                'email':request.data['email'], 
-                'password': request.data['password'], 
-                'confirm_password':request.data['confirm_password'], 
-                'organization':'abc', 
-                'phone_number':request.data['phone_number']
-               }
+        data = {'user_name': request.data['user_name'], 'email':request.data['email'], 'password': request.data['password'], 'confirm_password':request.data['confirm_password'], 'organization':request.data['organization']}
         serializer = UserSerializers(data=data)
         if serializer.is_valid():
             serializer.save(salt=salt, hashed_password=hashed_password, is_active=False)
