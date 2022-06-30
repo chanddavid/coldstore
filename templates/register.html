@@ -30,6 +30,9 @@
             <input class="form-control form-control-line" type="text" name="organization" placeholder="Organization">
         </div>
         <div class="form-group mb-4">
+            <input class="form-control form-control-line" type="text" name="phone_number" placeholder="Phone Number">
+        </div>
+        <div class="form-group mb-4">
             <input class="form-control form-control-line" type="password" id="password" name="password"
                 placeholder="Password">
         </div>
@@ -75,7 +78,6 @@
                             email: $('.email').val(),
                             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                         }
-<<<<<<< HEAD
                     },
                     phone_number:{
                         required:true
@@ -100,20 +102,6 @@
                         required: "Please provide your phone number",
                         remote: "Number is already taken."
                     },
-=======
-                    }
-                },
-                organization: {
-                    required: true,
-                    remote: {
-                        url: "{% url 'check_organization' %}",
-                        type: "POST",
-                        data: {
-                            email: $('.organization').val(),
-                            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                        }
-                    }
->>>>>>> 6bf897ad40d3f68eece723bc84589abdca0aee3a
                 },
                 password: {
                     required: true,

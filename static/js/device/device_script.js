@@ -12,6 +12,7 @@ let datatables = $('#device_datatable').DataTable({
     {
       "data": "device_Name",
       "render": function (data, type, row, meta) {
+        console.log(data)
         return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}', '${row.freeze_id}', '${row.organization}')">${data}</a>`;
       }
     },
@@ -164,6 +165,7 @@ $(document).on('submit', '#edit_device', function (e) {
 let ws;
 
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
+  console.log(device_name,freeze_id,organization)
   let canvasParent = document.getElementById('chart');
 
   // let currentElement = $(_this).parent()

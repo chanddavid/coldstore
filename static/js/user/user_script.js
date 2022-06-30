@@ -192,7 +192,6 @@ $(document).on("submit", "#edit_user", function (e) {
             email: $("#edit_email").val(),
             phone_number: $("#edit_phone").val(),
             organization: $("#edit_organization").val(),
-            phone_number: $("#phone_number").val(),
             is_superuser: $(".edit_is_superuser input[name='is_superuser']:checked").val(),
             is_active: $(".edit_is_active input[name='is_active']:checked").val(),
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),

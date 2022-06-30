@@ -81,17 +81,17 @@ class register_user(APIView):
         print(data)
         salt = get_salt()
         hashed_password = hash_string(salt, data["password"])
-        data = {'user_name': request.data['user_name'], 'email':request.data['email'], 'password': request.data['password'], 'confirm_password':request.data['confirm_password'], 'organization':request.data['organization'], 'phone': "123123"}
+        data = {'user_name': request.data['user_name'], 'email':request.data['email'], 'password': request.data['password'], 'confirm_password':request.data['confirm_password'], 'organization':request.data['organization'], 'phone_number': request.data['phone_number']}
         serializer = UserSerializers(data=data)
         if serializer.is_valid():
             serializer.save(salt=salt, hashed_password=hashed_password, is_active=False)
             username = serializer.validated_data['user_name']
-            create_twilio_outgoing_call(serializer.validated_data["user_name"], serializer.validated_data["phone_number"])
+            # create_twilio_outgoing_call(serializer.validated_data["user_name"], serializer.validated_data["phone_number"])
             messages.success(request, f'{username} created')
             return redirect('login_view')
         elif serializer.errors:
             print(serializer.errors)
-            return redirect('register_user')
+            return redirect('register_user')    
 
 class user_view_detail(APIView):
     """User APIView to retrieve specific user"""
