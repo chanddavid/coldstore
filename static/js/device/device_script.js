@@ -12,7 +12,7 @@ let datatables = $('#device_datatable').DataTable({
     {
       "data": "device_Name",
       "render": function (data, type, row, meta) {
-        return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}')">${data}</a>`;
+        return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}', '${row.freeze_id}', '${row.organization}')">${data}</a>`;
       }
     },
     { "data": "organization" },
@@ -163,13 +163,20 @@ $(document).on('submit', '#edit_device', function (e) {
 
 let ws;
 
-function get_realtime_data_from_mqttbroker(data) {
-  let canvasParent = document.getElementById('chart')
+function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
+  let canvasParent = document.getElementById('chart');
+
+  // let currentElement = $(_this).parent()
+
+
   canvasParent.innerHTML = ` <canvas id="myChart">
 
     </canvas>`
 
-  let url = `ws://${window.location.host}/ws/async-get-real-time-data/`
+  
+
+
+  let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
   ws = new WebSocket(url);
   var myLine = null
 

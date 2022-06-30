@@ -77,6 +77,14 @@ class AsyncDeviceConsumer(AsyncConsumer):
         print(env.account_sid)
         print(env.auth_token)
 
+        print("Self.scope is: ")
+        print(self.scope)
+
+        kwargs = self.scope["url_route"]["kwargs"]
+
+        topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
+
+        print("Topic is: ", topic)
 
         current_time = datetime.now()
 
@@ -84,8 +92,8 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         async with Client("10.10.5.82") as client:
             self.client = client
-            async with client.filtered_messages("esp32/temperature") as messages:
-                await client.subscribe("esp32/temperature")
+            async with client.filtered_messages(topic) as messages:
+                await client.subscribe(topic)
                 async for message in messages:           
 
                     cTime = datetime.now()
