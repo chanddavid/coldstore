@@ -165,7 +165,6 @@ $(document).on('submit', '#edit_device', function (e) {
 let ws;
 
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
-  console.log(device_name,freeze_id,organization)
   let canvasParent = document.getElementById('chart');
 
   // let currentElement = $(_this).parent()

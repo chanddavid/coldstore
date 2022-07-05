@@ -84,6 +84,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
 
+
         print("Topic is: ", topic)
 
         current_time = datetime.now()
@@ -94,15 +95,16 @@ class AsyncDeviceConsumer(AsyncConsumer):
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
-                async for message in messages:           
+                async for message in messages:
+                    print(message)           
 
                     cTime = datetime.now()
                     
                     # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
                     # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
-                    
-                    print(message.payload.decode())
+                    print("message are comming")
+                    print("Message",message.payload.decode())
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
 
@@ -123,7 +125,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
                     await asyncio.sleep(5)
 
-                    
+
 
     async def websocket_receive(self, event):
         print("Data received from client") 
@@ -131,4 +133,4 @@ class AsyncDeviceConsumer(AsyncConsumer):
     async def websocket_disconnect(self, event):
         print("Disconnecteding...")
         self.client.disconnect()
-        raise await StopConsumer()
+        raise await StopConsumer()  
