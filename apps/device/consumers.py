@@ -88,7 +88,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         current_time = datetime.now()
 
-        sendNotificationTime = current_time + timedelta(minutes=5)
+        sendNotificationTime = current_time + timedelta(minutes=1)
 
         async with Client("10.10.5.82") as client:
             self.client = client
@@ -98,9 +98,9 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
                     cTime = datetime.now()
                     
-                    # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
+                    print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
-                    # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
+                    print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
                     
                     print(message.payload.decode())
 
@@ -108,20 +108,25 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
                     if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
                         print("Sending notification...")
-                        sendNotificationTime = cTime + timedelta(minutes=5)
+                        sendNotificationTime = cTime + timedelta(minutes=1)
 
                         if isCrtical:
                             print("Is critical...")
                             twilio_client = TwilioSMS.getInstance(env.account_sid, env.auth_token)
                             print(twilio_client)
-                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to="+9779814367845", body="Warning: The temperature is at crtical state.")
+                           
+                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to="+9779814367845", body=f"Warning: Critical \n \
+                                                                                                                                                      Organization: {kwargs['organization']} \n \
+                                                                                                                                                      Freeze: {kwargs['freeze_id']} \n \
+                                                                                                                                                      Device: {kwargs['device_id']}\n \
+                                                                                                                                                      Temperature  {json.loads(message.payload.decode())['temp']}°C.")
 
                     await self.send({
                         "type": "websocket.send",
                         "text": message.payload.decode()
                     })
 
-                    await asyncio.sleep(5)
+                    # await asyncio.sleep(1)
 
                     
 
