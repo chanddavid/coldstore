@@ -274,10 +274,10 @@ function refresh_device(data) {
 }
 
 
-document.getElementById("close-socket").addEventListener("click", (e) => {
-  e.preventDefault();
-  ws.close();
-})
+// document.getElementById("close-socket").addEventListener("click", (e) => {
+//   e.preventDefault();
+//   ws.close();
+// })
 
 // function close_connection(){
 //     ws.close();

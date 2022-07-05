@@ -95,9 +95,8 @@ class AsyncDeviceConsumer(AsyncConsumer):
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
-                async for message in messages:
-                    print(message)           
-
+                async for message in messages:            
+                    print(message)    
                     cTime = datetime.now()
                     
                     # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
