@@ -1,4 +1,5 @@
 
+from os import PRIO_PGRP
 from channels.consumer import AsyncConsumer, SyncConsumer
 from channels.exceptions import StopConsumer
 from mqtt.mqtt_config import MQTTProtocolConfig
@@ -12,6 +13,10 @@ from asgiref.sync import sync_to_async
 import asyncio
 from datetime import datetime, timedelta
 from .twilio_sms import TwilioSMS
+import pymongo
+from datetime import datetime
+conn = pymongo.MongoClient('mongodb://localhost:27017')
+db = conn.StoreRealTimeData
 class SyncDeviceConsumer(SyncConsumer):
 
     def __init__(self) -> None:
@@ -84,12 +89,12 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
 
-
+        
         print("Topic is: ", topic)
 
         current_time = datetime.now()
 
-        sendNotificationTime = current_time + timedelta(minutes=5)
+        sendNotificationTime = current_time + timedelta(minutes=1)
 
         async with Client("10.10.5.82") as client:
             self.client = client
@@ -99,30 +104,58 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     print(message)    
                     cTime = datetime.now()
                     
-                    # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
+                    print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
                     # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
                     print("message are comming")
                     print("Message",message.payload.decode())
+                    Temp=json.loads(message.payload.decode())['temp']
+                    Organization=json.loads(message.payload.decode())['org']
+                    Device_ID=json.loads(message.payload.decode())['d_id']
+                    Freeze_ID=json.loads(message.payload.decode())['f_id']
+
+                    collections = db.list_collection_names()
+                    print(collections)
+                    list=[]
+                    if Organization not in  collections:
+                        print("False")
+                        db.create_collection(Organization, timeseries={
+                                'timeField': "timestamp",
+                                'metaField': "metadata",
+                                'granularity': "seconds"
+                            })  
+                    print("True") 
+            
+                    list.append( {
+                            "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},
+                            "timestamp":datetime.today().replace(microsecond=0),
+                            "temp": Temp
+                        })
+                    db[Organization].insert_many(list)
+                    print("collections",collections)
+                    
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
 
                     if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
                         print("Sending notification...")
-                        sendNotificationTime = cTime + timedelta(minutes=5)
+                        sendNotificationTime = cTime + timedelta(minutes=1)
 
                         if isCrtical:
                             print("Is critical...")
                             twilio_client = TwilioSMS.getInstance(env.account_sid, env.auth_token)
                             print(twilio_client)
-                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to="+9779814367845", body="Warning: The temperature is at crtical state.")
-
+                        
+                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to="+9779814367845", body=f"Warning: Critical \n \
+                                                                                                                                                    Organization: {kwargs['organization']} \n \
+                                                                                                                                                    Freeze: {kwargs['freeze_id']} \n \
+                                                                                                                                         Temperature  {json.loads(message.payload.decode())['temp']}°C.")
                     await self.send({
                         "type": "websocket.send",
                         "text": message.payload.decode()
                     })
-
-                    await asyncio.sleep(5)
+               
+                    # await asyncio.sleep(1)
 
 
 
@@ -133,3 +166,5 @@ class AsyncDeviceConsumer(AsyncConsumer):
         print("Disconnecteding...")
         self.client.disconnect()
         raise await StopConsumer()  
+
+        
