@@ -14,6 +14,7 @@ class Device(models.Model):
     organization=models.CharField(max_length=100,null=True)
     registration_data=models.DateTimeField(auto_now_add=True)
     status=models.BooleanField("Is Active",default=False)
+    
 
     def __str__(self):
         return self.device_Name

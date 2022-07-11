@@ -275,13 +275,16 @@ class user_roles_view_detail(APIView):
         print(instance)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 class Request_reset_page(APIView):
     def get(self, request):
         current_logged_in_user = request.session.get("username")
         user = User.objects.get(user_name=current_logged_in_user)
+        user_has_privilege=user_privilege(user)     
         context = {
             'title': 'Reset Request',
-            'user': user
+            'user': user,
+            'user_has_privilege':user_has_privilege
         }
         return render(request, 'password_reset/reset_request.html', context)
 

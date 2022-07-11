@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from .twilio_sms import TwilioSMS
 import pymongo
 from datetime import datetime
-conn = pymongo.MongoClient('mongodb://localhost:27017')
+conn = pymongo.MongoClient(env.mongodb_localhost)
 db = conn.StoreRealTimeData
 class SyncDeviceConsumer(SyncConsumer):
 
@@ -94,7 +94,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         current_time = datetime.now()
 
-        sendNotificationTime = current_time + timedelta(minutes=1)
+        sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
 
         async with Client("10.10.5.82") as client:
             self.client = client
@@ -136,17 +136,17 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
-
+    
                     if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
                         print("Sending notification...")
-                        sendNotificationTime = cTime + timedelta(minutes=1)
+                        sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)
 
                         if isCrtical:
                             print("Is critical...")
                             twilio_client = TwilioSMS.getInstance(env.account_sid, env.auth_token)
                             print(twilio_client)
                         
-                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to="+9779814367845", body=f"Warning: Critical \n \
+                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to=env.twilio_receiver_phn_number, body=f"Warning: Critical \n \
                                                                                                                                                     Organization: {kwargs['organization']} \n \
                                                                                                                                                     Freeze: {kwargs['freeze_id']} \n \
                                                                                                                                          Temperature  {json.loads(message.payload.decode())['temp']}°C.")

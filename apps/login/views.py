@@ -1,5 +1,6 @@
 import json
 import os
+from traceback import print_tb
 
 import requests
 from django.forms import model_to_dict
@@ -19,7 +20,7 @@ import datetime
 from ..account.models import User_role
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
-
+from ..device.models import Device
 def login_view(request):
 
     if not request.session.has_key('username'):
@@ -95,8 +96,21 @@ class Check_Password(APIView):
         else:
             return Response(False)
 
+def user_doc_info(current_logged_in_user):
+    
+    total_org=User.objects.all().count()
+    total_device=Device.objects.all().count()
+    
+    current_logged_in_users_with_orgname = User.objects.filter(user_name=current_logged_in_user).values_list('organization', flat=True)     
+    data=current_logged_in_users_with_orgname[0]    
+    total_dev=Device.objects.filter(organization=data).count()
+
+    return total_org,total_device,total_dev  
+
+
 class login_validate(APIView):
     def post(self, request):
+    
         user_has_privilege = False
         global user
         data = request.data
@@ -110,6 +124,9 @@ class login_validate(APIView):
                 user_serializer.save(last_login=datetime.datetime.today().date())
             request.session['username']=user.user_name
             current_logged_in_user = request.session.get("username")
+
+            total_org,total_device,total_dev=user_doc_info(current_logged_in_user)
+            
             user = User.objects.get(user_name=current_logged_in_user)
             user_has_privilege=user_privilege(user)
             print("Organization value  is: ")
@@ -118,7 +135,11 @@ class login_validate(APIView):
 
             context = {
                 'user': user,
-                'user_has_privilege': user_has_privilege
+                'user_has_privilege': user_has_privilege,
+                'total_org':total_org,
+                'total_device':total_device,
+                "total_dev":total_dev
+    
             }
             return render(request, 'index.html', context)
         elif serializer.errors:
@@ -128,14 +149,21 @@ class login_validate(APIView):
 
     @my_login_required
     def get(self, request):
+        print("i am calleing")
         user_has_privilege = False
         if request.GET.get('page') == None:
-            current_logged_in_user = request.session.get("username")           
-            user = User.objects.get(user_name=current_logged_in_user)
+            current_logged_in_user = request.session.get("username") 
+
+            total_org,total_device,total_dev=user_doc_info(current_logged_in_user)
+
+            user = User.objects.get(user_name=current_logged_in_user) 
             user_has_privilege=user_privilege(user)
             context = {
                 'user': user,
-                'user_has_privilege': user_has_privilege
+                'user_has_privilege': user_has_privilege,
+                'total_org':total_org,
+                'total_device':total_device,
+                "total_dev":total_dev
             }
             return render(request, 'index.html', context)
         else:

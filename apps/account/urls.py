@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_page,user_view, user_view_detail, user_role_page, user_roles_view, user_roles_view_detail, deleteConfirmation, register_user, Check_User_Username_For_Update, Check_User_Email_For_Update, Request_reset_page, Request_reset_view
+from .views import user_page,user_view, user_view_detail, user_role_page, user_roles_view, user_roles_view_detail, deleteConfirmation, register_user, Check_User_Username_For_Update,Request_reset_page, Check_User_Email_For_Update, Request_reset_view
 
 
 urlpatterns = [

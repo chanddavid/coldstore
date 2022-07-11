@@ -26,6 +26,19 @@ class EnvVars(BaseSettings):
     account_sid: str
     auth_token: str
     twilio_phn_number: str
+    twilio_receiver_phn_number: str
+    time_interval_to_send_sms: int
+    
+
+
+    #mongodb
+
+    #development
+    mongodb_localhost:str
+    #production
+    # mongodb_production:str
+
+
     class Config:
         env_file=".env"
 try:
