@@ -15,8 +15,12 @@ from datetime import datetime, timedelta
 from .twilio_sms import TwilioSMS
 import pymongo
 from datetime import datetime
+from .sendNotifcation import send_notification
+
+
 conn = pymongo.MongoClient(env.mongodb_localhost)
 db = conn.StoreRealTimeData
+
 class SyncDeviceConsumer(SyncConsumer):
 
     def __init__(self) -> None:
@@ -89,12 +93,14 @@ class AsyncDeviceConsumer(AsyncConsumer):
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
 
+        initialCritical = True
         
         print("Topic is: ", topic)
 
         current_time = datetime.now()
 
-        sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
+        # sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
+        sendNotificationTime = current_time
 
         async with Client("10.10.5.82") as client:
             self.client = client
@@ -106,7 +112,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     
                     print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
-                    # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
+                    print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
                     print("message are comming")
                     print("Message",message.payload.decode())
                     Temp=json.loads(message.payload.decode())['temp']
@@ -136,20 +142,19 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
-    
-                    if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
-                        print("Sending notification...")
-                        sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)
 
-                        if isCrtical:
-                            print("Is critical...")
-                            twilio_client = TwilioSMS.getInstance(env.account_sid, env.auth_token)
-                            print(twilio_client)
+                    # if isCrtical and initialCritical:
+                    #     print("Is critical while starting...")
+                    #     initialCritical = False
+                    #     await send_notification(kwargs, message)
                         
-                            await sync_to_async(twilio_client.twilio_client.messages.create)(from_=env.twilio_phn_number, to=env.twilio_receiver_phn_number, body=f"Warning: Critical \n \
-                                                                                                                                                    Organization: {kwargs['organization']} \n \
-                                                                                                                                                    Freeze: {kwargs['freeze_id']} \n \
-                                                                                                                                         Temperature  {json.loads(message.payload.decode())['temp']}°C.")
+                    if isCrtical:
+                        if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
+                            print("Sending notification after 5 min...")
+                            sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)                       
+                            print("Is critical after 1 min...")
+                            await send_notification(kwargs, message)
+
                     await self.send({
                         "type": "websocket.send",
                         "text": message.payload.decode()
