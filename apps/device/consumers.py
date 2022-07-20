@@ -1,26 +1,26 @@
 
 from os import PRIO_PGRP
+from traceback import print_tb
+from tracemalloc import start
 from channels.consumer import AsyncConsumer, SyncConsumer
 from channels.exceptions import StopConsumer
+from urllib3 import Retry
 from mqtt.mqtt_config import MQTTProtocolConfig
 import random
 from asyncio_mqtt.client import Client
 import json
 from time import sleep
-from twilio.rest import Client as TwilioClient
+# from twilio.rest import Client as TwilioClient
 from mqtt.env_vars import env
 from asgiref.sync import sync_to_async
 import asyncio
 from datetime import datetime, timedelta
 from .twilio_sms import TwilioSMS
 import pymongo
-from datetime import datetime
+import dateutil.parser
 from .sendNotifcation import send_notification
-
-
 conn = pymongo.MongoClient(env.mongodb_localhost)
 db = conn.StoreRealTimeData
-
 class SyncDeviceConsumer(SyncConsumer):
 
     def __init__(self) -> None:
@@ -64,15 +64,9 @@ class SyncDeviceConsumer(SyncConsumer):
 
 class AsyncDeviceConsumer(AsyncConsumer):
 
-    # def __init__(self) -> None:
-    #     print("Async EXecuting...")
-        
-    #     self.mqtt = MQTTProtocolConfig.getInstance()
-
-        # self.client = self.mqtt.connect_mqtt("sub_client_ids")
-
     def __init__(self):
         self.client = None
+
 
     async def websocket_connect(self, event):
 
@@ -90,14 +84,17 @@ class AsyncDeviceConsumer(AsyncConsumer):
         print(self.scope)
 
         kwargs = self.scope["url_route"]["kwargs"]
+        current_time = datetime.now()
+        timebefore1min=current_time-timedelta(minutes=1)
+        print(timebefore1min)
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
+       
 
         initialCritical = True
         
         print("Topic is: ", topic)
 
-        current_time = datetime.now()
 
         # sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
         sendNotificationTime = current_time
@@ -138,22 +135,25 @@ class AsyncDeviceConsumer(AsyncConsumer):
                             "temp": Temp
                         })
                     db[Organization].insert_many(list)
+                    print("list",list)
                     print("collections",collections)
                     
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
-
+                   
                     # if isCrtical and initialCritical:
                     #     print("Is critical while starting...")
                     #     initialCritical = False
                     #     await send_notification(kwargs, message)
                         
                     if isCrtical:
+                        print("critical Temperature")
                         if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
                             print("Sending notification after 5 min...")
                             sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)                       
                             print("Is critical after 1 min...")
                             await send_notification(kwargs, message)
+                        print("End critical temperature")
 
                     await self.send({
                         "type": "websocket.send",
@@ -172,4 +172,86 @@ class AsyncDeviceConsumer(AsyncConsumer):
         self.client.disconnect()
         raise await StopConsumer()  
 
+
+class selectDateConsumer(SyncConsumer):
+
+    def __init__(self):
+        self.client = None
+
+    def websocket_connect(self, event):
+
+        print("Date Connection success")
+
+        self.send({
+            "type": "websocket.accept"
+        })
+        print("scope is",self.scope)
+
+        kwargs = self.scope["url_route"]["kwargs"]
+        start_date=kwargs['start_date']
+        end_date=kwargs['end_date']
+
+        print(start_date)
+        print(end_date)
+
+        startdate=datetime.strptime(start_date,'%B %d %Y')
+        enddate=datetime.strptime(end_date,'%B %d %Y')
+
+        date_str=f'{startdate}'
+        date_end=f'{enddate}'
+
+        final_start_date = dateutil.parser.parse(date_str)
+        final_end_date = dateutil.parser.parse(date_end)
+
+        current_time = datetime.now()
+        timebefore1hour=current_time-timedelta(hours=1)
+        print(timebefore1hour)
+
         
+#         {
+#   '$and':[{"metadata.freeze_id":{'$eq':'freeze-2'}},
+#         {timestamp:{'$gte':ISODate('2022-07-18T16:47:59.000+00:00'),'$lte':ISODate('2022-07-18T16:48:34.000+00:00')}}
+#         ]
+#           }
+
+        collection=db[kwargs['organization']] 
+        
+        if final_start_date==final_end_date:
+            print("i am today")
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})   
+        else:
+            cursor = collection.find({'timestamp':{'$gt':datetime.strptime(start_date,'%B %d %Y'),'$lte':datetime.strptime(end_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})
+        print("cursor",cursor)
+        mylist=[]
+
+        for i in cursor:
+            mylist.append(i)
+        data_set=[d['temp'] for d in mylist]
+        # print("data_set",data_set[-7200:])
+
+        self.send({
+                    "type": "websocket.send",
+                    "text":json.dumps({'data_set':data_set[-7200:]}) 
+                })
+
+    def websocket_receive(self, event):
+        print("Data received from mongo client") 
+    
+    def websocket_disconnect(self, event):
+        print("Disconnecteding from mongo...")
+        self.client.disconnect()
+        raise StopConsumer()  
+
+        
+
+
+
+
+
+
+
+
+
+
+
+

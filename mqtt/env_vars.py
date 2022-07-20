@@ -28,6 +28,11 @@ class EnvVars(BaseSettings):
     twilio_phn_number: str
     twilio_receiver_phn_number: str
     time_interval_to_send_sms: int
+
+    #sparrow sms
+    sparrow_token:str
+    sparrow_from:str
+    sparrow_to:str
     
 
 

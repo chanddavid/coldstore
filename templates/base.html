@@ -22,7 +22,9 @@
     <link href="{% static 'vendors/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/main.min.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         
 
 
@@ -36,6 +38,7 @@
     {% block externalcss %}
 
     {% endblock %}
+    
 </head>
 
 <body>
@@ -60,8 +63,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="https://kit.fontawesome.com/d1acacb120.js" crossorigin="anonymous"></script>
 <script src="  https://kit.fontawesome.com/cab915e289.js" crossorigin="anonymous"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 
 
@@ -69,6 +73,7 @@
 <!-- PAGE LEVEL PLUGINS-->
 <!-- CORE SCRIPTS-->
 <script src="{% static 'js/app.min.js' %}"></script>
+
 <!-- PAGE LEVEL SCRIPTS-->
 {% block externaljs %}
 {% endblock %}

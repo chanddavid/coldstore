@@ -1,5 +1,6 @@
 import json
 import os
+from tokenize import endpats
 from traceback import print_tb
 
 import requests
@@ -21,6 +22,7 @@ from ..account.models import User_role
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
 from ..device.models import Device
+
 def login_view(request):
 
     if not request.session.has_key('username'):
@@ -131,14 +133,14 @@ class login_validate(APIView):
             user_has_privilege=user_privilege(user)
             print("Organization value  is: ")
             user_acc_to_org(user)
-                
 
             context = {
                 'user': user,
                 'user_has_privilege': user_has_privilege,
                 'total_org':total_org,
                 'total_device':total_device,
-                "total_dev":total_dev
+                "total_dev":total_dev,
+              
     
             }
             return render(request, 'index.html', context)

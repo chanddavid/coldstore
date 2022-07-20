@@ -12,8 +12,18 @@ from ..login.decorators import my_login_required
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
 # from mqtt.restart import restart
+from mqtt.env_vars import env
+import pymongo
 
-
+# mongodb dataset
+# def getdataset(current_logged_in_user):
+#         conn = pymongo.MongoClient(env.mongodb_localhost)
+#         db = conn.StoreRealTimeData
+#         current_logged_in_users_with_orgname = User.objects.filter(user_name=current_logged_in_user).values_list('organization', flat=True)     
+#         datas=current_logged_in_users_with_orgname[0] 
+#         collection=db[datas]
+#         cursor = collection.find()
+#         return cursor
 class device_page(APIView):
     """View to render device.html page"""
     renderer_classes = [TemplateHTMLRenderer]
@@ -27,6 +37,7 @@ class device_page(APIView):
         user = User.objects.get(user_name=current_logged_in_user)
         serializer = DeviceSerializer()
         user_has_privilege=user_privilege(user)
+  
         return Response({'serializer': serializer, 'style':self.style, 'title': 'Dashboard-Device', 'user':user,'user_has_privilege': user_has_privilege})
 
 
