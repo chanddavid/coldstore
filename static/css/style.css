@@ -25,9 +25,22 @@
 
 
 #temp-graph{
+  width: 900px;
+  margin: auto;
+}
+#chart{
+  width: 650px;
+  margin: auto;
+}
+#middlepart{
   width: 700px;
   margin: auto;
 }
+
+.modal-dialog .modal-content{
+  height:900px;
+}
+
 
 .modal-content{
     border-radius: 1.5rem!important;

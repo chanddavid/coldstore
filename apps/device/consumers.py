@@ -41,8 +41,8 @@ class SyncDeviceConsumer(SyncConsumer):
 
         def on_message(client, userdata, msg):
             info = msg.payload.decode()
-            print("Info is: ")
-            print(info)
+            # print("Info is: ")
+            # print(info)
             
             self.send({
                 "type": "websocket.send",
@@ -76,24 +76,24 @@ class AsyncDeviceConsumer(AsyncConsumer):
             "type": "websocket.accept"
         })
 
-        print("Env sid: ")
-        print(env.account_sid)
-        print(env.auth_token)
+        # print("Env sid: ")
+        # print(env.account_sid)
+        # print(env.auth_token)
 
-        print("Self.scope is: ")
-        print(self.scope)
+        # print("Self.scope is: ")
+        # print(self.scope)
 
         kwargs = self.scope["url_route"]["kwargs"]
         current_time = datetime.now()
         timebefore1min=current_time-timedelta(minutes=1)
-        print(timebefore1min)
+        # print(timebefore1min)
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
        
 
         initialCritical = True
         
-        print("Topic is: ", topic)
+        # print("Topic is: ", topic)
 
 
         # sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
@@ -104,7 +104,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
                 async for message in messages:            
-                    print(message)    
+                    # print(message)    
                     cTime = datetime.now()
                     
                     print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
@@ -118,7 +118,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     Freeze_ID=json.loads(message.payload.decode())['f_id']
 
                     collections = db.list_collection_names()
-                    print(collections)
+                    # print(collections)
                     list=[]
                     if Organization not in  collections:
                         print("False")
@@ -135,8 +135,8 @@ class AsyncDeviceConsumer(AsyncConsumer):
                             "temp": Temp
                         })
                     db[Organization].insert_many(list)
-                    print("list",list)
-                    print("collections",collections)
+                    # print("list",list)
+                    # print("collections",collections)
                     
 
                     isCrtical = json.loads(message.payload.decode())["critical"]
@@ -190,48 +190,39 @@ class selectDateConsumer(SyncConsumer):
         kwargs = self.scope["url_route"]["kwargs"]
         start_date=kwargs['start_date']
         end_date=kwargs['end_date']
-
-        print(start_date)
-        print(end_date)
-
         startdate=datetime.strptime(start_date,'%B %d %Y')
         enddate=datetime.strptime(end_date,'%B %d %Y')
-
+        incrementby1day=enddate+timedelta(days=1)     
         date_str=f'{startdate}'
         date_end=f'{enddate}'
-
         final_start_date = dateutil.parser.parse(date_str)
-        final_end_date = dateutil.parser.parse(date_end)
-
-        current_time = datetime.now()
-        timebefore1hour=current_time-timedelta(hours=1)
-        print(timebefore1hour)
-
-        
+        final_end_date = dateutil.parser.parse(date_end)        
 #         {
 #   '$and':[{"metadata.freeze_id":{'$eq':'freeze-2'}},
 #         {timestamp:{'$gte':ISODate('2022-07-18T16:47:59.000+00:00'),'$lte':ISODate('2022-07-18T16:48:34.000+00:00')}}
 #         ]
-#           }
-
+#          }
         collection=db[kwargs['organization']] 
         
         if final_start_date==final_end_date:
-            print("i am today")
-            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})   
+            
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
         else:
             cursor = collection.find({'timestamp':{'$gt':datetime.strptime(start_date,'%B %d %Y'),'$lte':datetime.strptime(end_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})
-        print("cursor",cursor)
+        # print("cursor",cursor)
         mylist=[]
-
+    
+        
         for i in cursor:
             mylist.append(i)
         data_set=[d['temp'] for d in mylist]
-        # print("data_set",data_set[-7200:])
+        # print("data_set",data_set[-100:])
+    
 
         self.send({
                     "type": "websocket.send",
-                    "text":json.dumps({'data_set':data_set[-7200:]}) 
+                    # "text":json.dumps({'data_set':data_set[-7200:]}) 
+                    "text":json.dumps({'data_set':data_set}) 
                 })
 
     def websocket_receive(self, event):
@@ -243,14 +234,6 @@ class selectDateConsumer(SyncConsumer):
         raise StopConsumer()  
 
         
-
-
-
-
-
-
-
-
 
 
 
