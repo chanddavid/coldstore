@@ -60,8 +60,6 @@ class SyncDeviceConsumer(SyncConsumer):
         self.client.loop_stop()
         raise StopConsumer()
 
-
-
 class AsyncDeviceConsumer(AsyncConsumer):
 
     def __init__(self):
@@ -173,7 +171,56 @@ class AsyncDeviceConsumer(AsyncConsumer):
         raise await StopConsumer()  
 
 
+def deviceConsumer(kwargs):
+    start_date=kwargs['start_date']
+    end_date=kwargs['end_date']
+    startdate=datetime.strptime(start_date,'%B %d %Y')
+    enddate=datetime.strptime(end_date,'%B %d %Y')
+    incrementby1day=enddate+timedelta(days=1)     
+    date_str=f'{startdate}'
+    date_end=f'{enddate}'
+    final_start_date = dateutil.parser.parse(date_str)
+    final_end_date = dateutil.parser.parse(date_end)   
+    collection=db[kwargs['organization']] 
+
+    if final_start_date==final_end_date:     
+        cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
+    else:
+        cursor = collection.find({'timestamp':{'$gt':datetime.strptime(start_date,'%B %d %Y'),'$lte':datetime.strptime(end_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})
+    print("cursor",cursor)
+    mylist=[]
+    
+
+    for i in cursor:
+        mylist.append(i)
+    return mylist
+
 class selectDateConsumer(SyncConsumer):
+    def __init__(self):
+        self.client = None
+
+    def websocket_connect(self, event):
+        print("Date Connection success")
+        self.send({
+            "type": "websocket.accept"
+        })
+        print("scope is",self.scope)
+        kwargs = self.scope["url_route"]["kwargs"]
+        mylist=deviceConsumer(kwargs)
+        data_set=[d['temp'] for d in mylist]
+        self.send({
+                    "type": "websocket.send",
+                    "text":json.dumps({'data_set':data_set}) 
+                })
+
+    def websocket_receive(self, event):
+        print("Data received from mongo client") 
+    
+    def websocket_disconnect(self, event):
+        print("Disconnecteding from mongo...")
+        self.client.disconnect()
+        raise StopConsumer()  
+class TimeDateConsumer(SyncConsumer):
 
     def __init__(self):
         self.client = None
@@ -188,40 +235,33 @@ class selectDateConsumer(SyncConsumer):
         print("scope is",self.scope)
 
         kwargs = self.scope["url_route"]["kwargs"]
-        start_date=kwargs['start_date']
-        end_date=kwargs['end_date']
-        startdate=datetime.strptime(start_date,'%B %d %Y')
-        enddate=datetime.strptime(end_date,'%B %d %Y')
-        incrementby1day=enddate+timedelta(days=1)     
-        date_str=f'{startdate}'
-        date_end=f'{enddate}'
-        final_start_date = dateutil.parser.parse(date_str)
-        final_end_date = dateutil.parser.parse(date_end)        
-#         {
-#   '$and':[{"metadata.freeze_id":{'$eq':'freeze-2'}},
-#         {timestamp:{'$gte':ISODate('2022-07-18T16:47:59.000+00:00'),'$lte':ISODate('2022-07-18T16:48:34.000+00:00')}}
-#         ]
-#          }
-        collection=db[kwargs['organization']] 
-        
-        if final_start_date==final_end_date:
-            
-            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
-        else:
-            cursor = collection.find({'timestamp':{'$gt':datetime.strptime(start_date,'%B %d %Y'),'$lte':datetime.strptime(end_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})
-        # print("cursor",cursor)
-        mylist=[]
-    
-        
-        for i in cursor:
-            mylist.append(i)
-        data_set=[d['temp'] for d in mylist]
-        # print("data_set",data_set[-100:])
-    
+        time=kwargs['time']
+        mylist=deviceConsumer(kwargs)
+        lastTime=mylist[-1]['timestamp']
+        print("last",lastTime)
+        hourback = lastTime-timedelta(hours=1)
+        halfhourback = lastTime-timedelta(minutes=30)
+        oneHr=f'{hourback}' 
+        HalfHr=f'{halfhourback}'
+        print("recent is",lastTime)
+        data_set2=[{
+                "time": d["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
+                "temp": d['temp'] 
+            } for d in mylist
+        ]
+        data_set=[]
 
+        def timeFilter(tym):
+            for i in range(len(data_set2)):
+                if data_set2[i]["time"] >= tym:
+                    data_set.append(data_set2[i]['temp'])    
+        if time=='halfhr':   
+            timeFilter(HalfHr)
+        elif time=="onehr":
+            timeFilter(oneHr)
+        print(data_set)
         self.send({
                     "type": "websocket.send",
-                    # "text":json.dumps({'data_set':data_set[-7200:]}) 
                     "text":json.dumps({'data_set':data_set}) 
                 })
 

@@ -199,20 +199,14 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     myLine.destroy();
   }
   window.myLine = new Chart(cxt, dataobj);
-
   // below graph
-  let start = moment().subtract(29, 'days');
+  let start = moment()
   let end = moment();
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
     start_date = start.format('MMMM D YYYY')
     end_date = end.format('MMMM D YYYY')
-
-    let canvasParent = document.getElementById('mynew_Chart');
-    canvasParent.innerHTML = ''
-    canvasParent.innerHTML = `<canvas id="mynewChart" height="120px">
-    </canvas>`
-  
+    canvasDestroy()
     let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
@@ -230,7 +224,25 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     }
   }, cb);
   cb(start, end);
+
+  // filter by time and minutes
+  document.getElementById("halfhr").addEventListener("click", function(){
+    canvasDestroy()
+    let time="halfhr"
+    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+    datesearch_ws = new WebSocket(datesearchurl);
+    secondChart(datesearch_ws)
+  })
+  document.getElementById("onehr").addEventListener("click", function(){
+    canvasDestroy()
+    let time="onehr"
+    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+    datesearch_ws = new WebSocket(datesearchurl);
+    secondChart(datesearch_ws)
+  })
+
 }
+
 
 
 function refresh_device(data) {

@@ -36,6 +36,9 @@
   width: 700px;
   margin: auto;
 }
+#moreinfo{
+  margin-left: 678px;
+}
 
 .modal-dialog .modal-content{
   height:900px;

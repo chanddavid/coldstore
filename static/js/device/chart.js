@@ -178,6 +178,13 @@ function secondChart(datesearch_ws){
     }
     datesearch_ws.onclose = function (e) {
       console.log("date search connection closed", e);
+      let canvasParent = document.getElementById('mynew_Chart');
       canvasParent.innerHTML = ''
     }
   }
+
+function canvasDestroy(){
+  let canvasParent = document.getElementById('mynew_Chart');
+  canvasParent.innerHTML = ''
+  canvasParent.innerHTML = `<canvas id="mynewChart" height="120px"></canvas>`
+}
