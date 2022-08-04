@@ -206,8 +206,18 @@ class selectDateConsumer(SyncConsumer):
         })
         print("scope is",self.scope)
         kwargs = self.scope["url_route"]["kwargs"]
+        print("current Time1",datetime.now())
         mylist=deviceConsumer(kwargs)
-        data_set=[d['temp'] for d in mylist]
+        print("current Time2",datetime.now())
+        # data_set=[d['temp'] for d in mylist]
+        # testing start
+        data_set=[{
+                    "dates": d["timestamp"].strftime("%Y %b %d %H:%M:%S"),
+                    "temp": d['temp'] 
+                } for d in mylist
+            ]
+        # testing end
+
         self.send({
                     "type": "websocket.send",
                     "text":json.dumps({'data_set':data_set}) 
@@ -232,34 +242,35 @@ class TimeDateConsumer(SyncConsumer):
         self.send({
             "type": "websocket.accept"
         })
-        print("scope is",self.scope)
-
+        print("scope is here:",self.scope)
         kwargs = self.scope["url_route"]["kwargs"]
         time=kwargs['time']
+        print("current Time3",datetime.now())
         mylist=deviceConsumer(kwargs)
-        lastTime=mylist[-1]['timestamp']
-        print("last",lastTime)
-        hourback = lastTime-timedelta(hours=1)
-        halfhourback = lastTime-timedelta(minutes=30)
-        oneHr=f'{hourback}' 
-        HalfHr=f'{halfhourback}'
-        print("recent is",lastTime)
-        data_set2=[{
-                "time": d["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
-                "temp": d['temp'] 
-            } for d in mylist
-        ]
-        data_set=[]
+        print("current Time4",datetime.now())
+        if len(mylist)==0:
+            data_set=[]
+        else:
+            lastTime=mylist[-1]['timestamp']
 
-        def timeFilter(tym):
-            for i in range(len(data_set2)):
-                if data_set2[i]["time"] >= tym:
-                    data_set.append(data_set2[i]['temp'])    
-        if time=='halfhr':   
-            timeFilter(HalfHr)
-        elif time=="onehr":
-            timeFilter(oneHr)
-        print(data_set)
+            if time=='halfhr':
+                subTime = lastTime-timedelta(minutes=30)  
+            else:
+                subTime = lastTime-timedelta(hours=1)
+            StrTime=f'{subTime}'      
+            data_set2=[{
+                    "time": d["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
+                    "temp": d['temp'] 
+                } for d in mylist
+            ]
+            data_set=[]
+            def timeFilter(tym):
+                for i in range(len(data_set2)): 
+                    if data_set2[i]["time"] >= tym:
+                        # data_set.append(data_set2[i]['temp'])    
+                        data_set.append(data_set2[i])    
+            
+            timeFilter(StrTime)
         self.send({
                     "type": "websocket.send",
                     "text":json.dumps({'data_set':data_set}) 
@@ -273,8 +284,4 @@ class TimeDateConsumer(SyncConsumer):
         self.client.disconnect()
         raise StopConsumer()  
 
-        
-
-
-
-
+#

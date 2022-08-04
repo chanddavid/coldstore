@@ -202,11 +202,16 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // below graph
   let start = moment()
   let end = moment();
+  console.log("start",start)  
+  console.log(typeof(start))  
+
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
     start_date = start.format('MMMM D YYYY')
     end_date = end.format('MMMM D YYYY')
     canvasDestroy()
+    var today= new Date();
+    console.log("current Time0",today); 
     let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
@@ -220,8 +225,8 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
       'Last 30 Days': [moment().subtract(29, 'days'), moment()],  
       'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-    }
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 
+    },
   }, cb);
   cb(start, end);
 
@@ -233,6 +238,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
   })
+
   document.getElementById("onehr").addEventListener("click", function(){
     canvasDestroy()
     let time="onehr"

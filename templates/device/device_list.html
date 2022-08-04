@@ -71,30 +71,23 @@
             </canvas>
           </div>
           <div class="modal-body">
-
             <div class="row" id="middlepart">
               <div class="col-md-7" id="newDate">
-
               </div>
               <div class="col-md-5">
                 <div id="reportrange"
-                  style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                  style="background: #fff; cursor: pointer; padding: 5px 8px; border: 1px solid #ccc; width: 100%">
                   <i class="fa fa-calendar"></i>
                   <span></span> <i class="fa fa-caret-down"></i>
                 </div>
               </div>
-            </div>
-            <br>
+            </div>   
             <div class="btn-group" role="group" id="moreinfo" aria-label="Basic example">
             <button type="button"  id="halfhr" class="btn btn-outline-primary btn-sm">30 m</button>
-            <button type="button"  id="onehr" class="btn btn-outline-primary btn-sm">1 h</button>
-            
+            <button type="button"  id="onehr" class="btn btn-outline-primary btn-sm">1 h</button>   
             </div>
-
             <div class="modal-body" id="mynew_Chart">
-              <canvas id="mynewChart" height="300px">
-
-              </canvas>
+              <div id="container"></div>
             </div>
           </div>
         </div>
@@ -110,10 +103,13 @@
 
 <!-- PAGE LEVEL PLUGINS-->
 {% block externaljs %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="{% static 'js/device/modals/device_modals.js' %}"></script>
 <script src="{% static 'vendors/dataTables/datatables.min.js' %}"></script>
 <script src="{% static 'js/device/device_script.js' %}"></script>
 <script src="{% static 'js/device/chart.js' %}"></script>
+
 
 <script>
   $("#post_device").validate({
