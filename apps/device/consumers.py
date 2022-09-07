@@ -1,7 +1,4 @@
 
-from os import PRIO_PGRP
-from traceback import print_tb
-from tracemalloc import start
 from channels.consumer import AsyncConsumer, SyncConsumer
 from channels.exceptions import StopConsumer
 from urllib3 import Retry
@@ -77,27 +74,23 @@ class AsyncDeviceConsumer(AsyncConsumer):
         # print("Env sid: ")
         # print(env.account_sid)
         # print(env.auth_token)
-
         # print("Self.scope is: ")
         # print(self.scope)
-
         kwargs = self.scope["url_route"]["kwargs"]
         current_time = datetime.now()
         timebefore1min=current_time-timedelta(minutes=1)
-        # print(timebefore1min)
+        
 
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
        
-
         initialCritical = True
-        
-        # print("Topic is: ", topic)
-
+    
+        print("Topic is: ", topic)
 
         # sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
         sendNotificationTime = current_time
 
-        async with Client("10.10.5.82") as client:
+        async with Client(env.mqtt_broker) as client:
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
@@ -115,6 +108,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     Device_ID=json.loads(message.payload.decode())['d_id']
                     Freeze_ID=json.loads(message.payload.decode())['f_id']
 
+
                     collections = db.list_collection_names()
                     # print(collections)
                     list=[]
@@ -130,7 +124,7 @@ class AsyncDeviceConsumer(AsyncConsumer):
                     list.append( {
                             "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},
                             "timestamp":datetime.today().replace(microsecond=0),
-                            "temp": Temp
+                            "temp": Temp,
                         })
                     db[Organization].insert_many(list)
                     # print("list",list)
@@ -160,8 +154,6 @@ class AsyncDeviceConsumer(AsyncConsumer):
                
                     # await asyncio.sleep(1)
 
-
-
     async def websocket_receive(self, event):
         print("Data received from client") 
     
@@ -174,19 +166,29 @@ class AsyncDeviceConsumer(AsyncConsumer):
 def deviceConsumer(kwargs):
     start_date=kwargs['start_date']
     end_date=kwargs['end_date']
+
     startdate=datetime.strptime(start_date,'%B %d %Y')
     enddate=datetime.strptime(end_date,'%B %d %Y')
-    incrementby1day=enddate+timedelta(days=1)     
+
+    incrementby1day=enddate+timedelta(days=1)  
+
     date_str=f'{startdate}'
     date_end=f'{enddate}'
+
+    # change
+    # y=f'{date_end[0:10]}'+' 23:59:59+00:00'
+    # edd=dateutil.parser.parse(y)
+    # endchange
+
     final_start_date = dateutil.parser.parse(date_str)
-    final_end_date = dateutil.parser.parse(date_end)   
+    final_end_date = dateutil.parser.parse(date_end) 
+    print("type2",final_start_date,final_end_date)  
     collection=db[kwargs['organization']] 
 
     if final_start_date==final_end_date:     
         cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
     else:
-        cursor = collection.find({'timestamp':{'$gt':datetime.strptime(start_date,'%B %d %Y'),'$lte':datetime.strptime(end_date,'%B %d %Y')},"metadata.freeze_id":kwargs['freeze_id']})
+        cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lte':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})
     print("cursor",cursor)
     mylist=[]
     

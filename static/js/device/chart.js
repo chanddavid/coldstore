@@ -26,19 +26,33 @@ function dataObjofUpperGraph() {
         data: [65, 59, 80, 81, 30, 23, 54, 12, 23, 34],
         tension: 0.4,
         pointRadius: 1,
-        fill: true,
-      }]
+        fill: false,
+        animation: true,
+      },
+      {
+        borderColor: "#F7BA11",
+        label: 'Threshold',
+        borderWidth: 2, 
+        pointRadius: 1,
+        data: [26,26,26,26,26,26,26,26,26,26],
+        animation:false
+    }
+    ]
     },
     options: {
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Temperature'
+          }
         },
         x: {
           beginAtZero: true
         }
       },
-      animation: true,
+     
 
     }
   }

@@ -163,7 +163,10 @@ $(document).on('submit', '#edit_device', function (e) {
 
 let ws;
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
+  // localStorage.setItem(device_name,JSON.stringify({"device_name":device_name,"freeze_id":freeze_id,"organization":organization}))
   // upper chart
+  console.log(device_name,freeze_id,organization)
+
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
   </canvas>`
@@ -178,6 +181,14 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   ws.onmessage = function (e) {
     let realdata = JSON.parse(e.data)["temp"]
     let device_id = JSON.parse(e.data)["d_id"]
+    let Threshold=JSON.parse(e.data)['c_temp']
+
+    dataobjNew1 = dataobj['data']['datasets'][1]['data'];
+    dataobjNew1.shift();
+    dataobjNew1.push(Threshold)
+    dataobj['data']['datasets'][1]['data'] = dataobjNew1
+    window.myLine.update();
+
     dataobjNew = dataobj['data']['datasets'][0]['data'];
     dataobjNew.shift();
     dataobjNew.push(realdata)
@@ -210,8 +221,6 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     start_date = start.format('MMMM D YYYY')
     end_date = end.format('MMMM D YYYY')
     canvasDestroy()
-    var today= new Date();
-    console.log("current Time0",today); 
     let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)

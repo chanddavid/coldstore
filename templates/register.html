@@ -79,29 +79,9 @@
                             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                         }
                     },
-                    phone_number:{
-                        required:true
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6
-                    },
-                    confirm_password: {
-                        required: true,
-                        equalTo: "#password"
-                    }
                 },
-                messages:{
-                    user_name: {
-                        remote: "Username already exists."
-                    },
-                    email: {
-                        remote: "This email is already taken."
-                    },
-                    phone_number:{
-                        required: "Please provide your phone number",
-                        remote: "Number is already taken."
-                    },
+                phone_number: {
+                    required: true
                 },
                 password: {
                     required: true,
@@ -110,7 +90,7 @@
                 confirm_password: {
                     required: true,
                     equalTo: "#password"
-                }
+                },
             },
             messages: {
                 user_name: {
@@ -118,7 +98,11 @@
                 },
                 email: {
                     remote: "This email is already taken."
-                }
+                },
+                phone_number: {
+                    required: "Please provide your phone number",
+                    remote: "Number is already taken."
+                },
             },
             highlight: function (e) {
                 $(e).closest(".form-group").addClass("has-error")
