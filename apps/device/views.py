@@ -52,7 +52,6 @@ class device_view(APIView):
         else:           
             device=user_acc_to_org(user)
         device_serializer = DeviceSerializer(device, many=True)
-        print(device_serializer.data)
         return Response({"data":device_serializer.data}, status=status.HTTP_200_OK)
 
 

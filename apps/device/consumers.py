@@ -73,7 +73,7 @@ class AsyncDeviceChartConsumer(AsyncConsumer):
         kwargs = self.scope["url_route"]["kwargs"]
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
         print("Topic is: ", topic)
-        async with Client(env.mqtt_broker) as client:
+        async with Client(env.mqtt_broker,env.mqtt_port) as client:
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
@@ -227,7 +227,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
 
     async def websocket_connect(self, event):
 
-        print("Connection success")
+        # print("Connection success")
 
         await self.send({
             "type": "websocket.accept"
@@ -244,7 +244,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
 
         sendNotificationTime = current_time
 
-        async with Client(env.mqtt_broker) as client:
+        async with Client(env.mqtt_broker,env.mqtt_port) as client:
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
@@ -254,9 +254,9 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     
                     print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
-                    print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
-                    print("message are comming")
-                    print("Message",message.payload.decode())
+                    # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
+                    # print("message are comming")
+                    # print("Message",message.payload.decode())
                     Temp=json.loads(message.payload.decode())['temp']
                     Organization=json.loads(message.payload.decode())['org']
                     Device_ID=json.loads(message.payload.decode())['d_id']
@@ -267,7 +267,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     # print(collections)
                     list=[]
                     if Organization not in  collections:
-                        print("False")
+                        # print("False")
                         db.create_collection(Organization, timeseries={
                                 'timeField': "timestamp",
                                 'metaField': "metadata",

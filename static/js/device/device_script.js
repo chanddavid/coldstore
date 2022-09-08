@@ -12,8 +12,25 @@ let datatables = $('#device_datatable').DataTable({
     {
       "data": "device_Name",
       "render": function (data, type, row, meta) {
-        console.log(data)
+        console.log("list device",data,row.freeze_id,row.organization)
+        //subscribe to mqtt server and save data to database
+        device_name = data
+        freeze_id = row.freeze_id
+        organization = row.organization
+        let urls = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
+        wss = new WebSocket(urls);
+        wss.onopen = function (e) {
+          console.log("Connection is opened !!!!", e)
+        }
+        wss.onmessage = function (e) {
+          console.log("message received from server", e.data);
+        }
+        wss.onclose = function (e) {
+          console.log("websocket connection closed", e);
+        }
+        
         return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}', '${row.freeze_id}', '${row.organization}')">${data}</a>`;
+
       }
     },
     { "data": "organization" },
@@ -30,7 +47,8 @@ let datatables = $('#device_datatable').DataTable({
   columnDefs: [{
     targets: 'no-sort',
     orderable: false
-  }]
+  }],
+
 });
 
 $('#searchbar').on('keyup', function () {
@@ -82,22 +100,6 @@ $(document).on("submit", "#post_device", function (e) {
       datatables.ajax.reload();
     }
   })
-  //subscribe to mqtt server and save data to database
-  device_name = $("input[name='device_Name']").val()
-  freeze_id = $("input[name='freeze_id']").val()
-  organization = $("input[name='organization']").val()
-  let url = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
-  ws = new WebSocket(url);
-  ws.onopen = function (e) {
-    console.log("Connection is opened !!!!",e)
-  }
-  ws.onmessage = function (e) {
-    console.log("message received from server", e.data);
-  }
-  ws.onclose = function (e) {
-    console.log("websocket connection closed", e);
-  }
-
 
 })
 
@@ -223,7 +225,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
 
-    
+
   }
 
 
@@ -279,8 +281,8 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     e.preventDefault();
     ws.close();
   })
-  
-  
+
+
   // below graph
   let start = moment()
   let end = moment();
