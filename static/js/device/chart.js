@@ -12,52 +12,6 @@ function currentDate(realdata, device_id) {
   let deviceidgraph = document.getElementById("graph-title")
   deviceidgraph.innerHTML = `<h5 class="modal-title" id="graph-title">Temperature Graph of ${device_id}</h5>`
 }
-function dataObjofUpperGraph() {
-  let dataobj = {
-    type: 'line',
-    data: {
-      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-
-      datasets: [{
-        label: 'Temperature',
-        borderColor: "rgb(220,20,60)",
-        borderWidth: 2,
-        backgroundColor: "rgba(255,99,132,0.2)",
-        data: [65, 59, 80, 81, 30, 23, 54, 12, 23, 34],
-        tension: 0.4,
-        pointRadius: 1,
-        fill: false,
-        animation: true,
-      },
-      {
-        borderColor: "#F7BA11",
-        label: 'Threshold',
-        borderWidth: 2, 
-        pointRadius: 1,
-        data: [26,26,26,26,26,26,26,26,26,26],
-        animation:false
-    }
-    ]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Temperature'
-          }
-        },
-        x: {
-          beginAtZero: true
-        }
-      },
-     
-
-    }
-  }
-  return dataobj
-}
 function canvasDestroy() {
   let canvasParent = document.getElementById('mynew_Chart');
   canvasParent.innerHTML = ''

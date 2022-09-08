@@ -163,53 +163,105 @@ $(document).on('submit', '#edit_device', function (e) {
 
 let ws;
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
-  // localStorage.setItem(device_name,JSON.stringify({"device_name":device_name,"freeze_id":freeze_id,"organization":organization}))
-  // upper chart
-  console.log(device_name,freeze_id,organization)
-
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
-  </canvas>`
+
+  
+    </canvas>`
+
   let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
   ws = new WebSocket(url);
+  var myLine = null
 
-  let myLine = null
   ws.onopen = function (e) {
     console.log("Connection is opened !!!!")
     console.log(e)
   }
+
   ws.onmessage = function (e) {
+    console.log("i am js message",JSON.parse(e.data))
     let realdata = JSON.parse(e.data)["temp"]
     let device_id = JSON.parse(e.data)["d_id"]
     let Threshold=JSON.parse(e.data)['c_temp']
 
-    dataobjNew1 = dataobj['data']['datasets'][1]['data'];
-    dataobjNew1.shift();
-    dataobjNew1.push(Threshold)
-    dataobj['data']['datasets'][1]['data'] = dataobjNew1
-    window.myLine.update();
 
     dataobjNew = dataobj['data']['datasets'][0]['data'];
     dataobjNew.shift();
     dataobjNew.push(realdata)
     dataobj['data']['datasets'][0]['data'] = dataobjNew
-    window.myLine.update();
+    myLine.update();
+
+    dataobjNew1 = dataobj['data']['datasets'][1]['data'];
+    dataobjNew1.shift();
+    dataobjNew1.push(Threshold)
+    dataobj['data']['datasets'][1]['data'] = dataobjNew1
+    myLine.update();
 
     //date and temperature
-    currentDate(realdata, device_id)
+    // currentDate(realdata, device_id)
+    let options = { year: 'numeric', month: 'long', day: 'numeric' }
+    let today = new Date();
+    todaydate = today.toLocaleDateString("en-US", options)
 
   }
   ws.onclose = function (e) {
     console.log("Closed data from server")
+    let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
+    
+    let newDate=document.getElementById("newDate")
+    newDate.innerHTML=''
+  }
+  
+  let dataobj = {
+    type: 'line',
+    data: {
+      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 
+      datasets: [{
+        label: 'Temperature',
+        borderColor: "rgb(220,20,60)",
+        borderWidth: 2,
+        backgroundColor: "rgba(255,99,132,0.2)",
+        data: [65, 59, 80, 81, 30, 23, 54, 12, 23, 34],
+        tension: 0.4,
+        pointRadius: 1,
+        fill: false,
+        animation: true,
+      },
+      {
+        borderColor: "#F7BA11",
+        label: 'Threshold',
+        borderWidth: 2, 
+        pointRadius: 1,
+        data: [26,26,26,26,26,26,26,26,26,26],
+        animation:false
+    }
+    ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Temperature'
+          }
+        },
+        x: {
+          beginAtZero: true
+        }
+      },
+     
+
+    }
   }
-  dataobj = dataObjofUpperGraph()
-  let cxt = document.getElementById('myChart').getContext('2d');
-  if (myLine != null) {
-    myLine.destroy();
-  }
-  window.myLine = new Chart(cxt, dataobj);
+  var ctx = document.getElementById('myChart').getContext('2d');
+  myLine = new Chart(ctx, dataobj);
+  // if (myLine != null) {
+  //   myLine.destroy();
+  // }
+  
   // below graph
   let start = moment()
   let end = moment();
