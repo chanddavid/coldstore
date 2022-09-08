@@ -82,6 +82,23 @@ $(document).on("submit", "#post_device", function (e) {
       datatables.ajax.reload();
     }
   })
+  //subscribe to mqtt server and save data to database
+  device_name = $("input[name='device_Name']").val()
+  freeze_id = $("input[name='freeze_id']").val()
+  organization = $("input[name='organization']").val()
+  let url = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
+  ws = new WebSocket(url);
+  ws.onopen = function (e) {
+    console.log("Connection is opened !!!!",e)
+  }
+  ws.onmessage = function (e) {
+    console.log("message received from server", e.data);
+  }
+  ws.onclose = function (e) {
+    console.log("websocket connection closed", e);
+  }
+
+
 })
 
 function delete_device(data) {
@@ -179,10 +196,10 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   }
 
   ws.onmessage = function (e) {
-    console.log("i am js message",JSON.parse(e.data))
+    console.log("i am js message", JSON.parse(e.data))
     let realdata = JSON.parse(e.data)["temp"]
     let device_id = JSON.parse(e.data)["d_id"]
-    let Threshold=JSON.parse(e.data)['c_temp']
+    let Threshold = JSON.parse(e.data)['c_temp']
 
 
     dataobjNew = dataobj['data']['datasets'][0]['data'];
@@ -208,11 +225,11 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     console.log("Closed data from server")
     let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
-    
-    let newDate=document.getElementById("newDate")
-    newDate.innerHTML=''
+
+    let newDate = document.getElementById("newDate")
+    newDate.innerHTML = ''
   }
-  
+
   let dataobj = {
     type: 'line',
     data: {
@@ -232,12 +249,12 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
       {
         borderColor: "#F7BA11",
         label: 'Threshold',
-        borderWidth: 2, 
+        borderWidth: 2,
         pointRadius: 1,
-        data: [26,26,26,26,26,26,26,26,26,26],
-        animation:false
-    }
-    ]
+        data: [26, 26, 26, 26, 26, 26, 26, 26, 26, 26],
+        animation: false
+      }
+      ]
     },
     options: {
       scales: {
@@ -252,7 +269,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
           beginAtZero: true
         }
       },
-     
+
 
     }
   }
@@ -261,12 +278,12 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // if (myLine != null) {
   //   myLine.destroy();
   // }
-  
+
   // below graph
   let start = moment()
   let end = moment();
-  console.log("start",start)  
-  console.log(typeof(start))  
+  console.log("start", start)
+  console.log(typeof (start))
 
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
@@ -284,25 +301,25 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
       'Today': [moment(), moment()],
       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-      'Last 30 Days': [moment().subtract(29, 'days'), moment()],  
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
       'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
     },
   }, cb);
   cb(start, end);
 
   // filter by time and minutes
-  document.getElementById("halfhr").addEventListener("click", function(){
+  document.getElementById("halfhr").addEventListener("click", function () {
     canvasDestroy()
-    let time="halfhr"
+    let time = "halfhr"
     let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
   })
 
-  document.getElementById("onehr").addEventListener("click", function(){
+  document.getElementById("onehr").addEventListener("click", function () {
     canvasDestroy()
-    let time="onehr"
+    let time = "onehr"
     let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)

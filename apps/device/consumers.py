@@ -57,11 +57,10 @@ class SyncDeviceConsumer(SyncConsumer):
         self.client.loop_stop()
         raise StopConsumer()
 
-class AsyncDeviceConsumer(AsyncConsumer):
+class AsyncDeviceChartConsumer(AsyncConsumer):
 
     def __init__(self):
         self.client = None
-
 
     async def websocket_connect(self, event):
 
@@ -70,89 +69,20 @@ class AsyncDeviceConsumer(AsyncConsumer):
         await self.send({
             "type": "websocket.accept"
         })
-
-        # print("Env sid: ")
-        # print(env.account_sid)
-        # print(env.auth_token)
-        # print("Self.scope is: ")
-        # print(self.scope)
         kwargs = self.scope["url_route"]["kwargs"]
-        current_time = datetime.now()
-        timebefore1min=current_time-timedelta(minutes=1)
-        
-
         topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
-       
-        initialCritical = True
-    
         print("Topic is: ", topic)
-
-        # sendNotificationTime = current_time + timedelta(minutes=env.time_interval_to_send_sms)
-        sendNotificationTime = current_time
-
         async with Client(env.mqtt_broker) as client:
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
                 async for message in messages:            
-                    # print(message)    
-                    cTime = datetime.now()
-                    
-                    print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
-
-                    print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
                     print("message are comming")
-                    print("Message",message.payload.decode())
-                    Temp=json.loads(message.payload.decode())['temp']
-                    Organization=json.loads(message.payload.decode())['org']
-                    Device_ID=json.loads(message.payload.decode())['d_id']
-                    Freeze_ID=json.loads(message.payload.decode())['f_id']
-
-
-                    collections = db.list_collection_names()
-                    # print(collections)
-                    list=[]
-                    if Organization not in  collections:
-                        print("False")
-                        db.create_collection(Organization, timeseries={
-                                'timeField': "timestamp",
-                                'metaField': "metadata",
-                                'granularity': "seconds"
-                            })  
-                    print("True") 
-            
-                    list.append( {
-                            "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},
-                            "timestamp":datetime.today().replace(microsecond=0),
-                            "temp": Temp,
-                        })
-                    db[Organization].insert_many(list)
-                    # print("list",list)
-                    # print("collections",collections)
-                    
-
-                    isCrtical = json.loads(message.payload.decode())["critical"]
-                   
-                    # if isCrtical and initialCritical:
-                    #     print("Is critical while starting...")
-                    #     initialCritical = False
-                    #     await send_notification(kwargs, message)
-                        
-                    if isCrtical:
-                        print("critical Temperature")
-                        if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
-                            print("Sending notification after 5 min...")
-                            sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)                       
-                            print("Is critical after 1 min...")
-                            await send_notification(kwargs, message)
-                        print("End critical temperature")
-
+                    print("Message",message.payload.decode())               
                     await self.send({
                         "type": "websocket.send",
                         "text": message.payload.decode()
                     })
-               
-                    # await asyncio.sleep(1)
 
     async def websocket_receive(self, event):
         print("Data received from client") 
@@ -286,4 +216,86 @@ class TimeDateConsumer(SyncConsumer):
         self.client.disconnect()
         raise StopConsumer()  
 
-#
+# consumer that save data to databse when adding a device
+class AsyncAddDeviceConsumer(AsyncConsumer):
+
+    def __init__(self):
+        self.client = None
+
+
+    async def websocket_connect(self, event):
+
+        print("Connection success")
+
+        await self.send({
+            "type": "websocket.accept"
+        })
+        # print(self.scope)
+        kwargs = self.scope["url_route"]["kwargs"]
+        current_time = datetime.now()
+        timebefore1min=current_time-timedelta(minutes=1)
+        
+
+        topic = f"{kwargs['organization']}/{kwargs['freeze_id']}/{kwargs['device_id']}/temperature"
+    
+        print("Topic is: ", topic)
+
+        sendNotificationTime = current_time
+
+        async with Client(env.mqtt_broker) as client:
+            self.client = client
+            async with client.filtered_messages(topic) as messages:
+                await client.subscribe(topic)
+                async for message in messages:            
+                    # print(message)    
+                    cTime = datetime.now()
+                    
+                    print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
+
+                    print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
+                    print("message are comming")
+                    print("Message",message.payload.decode())
+                    Temp=json.loads(message.payload.decode())['temp']
+                    Organization=json.loads(message.payload.decode())['org']
+                    Device_ID=json.loads(message.payload.decode())['d_id']
+                    Freeze_ID=json.loads(message.payload.decode())['f_id']
+
+
+                    collections = db.list_collection_names()
+                    # print(collections)
+                    list=[]
+                    if Organization not in  collections:
+                        print("False")
+                        db.create_collection(Organization, timeseries={
+                                'timeField': "timestamp",
+                                'metaField': "metadata",
+                                'granularity': "seconds"
+                            })  
+                    print("True") 
+            
+                    list.append( {
+                            "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},
+                            "timestamp":datetime.today().replace(microsecond=0),
+                            "temp": Temp,
+                        })
+                    db[Organization].insert_many(list)
+                    isCrtical = json.loads(message.payload.decode())["critical"]
+ 
+                    if isCrtical:
+                        print("critical Temperature")
+                        if cTime.strftime("%d/%m/%Y %H:%M") == sendNotificationTime.strftime("%d/%m/%Y %H:%M"):
+                            print("Sending notification after 5 min...")
+                            sendNotificationTime = cTime + timedelta(minutes=env.time_interval_to_send_sms)                       
+                            print("Is critical after 1 min...")
+                            await send_notification(kwargs, message)
+                        print("End critical temperature")
+               
+                    # await asyncio.sleep(1)
+
+    async def websocket_receive(self, event):
+        print("Data received from client") 
+    
+    async def websocket_disconnect(self, event):
+        print("Disconnecteding...")
+        self.client.disconnect()
+        raise await StopConsumer()  
