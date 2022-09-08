@@ -63,6 +63,7 @@ class AsyncDeviceChartConsumer(AsyncConsumer):
         self.client = None
 
     async def websocket_connect(self, event):
+        print(event)
 
         print("Connection success")
 
@@ -88,6 +89,7 @@ class AsyncDeviceChartConsumer(AsyncConsumer):
         print("Data received from client") 
     
     async def websocket_disconnect(self, event):
+    
         print("Disconnecteding...")
         self.client.disconnect()
         raise await StopConsumer()  

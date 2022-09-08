@@ -182,10 +182,7 @@ let ws;
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
-
-  
     </canvas>`
-
   let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
   ws = new WebSocket(url);
   var myLine = null
@@ -215,7 +212,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     myLine.update();
 
     //date and temperature
-    // currentDate(realdata, device_id)
+    currentDate(realdata, device_id)
     let options = { year: 'numeric', month: 'long', day: 'numeric' }
     let today = new Date();
     todaydate = today.toLocaleDateString("en-US", options)
@@ -226,9 +223,9 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
 
-    let newDate = document.getElementById("newDate")
-    newDate.innerHTML = ''
+    
   }
+
 
   let dataobj = {
     type: 'line',
@@ -278,7 +275,12 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // if (myLine != null) {
   //   myLine.destroy();
   // }
-
+  document.getElementById("close-socket").addEventListener("click", (e) => {
+    e.preventDefault();
+    ws.close();
+  })
+  
+  
   // below graph
   let start = moment()
   let end = moment();
@@ -328,7 +330,6 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
 }
 
 
-
 function refresh_device(data) {
   // let deviceId = $(data).parent().siblings()[0].textContent;
   // $.ajax({
@@ -353,5 +354,12 @@ function refresh_device(data) {
   // console.log("i am clicked")
   ws.close();
 }
+
+
+// function close_connection(){
+//     ws.close();
+// }
+
+
 
 
