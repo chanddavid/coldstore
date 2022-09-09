@@ -1,4 +1,5 @@
 
+from http import client
 from channels.consumer import AsyncConsumer, SyncConsumer
 from channels.exceptions import StopConsumer
 from urllib3 import Retry
@@ -52,10 +53,10 @@ class SyncDeviceConsumer(SyncConsumer):
     def websocket_receive(self, event):
         print("Data received from client") 
     
-    def websocket_disconnect(self, event):
-        print("Disconnected...")
-        self.client.loop_stop()
-        raise StopConsumer()
+    # def websocket_disconnect(self, event):
+    #     print("Disconnected...")
+    #     self.client.loop_stop()
+    #     raise StopConsumer()
 
 class AsyncDeviceChartConsumer(AsyncConsumer):
 
@@ -87,10 +88,9 @@ class AsyncDeviceChartConsumer(AsyncConsumer):
 
     async def websocket_receive(self, event):
         print("Data received from client") 
-    
+
     async def websocket_disconnect(self, event):
-    
-        print("Disconnecteding...")
+        print("websocket Disconnect", event)
         self.client.disconnect()
         raise await StopConsumer()  
 
@@ -252,7 +252,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     # print(message)    
                     cTime = datetime.now()
                     
-                    print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
+                    # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
 
                     # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
                     # print("message are comming")
@@ -273,7 +273,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                                 'metaField': "metadata",
                                 'granularity': "seconds"
                             })  
-                    print("True") 
+                    # print("True") 
             
                     list.append( {
                             "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},
@@ -295,7 +295,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     # await asyncio.sleep(1)
 
     async def websocket_receive(self, event):
-        print("Data received from client") 
+        print("Data received from client",event) 
     
     async def websocket_disconnect(self, event):
         print("Disconnecteding...")

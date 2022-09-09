@@ -221,13 +221,15 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
 
   }
   ws.onclose = function (e) {
-    console.log("Closed data from server")
+    console.log("Closed data from server",e)
     let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
-
-
   }
 
+  document.getElementById("close-socket").addEventListener("click", (e) => {
+    e.preventDefault();
+    ws.close();
+  })
 
   let dataobj = {
     type: 'line',
@@ -277,10 +279,6 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // if (myLine != null) {
   //   myLine.destroy();
   // }
-  document.getElementById("close-socket").addEventListener("click", (e) => {
-    e.preventDefault();
-    ws.close();
-  })
 
 
   // below graph
