@@ -80,10 +80,15 @@ class AsyncDeviceChartConsumer(AsyncConsumer):
                 await client.subscribe(topic)
                 async for message in messages:            
                     print("message are comming")
-                    print("Message",message.payload.decode())               
+                    print("Message",message.payload.decode())  
+                    try:
+                        text=message.payload.decode("utf-8")      
+                    except:
+                        text=message.payload.decode("unicode_escape")      
+                               
                     await self.send({
                         "type": "websocket.send",
-                        "text": message.payload.decode()
+                        "text": text
                     })
 
     async def websocket_receive(self, event):
