@@ -8,12 +8,10 @@ import random
 from asyncio_mqtt.client import Client
 import json
 from time import sleep
-# from twilio.rest import Client as TwilioClient
 from mqtt.env_vars import env
 from asgiref.sync import sync_to_async
 import asyncio
 from datetime import datetime, timedelta
-from .twilio_sms import TwilioSMS
 import pymongo
 import dateutil.parser
 from .sendNotifcation import send_notification

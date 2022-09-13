@@ -1,4 +1,3 @@
-from .twilio_sms import TwilioSMS
 from mqtt.env_vars import env
 import json
 from asgiref.sync import sync_to_async
