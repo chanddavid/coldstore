@@ -271,11 +271,12 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     list=[]
                     if Organization not in  collections:
                         # print("False")
-                        db.create_collection(Organization, timeseries={
-                                'timeField': "timestamp",
-                                'metaField': "metadata",
-                                'granularity': "seconds"
-                            })  
+                        # db.create_collection(Organization, timeseries={
+                        #         'timeField': "timestamp",
+                        #         'metaField': "metadata",
+                        #         'granularity': "seconds"
+                        #     })  
+                        db.create_collection(Organization)  
                     # print("True") 
             
                     list.append( {

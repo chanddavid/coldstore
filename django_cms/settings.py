@@ -90,7 +90,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_cms.wsgi.application'
+# WSGI_APPLICATION = 'django_cms.wsgi.application'
 
 ASGI_APPLICATION = 'django_cms.asgi.application'
 
@@ -148,6 +148,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATIC_ROOT= os.path.join(BASE_DIR, "staticfiles")
 
 
 STATICFILES_FINDERS = (
