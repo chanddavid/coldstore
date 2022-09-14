@@ -1,4 +1,4 @@
-let ws_connection = "110.44.123.47:" 
+let ws_connection = "110.44.123.47:80" 
 let datatables = $('#device_datatable').DataTable({
   pageLength: 10,
   fixedHeader: true,
