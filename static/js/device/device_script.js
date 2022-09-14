@@ -1,4 +1,3 @@
-let ws_connection = "110.44.123.47:80" 
 let datatables = $('#device_datatable').DataTable({
   pageLength: 10,
   fixedHeader: true,
@@ -18,7 +17,7 @@ let datatables = $('#device_datatable').DataTable({
         device_name = data
         freeze_id = row.freeze_id
         organization = row.organization
-        let urls = `ws://${ws_connection}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
+        let urls = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
         wss = new WebSocket(urls);
         wss.onopen = function (e) {
           console.log("Connection is opened !!!!", e)
@@ -186,7 +185,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
     </canvas>`
-  let url = `ws://${ws_connection}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
+  let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
   ws = new WebSocket(url);
   var myLine = null
 
@@ -293,7 +292,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     start_date = start.format('MMMM D YYYY')
     end_date = end.format('MMMM D YYYY')
     canvasDestroy()
-    let datesearchurl = `ws://${ws_connection}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
+    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
   }
@@ -315,7 +314,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   document.getElementById("halfhr").addEventListener("click", function () {
     canvasDestroy()
     let time = "halfhr"
-    let datesearchurl = `ws://${ws_connection}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
   })
@@ -323,7 +322,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   document.getElementById("onehr").addEventListener("click", function () {
     canvasDestroy()
     let time = "onehr"
-    let datesearchurl = `ws://${ws_connection}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
     datesearch_ws = new WebSocket(datesearchurl);
     secondChart(datesearch_ws)
   })
