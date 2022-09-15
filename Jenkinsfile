@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         ekbana30 = credentials('ekbana30')
-        APP_NAME = "ColdStoreWebApp"
+        APP_NAME = "coldstorewebapp"
         APP_PLATFORM = "django" //choose one among "django, maven, gradle,laravel ..."
         RUNNING_PORT = "8000"
         EXPOSE_PORT = "31290"
