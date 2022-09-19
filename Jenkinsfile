@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         ekbana30 = credentials('ekbana30')
-        APP_NAME = "ColdStoreWebApp"
+        APP_NAME = "coldstorewebapp"
         APP_PLATFORM = "django" //choose one among "django, maven, gradle,laravel ..."
         RUNNING_PORT = "8000"
         EXPOSE_PORT = "31290"
@@ -52,7 +52,7 @@ pipeline {
 def notifyStarted() {
 mattermostSend (
   color: "#2A42EE",
-  channel: '@rajan',
+  channel: '@rajan,@tankman',
   endpoint: 'https://ekbana.letsperk.com/hooks/kqndtuee7ig4jnfz19f7byoqxr',
   message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
   )
@@ -61,7 +61,7 @@ mattermostSend (
 def notifySuccessful() {
 mattermostSend (
   color: "#00f514",
-  channel: '@rajan',
+  channel: '@rajan,@tankman',
   endpoint: 'https://ekbana.letsperk.com/hooks/kqndtuee7ig4jnfz19f7byoqxr',
   message: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>):\n${changeLog}"
   )
@@ -70,7 +70,7 @@ mattermostSend (
 def notifyFailed() {
 mattermostSend (
   color: "#e00707",
-  channel: '@rajan',
+  channel: '@rajan,@tankman',
   endpoint: 'https://ekbana.letsperk.com/hooks/kqndtuee7ig4jnfz19f7byoqxr',
   message: "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
   )
