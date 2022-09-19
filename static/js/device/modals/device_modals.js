@@ -62,3 +62,6 @@ function toggleEditDeviceModal(data){
         }
     }
 }
+
+
+

@@ -12,23 +12,24 @@ let datatables = $('#device_datatable').DataTable({
     {
       "data": "device_Name",
       "render": function (data, type, row, meta) {
-        console.log("list device",data,row.freeze_id,row.organization)
+        console.log("list device", data, row.freeze_id, row.organization)
         //subscribe to mqtt server and save data to database
         device_name = data
         freeze_id = row.freeze_id
         organization = row.organization
-        let urls = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
-        wss = new WebSocket(urls);
-        wss.onopen = function (e) {
-          console.log("Connection is opened !!!!", e)
-        }
-        wss.onmessage = function (e) {
-          console.log("message received from server", e.data);
-        }
-        wss.onclose = function (e) {
-          console.log("websocket connection closed", e);
-        }
-        
+
+        // let urls = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
+        // wss = new WebSocket(urls);
+        // wss.onopen = function (e) {
+        //   console.log("Connection is opened !!!!", e)
+        // }
+        // wss.onmessage = function (e) {
+        //   console.log("message received from server", e.data);
+        // }
+        // wss.onclose = function (e) {
+        //   console.log("websocket connection closed", e);
+        // }
+
         return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}', '${row.freeze_id}', '${row.organization}')">${data}</a>`;
 
       }
@@ -180,19 +181,47 @@ $(document).on('submit', '#edit_device', function (e) {
   })
 })
 
+
+
+
 let ws;
 function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization) {
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
     </canvas>`
-  let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
-  ws = new WebSocket(url);
+  // let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
+  // ws = new WebSocket(url);
+  const client = new Paho.MQTT.Client("localhost", 9001, "Temperature_Inside" + new Date().getTime())
+  client.onConnectionLost = onConnectionLost;
+  client.onMessageArrived = onMessageArrived;
+  client.connect({ onSuccess: onConnect });
+  function onConnect() {
+    console.log("onConnect");
+    client.subscribe(f`${organization}/${freeze_id}/${device_Name}`);
+
+  }
+
+  function onConnectionLost(responseObject) {
+    if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost:" + responseObject.errorMessage);
+    }
+    client.connect({ onSuccess: onConnect });
+  }
+
+
+  function onMessageArrived(message) {
+    console.log("onMessageArrived:" + message.payloadString);
+    
+
+  }
+
+
   var myLine = null
 
-  ws.onopen = function (e) {
-    console.log("Connection is opened !!!!")
-    console.log(e)
-  }
+  // ws.onopen = function (e) {
+  //   console.log("Connection is opened !!!!")
+  //   console.log(e)
+  // }
 
   ws.onmessage = function (e) {
     console.log("i am js message", JSON.parse(e.data))
@@ -221,7 +250,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
 
   }
   ws.onclose = function (e) {
-    console.log("Closed data from server",e)
+    console.log("Closed data from server", e)
     let canvasParent = document.getElementById('chart')
     canvasParent.innerHTML = ''
   }
