@@ -223,15 +223,10 @@ class TimeDateConsumer(SyncConsumer):
 
 # consumer that save data to databse when adding a device
 class AsyncAddDeviceConsumer(AsyncConsumer):
-
     def __init__(self):
         self.client = None
-
-
+            
     async def websocket_connect(self, event):
-
-        # print("Connection success")
-
         await self.send({
             "type": "websocket.accept"
         })
@@ -251,14 +246,8 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
             self.client = client
             async with client.filtered_messages(topic) as messages:
                 await client.subscribe(topic)
-                async for message in messages:            
-                    # print(message)    
+                async for message in messages:           
                     cTime = datetime.now()
-                    
-                    # print("CTime:", cTime.strftime("%d/%m/%Y %H:%M"))
-
-                    # print("Notification time: ", sendNotificationTime.strftime("%d/%m/%Y %H:%M"))
-                    # print("message are comming")
                     # print("Message",message.payload.decode())
                     Temp=json.loads(message.payload.decode())['temp']
                     Organization=json.loads(message.payload.decode())['org']
@@ -270,14 +259,7 @@ class AsyncAddDeviceConsumer(AsyncConsumer):
                     # print(collections)
                     list=[]
                     if Organization not in  collections:
-                        # print("False")
-                        # db.create_collection(Organization, timeseries={
-                        #         'timeField': "timestamp",
-                        #         'metaField': "metadata",
-                        #         'granularity': "seconds"
-                        #     })  
                         db.create_collection(Organization)  
-                    # print("True") 
             
                     list.append( {
                             "metadata": {"device_name": Device_ID,"freeze_id":Freeze_ID,"type": "temperature"},

@@ -19,7 +19,11 @@ from helper.user_has_privilege import user_privilege
 from mqtt.env_vars import env
 # Create your views here.
 
+
+
+
 edit_user = None
+
 
 class user_page(APIView):
     """View to render user.html page"""

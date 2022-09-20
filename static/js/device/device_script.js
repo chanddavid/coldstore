@@ -191,13 +191,13 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     </canvas>`
   // let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
   // ws = new WebSocket(url);
-  const client = new Paho.MQTT.Client("localhost", 9001, "Temperature_Inside" + new Date().getTime())
+  const client = new Paho.MQTT.Client("10.10.5.82", 9002, "Temperature_Inside" + new Date().getTime())
   client.onConnectionLost = onConnectionLost;
   client.onMessageArrived = onMessageArrived;
   client.connect({ onSuccess: onConnect });
   function onConnect() {
     console.log("onConnect");
-    client.subscribe(f`${organization}/${freeze_id}/${device_Name}`);
+    client.subscribe(`${organization}/${freeze_id}/${device_name}/temperature`);
 
   }
 
@@ -211,24 +211,11 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
 
   function onMessageArrived(message) {
     console.log("onMessageArrived:" + message.payloadString);
-    
-
-  }
-
-
-  var myLine = null
-
-  // ws.onopen = function (e) {
-  //   console.log("Connection is opened !!!!")
-  //   console.log(e)
-  // }
-
-  ws.onmessage = function (e) {
-    console.log("i am js message", JSON.parse(e.data))
-    let realdata = JSON.parse(e.data)["temp"]
-    let device_id = JSON.parse(e.data)["d_id"]
-    let Threshold = JSON.parse(e.data)['c_temp']
-
+    const msg = message.payloadString
+    let realdata = JSON.parse(msg)["temp"]
+    let device_id = JSON.parse(msg)["d_id"]
+    let Threshold = JSON.parse(msg)['c_temp']
+    console.log(realdata, device_id, Threshold)
 
     dataobjNew = dataobj['data']['datasets'][0]['data'];
     dataobjNew.shift();
@@ -247,17 +234,20 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
     let options = { year: 'numeric', month: 'long', day: 'numeric' }
     let today = new Date();
     todaydate = today.toLocaleDateString("en-US", options)
-
   }
-  ws.onclose = function (e) {
-    console.log("Closed data from server", e)
-    let canvasParent = document.getElementById('chart')
-    canvasParent.innerHTML = ''
+  function onClose() {
+    client.unsubscribe(`${organization}/${freeze_id}/${device_name}/temperature`)
+    console.log("disconnected")
+  
   }
 
+
+  var myLine = null
   document.getElementById("close-socket").addEventListener("click", (e) => {
     e.preventDefault();
-    ws.close();
+    let canvasParent = document.getElementById('chart')
+    canvasParent.innerHTML = ''
+    onClose()
   })
 
   let dataobj = {
@@ -299,8 +289,6 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
           beginAtZero: true
         }
       },
-
-
     }
   }
   var ctx = document.getElementById('myChart').getContext('2d');
@@ -310,51 +298,51 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // }
 
 
-  // below graph
-  let start = moment()
-  let end = moment();
-  console.log("start", start)
-  console.log(typeof (start))
+  // // below graph
+  // let start = moment()
+  // let end = moment();
+  // console.log("start", start)
+  // console.log(typeof (start))
 
-  function cb(start, end) {
-    $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
-    start_date = start.format('MMMM D YYYY')
-    end_date = end.format('MMMM D YYYY')
-    canvasDestroy()
-    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
-    datesearch_ws = new WebSocket(datesearchurl);
-    secondChart(datesearch_ws)
-  }
-  $('#reportrange').daterangepicker({
-    startDate: start,
-    endDate: end,
-    ranges: {
-      'Today': [moment(), moment()],
-      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-      'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-    },
-  }, cb);
-  cb(start, end);
+  // function cb(start, end) {
+  //   $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
+  //   start_date = start.format('MMMM D YYYY')
+  //   end_date = end.format('MMMM D YYYY')
+  //   canvasDestroy()
+  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
+  //   datesearch_ws = new WebSocket(datesearchurl);
+  //   secondChart(datesearch_ws)
+  // }
+  // $('#reportrange').daterangepicker({
+  //   startDate: start,
+  //   endDate: end,
+  //   ranges: {
+  //     'Today': [moment(), moment()],
+  //     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+  //     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+  //     'This Month': [moment().startOf('month'), moment().endOf('month')],
+  //     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+  //   },
+  // }, cb);
+  // cb(start, end);
 
-  // filter by time and minutes
-  document.getElementById("halfhr").addEventListener("click", function () {
-    canvasDestroy()
-    let time = "halfhr"
-    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
-    datesearch_ws = new WebSocket(datesearchurl);
-    secondChart(datesearch_ws)
-  })
+  // // filter by time and minutes
+  // document.getElementById("halfhr").addEventListener("click", function () {
+  //   canvasDestroy()
+  //   let time = "halfhr"
+  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+  //   datesearch_ws = new WebSocket(datesearchurl);
+  //   secondChart(datesearch_ws)
+  // })
 
-  document.getElementById("onehr").addEventListener("click", function () {
-    canvasDestroy()
-    let time = "onehr"
-    let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
-    datesearch_ws = new WebSocket(datesearchurl);
-    secondChart(datesearch_ws)
-  })
+  // document.getElementById("onehr").addEventListener("click", function () {
+  //   canvasDestroy()
+  //   let time = "onehr"
+  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
+  //   datesearch_ws = new WebSocket(datesearchurl);
+  //   secondChart(datesearch_ws)
+  // })
 
 }
 
