@@ -22,6 +22,7 @@ class EnvVars(BaseSettings):
     mqtt_topic:str
     # mqtt_client_id:str
 
+    time_interval_to_send_sms:int
     #sparrow sms
     sparrow_token:str
     sparrow_from:str

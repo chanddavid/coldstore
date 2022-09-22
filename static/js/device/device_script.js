@@ -13,23 +13,6 @@ let datatables = $('#device_datatable').DataTable({
       "data": "device_Name",
       "render": function (data, type, row, meta) {
         console.log("list device", data, row.freeze_id, row.organization)
-        //subscribe to mqtt server and save data to database
-        device_name = data
-        freeze_id = row.freeze_id
-        organization = row.organization
-
-        // let urls = `ws://${window.location.host}/ws/async-save-data-database/${organization}/${freeze_id}/${device_name}`
-        // wss = new WebSocket(urls);
-        // wss.onopen = function (e) {
-        //   console.log("Connection is opened !!!!", e)
-        // }
-        // wss.onmessage = function (e) {
-        //   console.log("message received from server", e.data);
-        // }
-        // wss.onclose = function (e) {
-        //   console.log("websocket connection closed", e);
-        // }
-
         return `<a type="button" data-toggle="modal" data-target="#temp-graph" onclick="get_realtime_data_from_mqttbroker('${data}', '${row.freeze_id}', '${row.organization}')">${data}</a>`;
 
       }
@@ -189,8 +172,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   let canvasParent = document.getElementById('chart');
   canvasParent.innerHTML = ` <canvas id="myChart">
     </canvas>`
-  // let url = `ws://${window.location.host}/ws/async-get-real-time-data/${organization}/${freeze_id}/${device_name}`
-  // ws = new WebSocket(url);
+
   const client = new Paho.MQTT.Client("10.10.5.82", 9002, "Temperature_Inside" + new Date().getTime())
   client.onConnectionLost = onConnectionLost;
   client.onMessageArrived = onMessageArrived;
@@ -238,7 +220,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   function onClose() {
     client.unsubscribe(`${organization}/${freeze_id}/${device_name}/temperature`)
     console.log("disconnected")
-  
+
   }
 
 
@@ -298,51 +280,81 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
   // }
 
 
-  // // below graph
-  // let start = moment()
-  // let end = moment();
-  // console.log("start", start)
-  // console.log(typeof (start))
+  // below graph
+  let start = moment()
+  let end = moment();
+  console.log("start", start)
+  console.log(typeof (start))
 
-  // function cb(start, end) {
-  //   $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
-  //   start_date = start.format('MMMM D YYYY')
-  //   end_date = end.format('MMMM D YYYY')
-  //   canvasDestroy()
-  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}`
-  //   datesearch_ws = new WebSocket(datesearchurl);
-  //   secondChart(datesearch_ws)
-  // }
-  // $('#reportrange').daterangepicker({
-  //   startDate: start,
-  //   endDate: end,
-  //   ranges: {
-  //     'Today': [moment(), moment()],
-  //     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-  //     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-  //     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-  //     'This Month': [moment().startOf('month'), moment().endOf('month')],
-  //     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-  //   },
-  // }, cb);
-  // cb(start, end);
+  function cb(start, end) {
+    $('#reportrange span').html(start.format('MMMM D YYYY') + ' - ' + end.format('MMMM D YYYY'));
+    start_date = start.format('MMMM D YYYY')
+    end_date = end.format('MMMM D YYYY')
+    canvasDestroy()
+    $.ajax({
+      url: "getData_Backed/",
+      type: 'post',
+      dataType: 'json',
+      data: {
+        organization: organization,
+        freeze_id: freeze_id,
+        device_name: device_name,
+        start_date: start_date,
+        end_date: end_date
+      },
+      success: function (data) {
+        console.log("response", data)
+        secondChart(data)
+      }
+    })
 
-  // // filter by time and minutes
-  // document.getElementById("halfhr").addEventListener("click", function () {
-  //   canvasDestroy()
-  //   let time = "halfhr"
-  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
-  //   datesearch_ws = new WebSocket(datesearchurl);
-  //   secondChart(datesearch_ws)
-  // })
+  }
+  $('#reportrange').daterangepicker({
+    startDate: start,
+    endDate: end,
+    ranges: {
+      'Today': [moment(), moment()],
+      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+      'This Month': [moment().startOf('month'), moment().endOf('month')],
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    },
+  }, cb);
+  cb(start, end);
 
-  // document.getElementById("onehr").addEventListener("click", function () {
-  //   canvasDestroy()
-  //   let time = "onehr"
-  //   let datesearchurl = `ws://${window.location.host}/ws/async-search-date/${organization}/${freeze_id}/${start_date}/${end_date}/${time}`
-  //   datesearch_ws = new WebSocket(datesearchurl);
-  //   secondChart(datesearch_ws)
-  // })
+  // Ajax fucntion for time filter 
+  function ajaxFunc(value) {
+    $.ajax({
+      url: "getData_Backed_time/",
+      type: 'post',
+      dataType: 'json',
+      data: {
+        organization: organization,
+        freeze_id: freeze_id,
+        device_name: device_name,
+        start_date: start_date,
+        end_date: end_date,
+        time: value
+      },
+      success: function (data) {
+        console.log("response", data)
+        secondChart(data)
+      }
+    })
+  }
+  // filter by time and minutes
+  document.getElementById("halfhr").addEventListener("click", function () {
+    canvasDestroy()
+    let time = "halfhr"
+    ajaxFunc(time)
+  })
+
+  document.getElementById("onehr").addEventListener("click", function () {
+    canvasDestroy()
+    let time = "onehr"
+    ajaxFunc(time)
+  })
 
 }
 

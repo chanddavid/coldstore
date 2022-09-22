@@ -19,9 +19,9 @@ from ..account.serializers import UserSerializers, PasswordResetRequestSerialize
 from django.core.paginator import Paginator
 import datetime
 from ..account.models import User_role
-from helper.user_has_privilege import user_privilege
-from helper.user_has_privilege import user_acc_to_org
+from helper.user_has_privilege import user_privilege,user_acc_to_org
 from ..device.models import Device
+from ..device.serializers import DeviceSerializer
 
 def login_view(request):
 
@@ -132,7 +132,8 @@ class login_validate(APIView):
             user = User.objects.get(user_name=current_logged_in_user)
             user_has_privilege=user_privilege(user)
             print("Organization value  is: ")
-            user_acc_to_org(user)
+            device=user_acc_to_org(user)
+            
 
             context = {
                 'user': user,
@@ -158,14 +159,27 @@ class login_validate(APIView):
 
             total_org,total_device,total_dev=user_doc_info(current_logged_in_user)
 
+            # get all the device from datbase of logged in user for chart topic
             user = User.objects.get(user_name=current_logged_in_user) 
+            device=user_acc_to_org(user)
+            device_serializer = DeviceSerializer(device, many=True)
+            all_device=device_serializer.data
+            device_list=[{
+                    "organization": d['organization'],
+                    "freeze_id": d['freeze_id'] ,
+                    "device_Name": d['device_Name'] ,
+                } for d in all_device
+            ]
+            print(device_list)
             user_has_privilege=user_privilege(user)
             context = {
                 'user': user,
                 'user_has_privilege': user_has_privilege,
                 'total_org':total_org,
                 'total_device':total_device,
-                "total_dev":total_dev
+                "total_dev":total_dev,
+                'device_list':device_list
+
             }
             return render(request, 'index.html', context)
         else:
@@ -177,6 +191,7 @@ class login_validate(APIView):
             # }
             # html = render_to_string('static_element/users.html', context)
             # return Response(html)
+
 
 
 class logout(APIView):

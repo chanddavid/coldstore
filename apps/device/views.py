@@ -1,3 +1,5 @@
+from unittest import result
+from urllib import request
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -11,6 +13,15 @@ from apps.account.models import User_role
 from ..login.decorators import my_login_required
 from helper.user_has_privilege import user_privilege
 from helper.user_has_privilege import user_acc_to_org
+# second chart connection with database
+from datetime import datetime, timedelta
+import dateutil.parser
+from mqtt.env_vars import env
+import pymongo
+conn = pymongo.MongoClient(env.mongodb_localhost)
+db = conn.TestingMqtt
+
+
 # from mqtt.restart import restart
 from mqtt.env_vars import env
 import pymongo
@@ -107,6 +118,108 @@ class device_view_detail(APIView):
         instance = self.get_object(id=id)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+class getData_Backed(APIView):
+    def deviceConsumer(self,kwargs):
+        start_date=kwargs['start_date']
+        end_date=kwargs['end_date']
+        startdate=datetime.strptime(start_date,'%B %d %Y')
+        enddate=datetime.strptime(end_date,'%B %d %Y')
+
+        incrementby1day=enddate+timedelta(days=1)  
+
+        date_str=f'{startdate}'
+        date_end=f'{enddate}'
+
+        final_start_date = dateutil.parser.parse(date_str)
+        final_end_date = dateutil.parser.parse(date_end) 
+        print("type2",final_start_date,final_end_date)  
+        collection=db[kwargs['organization']] 
+
+        if final_start_date==final_end_date:     
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
+        else:
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lte':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})
+        print("cursor",cursor)
+        mylist=[]
+        
+
+        for i in cursor:
+            mylist.append(i)
+        return mylist
+
+    def post(self,request):
+        data =request.data
+        mylist=self.deviceConsumer(data)
+        data_set=[{
+                    "dates": d["timestamp"].strftime("%Y %b %d %H:%M:%S"),
+                    "temp": d['temp'] 
+                } for d in mylist
+            ]
+        result={'data_set':data_set}
+        return Response(result,status=status.HTTP_200_OK)
+
+
+class getData_Backed_time(APIView):
+    def deviceConsumerTime(self,kwargs):
+        start_date=kwargs['start_date']
+        end_date=kwargs['end_date']
+        startdate=datetime.strptime(start_date,'%B %d %Y')
+        enddate=datetime.strptime(end_date,'%B %d %Y')
+
+        incrementby1day=enddate+timedelta(days=1)  
+
+        date_str=f'{startdate}'
+        date_end=f'{enddate}'
+
+        final_start_date = dateutil.parser.parse(date_str)
+        final_end_date = dateutil.parser.parse(date_end) 
+        print("type2",final_start_date,final_end_date)  
+        collection=db[kwargs['organization']] 
+
+        if final_start_date==final_end_date:     
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lt':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})   
+        else:
+            cursor = collection.find({'timestamp':{'$gte':datetime.strptime(start_date,'%B %d %Y'),'$lte':incrementby1day},"metadata.freeze_id":kwargs['freeze_id']})
+        print("cursor",cursor)
+        mylist=[]
+        
+
+        for i in cursor:
+            mylist.append(i)
+        return mylist
+
+    def post(self,request):
+        data =request.data
+        time=data['time']
+        mylist=self.deviceConsumerTime(data)
+        if len(mylist)==0:
+            data_set=[]
+        else:
+            lastTime=mylist[-1]['timestamp']
+
+            if time=='halfhr':
+                subTime = lastTime-timedelta(minutes=30)  
+            else:
+                subTime = lastTime-timedelta(hours=1)
+            StrTime=f'{subTime}'      
+            data_set2=[{
+                    "time": d["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
+                    "temp": d['temp'] 
+                } for d in mylist
+            ]
+            data_set=[]
+            def timeFilter(tym):
+                for i in range(len(data_set2)): 
+                    if data_set2[i]["time"] >= tym:
+                        data_set.append(data_set2[i])    
+            
+            timeFilter(StrTime)
+            result={'data_set':data_set}
+        return Response(result,status=status.HTTP_200_OK)
+
 
 
 # class mqtt_device_restart(APIView):

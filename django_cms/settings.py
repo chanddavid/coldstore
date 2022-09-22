@@ -10,14 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os,asyncio
+import os
 from dotenv import load_dotenv, find_dotenv
-from apps.account.task import main
+
 
 from mqtt.env_vars import env
 load_dotenv(find_dotenv(), override=True)
 
-asyncio.run(main())
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -167,8 +167,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #this is feature/real-time-data
 
-
-#celery
-CELERY_TIMEZONE = "Asia/Nepal"
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 1
