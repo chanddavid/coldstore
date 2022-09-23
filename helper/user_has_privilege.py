@@ -21,3 +21,13 @@ def user_acc_to_org(user):
     except Exception as e:
         print(e)
 
+def user_device(user):
+    try:
+        print("inside call function")
+        current_logged_in_user = User.objects.filter(user_name=user).values_list('organization', flat=True)
+        data=current_logged_in_user[0]
+        current_user_device_data=Device.objects.filter(organization=data)
+        x=reversed(current_user_device_data)
+        return x
+    except Exception as e:
+        print(e)

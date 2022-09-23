@@ -21,7 +21,7 @@ from apps.login import views as login_view
 urlpatterns = [
     path('', include('apps.login.urls')),
     path('dashboard/', login_view.login_validate.as_view(), name="dashboard"),
-    # path('dashboard_chart/', login_view.dashboard_chart.as_view(), name="dashboard_chart"),
+    path('dashboard/dashboard_chart/', login_view.dashboard_chart.as_view(), name="dashboard_chart"),
     path('register/', login_view.register_view, name="register_user_view"),
     path('dashboard/users/', include('apps.account.urls')),
     path('dashboard/roles/', include('apps.roles.urls')),

@@ -252,7 +252,7 @@ function get_realtime_data_from_mqttbroker(device_name, freeze_id, organization)
         borderColor: "#F7BA11",
         label: 'Threshold',
         borderWidth: 2,
-        pointRadius: 1,
+        pointRadius: 0,
         data: [26, 26, 26, 26, 26, 26, 26, 26, 26, 26],
         animation: false
       }

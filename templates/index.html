@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block externalcss %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link href="{% static 'vendors/jvectormap/jquery-jvectormap-2.0.3.css' %}" rel="stylesheet" />
 <link href="{% static 'css/pagination.css' %}" rel="stylesheet" />
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 
 <style>
     .user_img {
@@ -99,38 +103,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row row mb-4">
-               
-                <div class="col-lg-4 col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body flexbox-b">
-                            {{device_list}}
-                            <!-- <div class="modal" tabindex="-1" id="temp-graph" role="dialog" aria-labelledby="temp-graph"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document" style="max-width: 100%">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="graph-title"></h5>
-                                            <button type="button" class="close" id="close-socket" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body" id="chart">
-                                            <canvas id="myChart">
-                                                {{device_list}}
-                                            </canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-                
-
-            </div>
         </div>
+        <div class="row">
+            <div class="col md-4">
+                <div class="modal-body">
+                    <canvas id="myChart0" style="display: block; width: 350px; height: 250px;"></canvas>
+                </div>
+            </div>
+            <div class="col md-4">
+                <div class="modal-body">
+                    <canvas id="myChart1" style="display: block; width: 350px; height: 250px;"></canvas>
+                </div>
+            </div>
+            <div class="col md-4">
+                <div class="modal-body">
+                    <canvas id="myChart2" style="display: block; width: 350px; height: 250px;"></canvas>
+                </div>
+            </div>
+            
+            
+        </div>
+
 
     </div>
     <!-- END PAGE CONTENT-->
@@ -151,4 +144,6 @@
 <!-- PAGE LEVEL SCRIPTS-->
 <script src="{% static 'js/scripts/dashboard_visitors.js' %}"></script>
 <script src="{% static 'js/dashboardchart.js' %}"></script>
+
+
 {% endblock %}

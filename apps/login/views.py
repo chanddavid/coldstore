@@ -1,8 +1,5 @@
 import json
 import os
-from tokenize import endpats
-from traceback import print_tb
-
 import requests
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
@@ -16,12 +13,13 @@ from rest_framework.views import APIView
 from ..account.hashing import hash_string
 from ..account.models import User,Password_reset_request
 from ..account.serializers import UserSerializers, PasswordResetRequestSerializer
-from django.core.paginator import Paginator
 import datetime
 from ..account.models import User_role
-from helper.user_has_privilege import user_privilege,user_acc_to_org
+from helper.user_has_privilege import user_privilege,user_acc_to_org,user_device
 from ..device.models import Device
 from ..device.serializers import DeviceSerializer
+from rest_framework import status
+
 
 def login_view(request):
 
@@ -112,7 +110,6 @@ def user_doc_info(current_logged_in_user):
 
 class login_validate(APIView):
     def post(self, request):
-    
         user_has_privilege = False
         global user
         data = request.data
@@ -131,9 +128,7 @@ class login_validate(APIView):
             
             user = User.objects.get(user_name=current_logged_in_user)
             user_has_privilege=user_privilege(user)
-            print("Organization value  is: ")
-            device=user_acc_to_org(user)
-            
+            print("Organization value  is: ")            
 
             context = {
                 'user': user,
@@ -152,25 +147,12 @@ class login_validate(APIView):
 
     @my_login_required
     def get(self, request):
-        print("i am calleing")
         user_has_privilege = False
         if request.GET.get('page') == None:
             current_logged_in_user = request.session.get("username") 
 
             total_org,total_device,total_dev=user_doc_info(current_logged_in_user)
-
-            # get all the device from datbase of logged in user for chart topic
             user = User.objects.get(user_name=current_logged_in_user) 
-            device=user_acc_to_org(user)
-            device_serializer = DeviceSerializer(device, many=True)
-            all_device=device_serializer.data
-            device_list=[{
-                    "organization": d['organization'],
-                    "freeze_id": d['freeze_id'] ,
-                    "device_Name": d['device_Name'] ,
-                } for d in all_device
-            ]
-            print(device_list)
             user_has_privilege=user_privilege(user)
             context = {
                 'user': user,
@@ -178,7 +160,6 @@ class login_validate(APIView):
                 'total_org':total_org,
                 'total_device':total_device,
                 "total_dev":total_dev,
-                'device_list':device_list
 
             }
             return render(request, 'index.html', context)
@@ -191,6 +172,21 @@ class login_validate(APIView):
             # }
             # html = render_to_string('static_element/users.html', context)
             # return Response(html)
+    def put(self,request):
+        print("i am calleing")
+        current_logged_in_user = request.session.get("username") 
+        # get all the device from datbase of logged in user for chart topic
+        user = User.objects.get(user_name=current_logged_in_user) 
+        device=user_acc_to_org(user)
+        device_serializer = DeviceSerializer(device, many=True)
+        all_device=device_serializer.data
+        device_list=[{
+                "organization": d['organization'],
+                "freeze_id": d['freeze_id'] ,
+                "device_Name": d['device_Name'] ,
+            } for d in all_device
+        ]
+        print("device_list",device_list)
 
 
 
@@ -203,11 +199,6 @@ class logout(APIView):
         return redirect('login_view')
 
 def send_forget_password_notification(notification_message):
-    # print("Username dict is: ")
-    # print(username_dict)
-    # print(username_dict['aashir'])
-    # for k, v in username_dict.items():
-    # i_hook_url =  'https://ekbana.letsperk.com/hooks/kqndtuee7ig4jnfz19f7byoqxr'
     i_hook_url = 'https://ekbana.letsperk.com/hooks/j46ziwsczir4ibk7peaizwamch'
     payload = {
         "channel": "python-report",
@@ -239,23 +230,6 @@ def send_forget_password_notification(notification_message):
     x = requests.post(url, data=json.dumps(payload), headers=headers)
     print("Request post text is: ")
     print(x.text)
-
-    #         "update": {
-    #             "props": {
-    #                 "response_type": "in_channel",
-    #                 "icon_url": "https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_1508920769/chat\
-    #                             botsbuilder.png",
-    #                 "attachments": [{
-    #                     "message": "this is message :x:"
-    #                 }]
-    #             }
-    #
-    #         }
-    #     }
-    #
-    #     url = i_hook_url
-    #     headers = {'content-type': 'application/json'}
-    #     print(requests.post(url, data=json.dumps(payload), headers=headers))
 
 class Password_reset_requests(APIView):
     def post(self, request):
@@ -293,3 +267,20 @@ class Password_reset_requests(APIView):
         }
         return render(request, 'password_reset/password_reset_form.html', context)
 
+
+class dashboard_chart(APIView):
+    def get(self,request):
+        current_logged_in_user = request.session.get("username") 
+        # get all the device from datbase of logged in user for chart topic
+        user = User.objects.get(user_name=current_logged_in_user) 
+        device=user_device(user)
+        device_serializer = DeviceSerializer(device, many=True)
+        all_device=device_serializer.data
+        print("dev",all_device[0:2])
+        device_list=[{
+                "organization": d['organization'],
+                "freeze_id": d['freeze_id'] ,
+                "device_Name": d['device_Name'] ,
+            } for d in all_device
+        ]
+        return Response(device_list,status=status.HTTP_200_OK)
