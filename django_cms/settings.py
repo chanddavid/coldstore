@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 
-from mqtt.env_vars import env
+from env_vars import env
 load_dotenv(find_dotenv(), override=True)
 
 

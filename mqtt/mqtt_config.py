@@ -1,4 +1,4 @@
-from mqtt.env_vars import env
+from env_vars import env
 from paho.mqtt import client as mqtt_client
 import time
 from random import randrange

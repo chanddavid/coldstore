@@ -16,14 +16,14 @@ from helper.user_has_privilege import user_acc_to_org
 # second chart connection with database
 from datetime import datetime, timedelta
 import dateutil.parser
-from mqtt.env_vars import env
+from env_vars import env
 import pymongo
 conn = pymongo.MongoClient(env.mongodb_localhost)
 db = conn.TestingMqtt
 
 
 # from mqtt.restart import restart
-from mqtt.env_vars import env
+from env_vars import env
 import pymongo
 
 # mongodb dataset

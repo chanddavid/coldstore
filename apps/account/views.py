@@ -16,7 +16,7 @@ from apps.roles.models import Role
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from helper.user_has_privilege import user_privilege
-from mqtt.env_vars import env
+from env_vars import env
 # Create your views here.
 
 

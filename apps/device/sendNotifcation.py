@@ -1,4 +1,4 @@
-from mqtt.env_vars import env
+from env_vars import env
 import json
 from asgiref.sync import sync_to_async
 import requests
