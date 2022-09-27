@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import json
 import os
 import requests
@@ -19,8 +20,8 @@ from helper.user_has_privilege import user_privilege,user_acc_to_org,user_device
 from ..device.models import Device
 from ..device.serializers import DeviceSerializer
 from rest_framework import status
-
-
+from logger.log import get_logger
+logger=get_logger()
 def login_view(request):
 
     if not request.session.has_key('username'):
@@ -136,13 +137,15 @@ class login_validate(APIView):
                 'total_org':total_org,
                 'total_device':total_device,
                 "total_dev":total_dev,
-              
+            
     
             }
+            logger.info("successful logged in :%s user" % (user))
             return render(request, 'index.html', context)
         elif serializer.errors:
             print(serializer.errors)
             messages.error(request, serializer.errors["non_field_errors"][0])
+            logger.error("Exception caught While connection Database: %s" % serializer.errors["non_field_errors"][0])
             return redirect('login_view')
 
     @my_login_required

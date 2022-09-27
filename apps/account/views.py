@@ -17,6 +17,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from helper.user_has_privilege import user_privilege
 from env_vars import env
+from logger.log import get_logger
+logger=get_logger()
 # Create your views here.
 
 
@@ -66,9 +68,11 @@ class user_view(APIView):
         if serializer.is_valid():
             serializer.save(salt=salt, hashed_password=hashed_password)
             print(serializer.data)
+            logger.info("successfully register user:%s by user:%s"% (serializer.data['user_name'],request.session.get("username")))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         elif serializer.errors:
             print(serializer.errors)
+            logger.error("Exception caught While connection Database: %s" % serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -85,9 +89,11 @@ class register_user(APIView):
             serializer.save(salt=salt, hashed_password=hashed_password, is_active=False)
             username = serializer.validated_data['user_name']
             messages.success(request, f'{username} created')
+            logger.info("successfully register :%s user" % (username))
             return redirect('login_view')
         elif serializer.errors:
             print(serializer.errors)
+            logger.error("Exception caught While connection Database: %s" % serializer.errors)
             return redirect('register_user')    
 
 class user_view_detail(APIView):
@@ -123,9 +129,11 @@ class user_view_detail(APIView):
         if serializer.is_valid():
             print("Valid......")
             serializer.save()
+            logger.info("successfully edited user:%s by user:%s" % (serializer.data['user_name'],request.session.get("username")))
             return Response(serializer.data, status=status.HTTP_200_OK)
         elif serializer.errors:
             print("Errors.....")
+            logger.error("Exception caught While connection Database: %s" % serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
      
@@ -134,6 +142,7 @@ class user_view_detail(APIView):
         print("deleting....")
         instance = self.get_object(id=id)
         instance.delete()
+        logger.info("successfully deleted user:%s by user:%s" % (instance,request.session.get("username")))
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Check_User_Username_For_Update(APIView):

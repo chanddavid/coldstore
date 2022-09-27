@@ -17,6 +17,8 @@ from helper.user_has_privilege import user_acc_to_org
 from datetime import datetime, timedelta
 import dateutil.parser
 from env_vars import env
+from logger.log import get_logger
+logger=get_logger()
 import pymongo
 conn = pymongo.MongoClient(env.mongodb_localhost)
 db = conn.TestingMqtt
@@ -83,8 +85,10 @@ class device_view(APIView):
         
         if device_serializer.is_valid():
             device_serializer.save()
+            logger.info("successfully Created:%s device by user:%s"% (request.data['device_Name'],request.session.get("username")))
             return Response(device_serializer.data, status=status.HTTP_201_CREATED)
         elif device_serializer.errors:
+            logger.error("Exception caught : %s" % device_serializer.errors)
             return Response(device_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class device_view_detail(APIView):
@@ -108,15 +112,18 @@ class device_view_detail(APIView):
         device_serializer = DeviceSerializer(data=data, instance=instance, partial=True)
         if device_serializer.is_valid():
             device_serializer.save()
+            logger.info("successfully Edited:%s device by user:%s"% (request.data['device_Name'],request.session.get("username")))
             return Response(device_serializer.data, status=status.HTTP_200_OK)
         elif device_serializer.errors:
             print(device_serializer.errors)
+            logger.error("Exception caught : %s" % device_serializer.errors)
             return Response(device_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def delete(self, request, id):
         instance = self.get_object(id=id)
         instance.delete()
+        logger.info("successfully Deleted:%s device by user:%s"% (instance,request.session.get("username")))
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
