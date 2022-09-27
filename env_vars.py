@@ -9,34 +9,22 @@ class EnvVars(BaseSettings):
     allowed_hosts:List[str]
     session_cookie_name: str
 
-    ##default_configuration
-    name:str
-    enforce_schema:bool
-    host=str
 
     #mqtt configuration
     mqtt_broker:str
     mqtt_port:int
-    mqtt_user:str
-    mqtt_password:str
-    mqtt_topic:str
-    # mqtt_client_id:str
-
-    time_interval_to_send_sms:int
-    #sparrow sms
-    sparrow_token:str
-    sparrow_from:str
-    sparrow_to:str
-    
 
 
     #mongodb
-
-    #development
     mongodb_localhost:str
-    #production
-    # mongodb_production:str
+    name:str
+    enforce_schema:bool
 
+    # sparrow
+    time_interval_to_send_sms:int
+    sparrow_token:str
+    sparrow_from:str
+    sparrow_to:str
 
     class Config:
         env_file=".env"
