@@ -1,7 +1,5 @@
-FROM python:3
+FROM python:3.8
 ENV PYTHONUNBUFFERED 1
 WORKDIR /django-docker
-COPY . /django-docker
-RUN pip install requests
-RUN pip install gunicorn
+COPY requirements.txt /django-docker/
 RUN pip install -r requirements.txt
