@@ -21,7 +21,7 @@ from logger.log import get_logger
 logger=get_logger()
 import pymongo
 conn = pymongo.MongoClient(env.mongodb_localhost)
-db = conn.TestingMqtt
+db = conn.StoreRealTimeData
 
 
 # from mqtt.restart import restart
@@ -155,6 +155,7 @@ class getData_Backed(APIView):
 
         for i in cursor:
             mylist.append(i)
+        print("mylist",mylist)
         return mylist
 
     def post(self,request):
