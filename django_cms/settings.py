@@ -41,7 +41,6 @@ SESSION_COOKIE_NAME=env.session_cookie_name
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -93,8 +92,7 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'django_cms.wsgi.application'
+WSGI_APPLICATION='django_cms.wsgi.application'
 
 
 
