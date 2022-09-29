@@ -94,9 +94,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'django_cms.wsgi.application'
-
-ASGI_APPLICATION = 'django_cms.asgi.application'
+WSGI_APPLICATION = 'django_cms.wsgi.application'
 
 
 
