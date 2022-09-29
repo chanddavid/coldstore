@@ -16,8 +16,4 @@ pydantic==1.9.1
 channels==3.0.4
 asyncio-mqtt==0.12.1
 python-dateutil==2.8.2
-<<<<<<< HEAD
- 
-=======
->>>>>>> a9e078d903778505d185deb2be501d369c94acfa
-
+gunicorn==20.1.0
